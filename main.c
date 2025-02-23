@@ -1,21 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/23 17:56:43 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/23 17:56:46 by mzeouaou         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#include "cube3D.h"
+#include "cub3d.h"
 
-int main(int argc, char **argv)
+int	main(int ac, char **av)
 {
-    if (!check_args(argc, argv))
-        return (0);
+	static t_game	game;
 
-    return (0);
+	setup(&game, ac, av);
 }

@@ -1,0 +1,96 @@
+#ifndef CUBD3D_H
+#define CUB3D_H
+
+# include "libft/libft.h"
+# include <fcntl.h>
+# include <math.h>
+# include <stdbool.h>
+# include <X11/X.h>
+#include "minilibx-linux/mlx.h"
+
+#define ANSI_COLOR_RESET "\033[0m"
+#define ANSI_COLOR_BLACK "\033[30m"
+#define ANSI_COLOR_RED "\033[31m"
+#define ANSI_COLOR_GREEN "\033[32m"
+#define ANSI_COLOR_YELLOW "\033[33m"
+#define ANSI_COLOR_BLUE "\033[34m"
+#define ANSI_COLOR_MAGENTA "\033[35m"
+#define ANSI_COLOR_CYAN "\033[36m"
+#define ANSI_COLOR_WHITE "\033[37m"
+
+#define WIDTH 1280
+#define HEIGHT 720
+#define BLOCK_SIZE 64
+#define PI 3.141592653589793
+#define FOV 60
+#define FOV_RAD (FOV * (PI / 180))
+
+#define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
+#define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
+#define ERR_NO_PLAYER "No player found!"
+
+typedef struct s_player
+{
+    int x;
+    int y;
+    int x_pixel;
+    int y_pixel;
+    double pva; //player view angle
+    double rotaion_speed;
+    int radius;
+    int move_speed;
+}   t_player;
+
+typedef struct s_image
+{
+    void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+}   t_img;
+
+typedef struct s_window
+{
+    void *cnx;
+    void *win;
+    t_img img;
+}   t_window;
+
+typedef struct s_ray
+{
+    double x;
+    double y;
+    double dst;
+    double ray_angle;
+}   t_ray;
+
+typedef struct s_keys
+{
+    int forward;
+    int backward;
+    int left;
+    int right;
+}   t_keys;
+
+typedef struct s_game
+{
+    char *filename;
+    int   map_len;
+    char    **map;
+    void *img;
+    t_player player;
+    t_window window;
+    t_ray ver_ray;
+    t_ray hor_ray;
+    t_keys keys;
+}   t_game;
+
+void    setup(t_game *game, int ac, char **av);
+void	ft_panic(const char *msg);
+int     ft_error(const char *msg);
+void draw_map(t_game *game);
+int found_wall(t_game *game, int x_pos, int y_pos);
+double normalize_angle(double angle);
+
+#endif
