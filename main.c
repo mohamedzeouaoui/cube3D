@@ -14,8 +14,9 @@
 
 int main(int argc, char **argv)
 {
-    if (!check_args(argc, argv))
-        return (0);
+    t_data data;
+
+    check_args(argc, argv, &data);
 
     return (0);
 }
