@@ -22,30 +22,31 @@ static size_t	get_map_rows(const char *file_name)
 	return (rows);
 }
 
-char	**parse_map(const char *file_name, t_game *game)
+char **parse_map(const char *file_name, t_game *game)
 {
-	int		fd;
-	char	**map;
-	size_t	rows;
-	int	i;
+    int fd;
+    char **map;
+    char *line;
+    size_t rows = 0;
 
-	fd = open(file_name, O_RDONLY);
-	if (fd < 0)
-		ft_panic(file_name);
-	rows = get_map_rows(file_name);
-	map = ft_calloc(rows + 1, sizeof(char *));
-	if (!map)
-		ft_panic("malloc");
-	i = 0;
-	while (i < rows)
-	{
-		map[i] = get_next_line(fd);
-		i++;
-	}
-	game->map_len = i - 1;
-	close(fd);
-	return (map);
+    fd = open(file_name, O_RDONLY);
+    if (fd < 0)
+        ft_panic(file_name);
+
+    map = NULL;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        map = realloc(map, sizeof(char *) * (rows + 2));
+        if (!map)
+            ft_panic("malloc");
+        map[rows++] = line;
+    }
+    map[rows] = NULL;
+    game->map_len = rows - 1;
+    close(fd);
+    return map;
 }
+
 
 int ft_close(t_window *window)
 {
@@ -122,26 +123,42 @@ int keys(int keycode, void *game1)
 		new_pos = game->player.x_pixel - game->player.move_speed;
 		if (!found_wall(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
+		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
+		{
+			// game->player.x_pixel -= 1;
+		}
 	}
 	if (keycode == game->keys.right)
 	{
 		new_pos = game->player.x_pixel + game->player.move_speed;
 		if (!found_wall(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
+		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
+		{
+			// printf("1\n");
+		}
 	}
 	if (keycode == game->keys.forward)
 	{
 		new_pos = game->player.y_pixel - game->player.move_speed;
 		if (!found_wall(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
+		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
+		{
+			// printf("1\n");
+		}
 	}
 	if (keycode == game->keys.backward)
 	{
 		new_pos = game->player.y_pixel + game->player.move_speed;
 		if (!found_wall(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
+		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
+		{
+			// printf("1\n");
+		}
 	}
-	clean_screen(game);
+	// clean_screen(game);
 }
 
 void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
@@ -158,10 +175,10 @@ void draw_square(t_game *game, int x_start, int y_start, int color)
     int y;
 
     y = y_start + 1;
-    while (y < y_start + BLOCK_SIZE)
+    while (y < y_start + BLOCK_SIZE_2D)
     {
         x = x_start + 1;
-        while (x < x_start + BLOCK_SIZE)
+        while (x < x_start + BLOCK_SIZE_2D)
         {
             ft_mlx_pixel_put(game, x, y, color);
             x++;
@@ -192,8 +209,8 @@ void draw_horizontal_line(t_game *game, int x1, int x2, int y, int color)
 
 void draw_circle(t_game *game, int color)
 {
-    int x = game->player.x_pixel;
-    int y = game->player.y_pixel;
+    int x = game->player.x_pixel / BLOCK_SIZE_2D;
+    int y = game->player.y_pixel / BLOCK_SIZE_2D;
     int radius = 5;
     int x_pos = 0;
     int y_pos = radius;
@@ -266,16 +283,17 @@ void draw_line(t_game *game, int x_end, int y_end)
 
 int found_wall(t_game *game, int x_pos, int y_pos)
 {
-	if (x_pos < 0 || x_pos > WIDTH || y_pos < 0 || y_pos > HEIGHT)
-		return (1);
-	int x_map = floor(x_pos / BLOCK_SIZE);
-	int y_map = floor(y_pos / BLOCK_SIZE);
-	if (y_map >= game->map_len || x_map > ft_strlen(game->map[y_map]))
-		return (1);
-	if (game->map[y_map][x_map] && game->map[y_map][x_map] == '1')
-		return (1);
-	return (0);
+    if (x_pos < 0 || x_pos >= WIDTH || y_pos < 0 || y_pos >= HEIGHT)
+        return (1);
+
+    int x_map = x_pos / BLOCK_SIZE;
+    int y_map = y_pos / BLOCK_SIZE;
+
+    if (y_map >= game->map_len || x_map >= game->map_width)
+        return (1);
+    return (game->map[y_map][x_map] == '1');
 }
+
 
 double count_distance(double x1, double x2, double y1, double y2)
 {
@@ -418,36 +436,24 @@ double normalize_angle(double angle)
 
 void cast_rays(t_game *game)
 {
-	double ray_angle = (game->player.pva - (FOV_RAD / 2)) + FOV_RAD / WIDTH;
-	for (int i = 0; i < WIDTH; i++)
-	{
-		cast_ray(game, normalize_angle(ray_angle), i);
-		ray_angle += FOV_RAD / WIDTH;
-	}
+    double angle_step = FOV_RAD / WIDTH;
+    double ray_angle = normalize_angle(game->player.pva - (FOV_RAD / 2));
+
+    for (int i = 0; i < WIDTH; i++)
+    {
+        cast_ray(game, ray_angle, i);
+        ray_angle = normalize_angle(ray_angle + angle_step);
+    }
 }
 
 void draw_map(t_game *game)
 {
 	char **map = game->map;
-	int y = 0;
-	int x;
-	int x_offset = 0;
-	int y_offset = 0;
-	for (int i = 0; i < game->map_len + 1; i++)
-	{
-		y_offset = i * BLOCK_SIZE;
-		for (int j = 0; j + 1 < ft_strlen(map[i]); j++)
-		{
-			x_offset = j * BLOCK_SIZE;
-			int color = 0xffffff;
-			if (map[i][j] == '1')
-				color = 0x0000f0;
-			// draw_square(game, x_offset, y_offset, color);
-			// draw_circle(game, 0xff0000);
-			// draw_view_line(game);
-			cast_rays(game);
-		}
-	}
+	int x_offset = BLOCK_SIZE_2D;
+	int y_offset = BLOCK_SIZE_2D;
+
+	clean_screen(game);
+	cast_rays(game);
 	mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
 }
 
@@ -480,6 +486,8 @@ void find_player(t_game *game)
 			if (game->map[i][j] == 'N')
 			{
 				game->player.pva = -(PI / 2);
+				game->player.x = j;
+				game->player.y = i;
 				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.rotaion_speed = 1.5 * (PI / 180);
@@ -496,6 +504,7 @@ void setup(t_game *game, int ac, char **av)
 	if (ft_strcmp(".cub", av[1] + ft_strlen(av[1]) - 4) != 0)
 		exit(ft_error(ERR_INVALID_FILENAME));
 	game->map = parse_map(av[1], game);
+	game->map_width = ft_strlen(game->map[0]);
 	game->filename = av[1];
 	find_player(game);
 	ft_mlx(game);

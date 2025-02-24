@@ -21,6 +21,7 @@
 #define WIDTH 1280
 #define HEIGHT 720
 #define BLOCK_SIZE 64
+#define BLOCK_SIZE_2D 24
 #define PI 3.141592653589793
 #define FOV 60
 #define FOV_RAD (FOV * (PI / 180))
@@ -77,6 +78,7 @@ typedef struct s_game
 {
     char *filename;
     int   map_len;
+    int   map_width;
     char    **map;
     void *img;
     t_player player;
