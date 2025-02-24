@@ -2,7 +2,7 @@
 CC = cc
 CFLAGS = -Werror -Wextra -Wall 
 RM = rm -rf
-UTILS = ./utils/ft_strlen.c
+UTILS = ./utils/ft_strlen.c ./utils/print_function.c ./utils/ft_isdigit.c ./utils/ft_strdup.c
 
 PARSING = ./parsing/parsing.c
 
@@ -16,7 +16,7 @@ NAME = cub3D
 all : ${NAME}
 
 ${NAME} : ${OFILES}
-	${CC} ${CFLAGS} ${OFILES} -lreadline -o ${NAME}
+	${CC} ${CFLAGS} ${OFILES} -o ${NAME}
 
 %.o: %.c
 	${CC} -c ${CFLAGS} $< -o $@
