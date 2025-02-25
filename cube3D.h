@@ -47,9 +47,25 @@ typedef struct s_texture
     char                *line_C;
 }						t_texture;
 
+typedef struct s_texture_F
+{
+    int    R;
+    int     G;
+    int     B;
+}   t_texture_F;
+
+typedef struct s_texture_C
+{
+    int    R;
+    int     G;
+    int     B;
+}   t_texture_C;
+
 
 typedef struct s_data
 {
+    t_texture_F     *floor;
+    t_texture_C     *ceiling;
     t_texture   *map_lines;
     int     fd_map;
 }   t_data;
@@ -60,5 +76,8 @@ char	*get_next_line(int fd);
 void print_error(char *str);
 int ft_isdigit(char c);
 char * ft_strdup(char *str);
+char	*ft_substr_parsing(char *s, int start, int len);
+char	**ft_split(char *s, char c);
+int	ft_atoi(char *str);
 
 # endif
