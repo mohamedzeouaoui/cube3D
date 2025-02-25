@@ -19,6 +19,7 @@ char * ft_strdup(char *str)
 
     i = 0;
     new_str = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+
     if (!new_str)
         print_error("Malloc failed");
     while (str[i])
