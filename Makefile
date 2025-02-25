@@ -1,8 +1,9 @@
 
 CC = cc
-CFLAGS = -Werror -Wextra -Wall 
+CFLAGS = -Werror -Wextra -Wall #-fsanitize=address
 RM = rm -rf
-UTILS = ./utils/ft_strlen.c ./utils/print_function.c ./utils/ft_isdigit.c ./utils/ft_strdup.c
+UTILS = ./utils/ft_strlen.c ./utils/print_function.c ./utils/ft_isdigit.c ./utils/ft_strdup.c ./utils/ft_substr_parsing.c \
+		./utils/ft_atoi.c ./utils/ft_split.c 
 
 PARSING = ./parsing/parsing.c
 
