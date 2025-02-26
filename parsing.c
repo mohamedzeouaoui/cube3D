@@ -42,7 +42,7 @@ char **parse_map(const char *file_name, t_game *game)
         map[rows++] = line;
     }
     map[rows] = NULL;
-    game->map_len = rows - 1;
+    game->map_len = rows;
     close(fd);
     return map;
 }
@@ -90,12 +90,14 @@ int keys(int keycode, void *game1)
 	game->keys.right = 0;
 	game->keys.forward = 0;
 	game->keys.backward = 0;
+	game->player.direction = 0;
 	if (game->player.pva > (45 * (PI / 180)) && game->player.pva < (135 * (PI / 180)))
 	{
 		game->keys.left = 100;
 		game->keys.right = 97;
 		game->keys.forward = 115;
 		game->keys.backward = 119;
+		game->player.direction = 2;
 	}
 	else if (game->player.pva > (225 * (PI / 180)) && game->player.pva < (315 * (PI / 180)))
 	{
@@ -103,6 +105,7 @@ int keys(int keycode, void *game1)
 		game->keys.right = 100;
 		game->keys.forward = 119;
 		game->keys.backward = 115;
+		game->player.direction = 0;
 	}
 	else if (game->player.pva > (315 * (PI / 180)) || game->player.pva < (45 * (PI / 180)))
 	{
@@ -110,6 +113,7 @@ int keys(int keycode, void *game1)
 		game->keys.right = 119;
 		game->keys.forward = 97;
 		game->keys.backward = 100;
+		game->player.direction = 1;
 	}
 	else if (game->player.pva > (135 * (PI / 180)) && game->player.pva < (225 * (PI / 180)))
 	{
@@ -117,48 +121,32 @@ int keys(int keycode, void *game1)
 		game->keys.right = 115;
 		game->keys.forward = 100;
 		game->keys.backward = 97;
+		game->player.direction = 3;
 	}
 	if (keycode == game->keys.left)
 	{
 		new_pos = game->player.x_pixel - game->player.move_speed;
 		if (!found_wall(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
-		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
-		{
-			// game->player.x_pixel -= 1;
-		}
 	}
 	if (keycode == game->keys.right)
 	{
 		new_pos = game->player.x_pixel + game->player.move_speed;
 		if (!found_wall(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
-		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
-		{
-			// printf("1\n");
-		}
 	}
 	if (keycode == game->keys.forward)
 	{
 		new_pos = game->player.y_pixel - game->player.move_speed;
 		if (!found_wall(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
-		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
-		{
-			// printf("1\n");
-		}
 	}
 	if (keycode == game->keys.backward)
 	{
 		new_pos = game->player.y_pixel + game->player.move_speed;
 		if (!found_wall(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
-		else if(game->player.pva != 0 && game->player.pva != (PI / 2) && game->player.pva != -(PI / 2) && game->player.pva != PI)
-		{
-			// printf("1\n");
-		}
 	}
-	// clean_screen(game);
 }
 
 void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
@@ -172,13 +160,13 @@ void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
 void draw_square(t_game *game, int x_start, int y_start, int color)
 {
     int x;
-    int y;
+    int y = 0;
 
     y = y_start + 1;
-    while (y < y_start + BLOCK_SIZE_2D)
+    while (y < HEIGHT && y < y_start + BLOCK_SIZE)
     {
         x = x_start + 1;
-        while (x < x_start + BLOCK_SIZE_2D)
+        while (x < x_start + BLOCK_SIZE)
         {
             ft_mlx_pixel_put(game, x, y, color);
             x++;
@@ -209,8 +197,8 @@ void draw_horizontal_line(t_game *game, int x1, int x2, int y, int color)
 
 void draw_circle(t_game *game, int color)
 {
-    int x = game->player.x_pixel / BLOCK_SIZE_2D;
-    int y = game->player.y_pixel / BLOCK_SIZE_2D;
+    int x = game->player.x_pixel / BLOCK_SIZE;
+    int y = game->player.y_pixel / BLOCK_SIZE;
     int radius = 5;
     int x_pos = 0;
     int y_pos = radius;
@@ -283,7 +271,7 @@ void draw_line(t_game *game, int x_end, int y_end)
 
 int found_wall(t_game *game, int x_pos, int y_pos)
 {
-    if (x_pos < 0 || x_pos >= WIDTH || y_pos < 0 || y_pos >= HEIGHT)
+    if (x_pos < 0 || x_pos >= (game->map_width * BLOCK_SIZE) || y_pos < 0 || y_pos >= (game->map_len * BLOCK_SIZE))
         return (1);
 
     int x_map = x_pos / BLOCK_SIZE;
@@ -326,7 +314,7 @@ void hor_rays(t_game *game, t_ray *hor)
 	double y_next_step = y_intercept;
 	if (!is_ray_facing_down)
 		y_next_step--;
-	while(y_next_step > 0 && x_next_step > 0 && x_next_step < WIDTH && y_next_step < HEIGHT)
+	while(1)
 	{
 		if (found_wall(game, x_next_step, y_next_step))
 		{
@@ -370,7 +358,7 @@ void vert_rays(t_game *game, t_ray *ver)
 	double y_next_step = y_intercept;
 	if (!is_ray_facing_right)
 		x_next_step--;
-	while(y_next_step > 0 && x_next_step > 0 && x_next_step < WIDTH && y_next_step < HEIGHT)
+	while(y_next_step > 0 && x_next_step > 0)
 	{
 		if (found_wall(game, x_next_step, y_next_step))
 		{
@@ -387,16 +375,54 @@ void vert_rays(t_game *game, t_ray *ver)
 	}
 }
 
-void draw_3d(t_game *game, int x_start, int y_start, int color, int wall_height)
+// void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
+// {
+// 	int tex_cord = game->wall.wall_cord * BLOCK_SIZE;
+// 	y_start = (HEIGHT / 2) - (wall_height / 2);
+// 	for (int y = y_start; y < y_start + wall_height; y++)
+// 	{
+// 		if (y >= 0 && y < HEIGHT)
+// 			ft_mlx_pixel_put(game, x_start, y, 0x808080);
+// 	}
+// }
+
+unsigned int	my_mlx_pixel_get(t_game *game, int x, int y)
 {
-	y_start = (HEIGHT / 2) - (wall_height / 2);
-	for (int y = y_start; y < y_start + wall_height; y++)
-	{
-		if (y >= 0 && y < HEIGHT)
-			ft_mlx_pixel_put(game, x_start, y, 0x808080);
-	}
+	char	*dst;
+
+	dst = game->wall.addr + (y * game->wall.line_length + x * (game->wall.bpp / 8));
+	return (*(unsigned int *)dst);
 }
 
+
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
+{
+	int y = 0;
+	int tex_x = (int)(game->wall.wall_cord * BLOCK_SIZE) % BLOCK_SIZE; // Get texture column
+	double step = 1.0 * BLOCK_SIZE / wall_height;
+	double tex_pos = 0;
+
+	// y_start = (HEIGHT / 2) - (wall_height / game->view_height);
+	// Draw ceiling
+	for (int i = 0; i < y_start; i++)
+		ft_mlx_pixel_put(game, x_start, i, 0xff0000);
+	for (y = y_start; y < y_start + wall_height; y++)
+	{
+		int tex_y = (int)tex_pos; // Keep within texture bounds
+		tex_pos += step;
+
+		// Get pixel color from texture
+		int pixel_index = (tex_y * game->wall.line_length) + (tex_x * (game->wall.bpp / 8));
+		int color = *(int *)(game->wall.tex_data + pixel_index);
+		if (y >= 0 && y < HEIGHT)
+			ft_mlx_pixel_put(game, x_start, y, color);
+	}
+	// Draw floor
+	for (int i = y_start + wall_height; i < HEIGHT; i++)
+		ft_mlx_pixel_put(game, x_start, i, 0x00ff00);
+}
+
+// width scaling
 void cast_ray(t_game *game, double ray_angle, int i)
 {
 	t_ray	hor;
@@ -411,19 +437,23 @@ void cast_ray(t_game *game, double ray_angle, int i)
 	ver.ray_angle = ray_angle;
 	hor_rays(game, &hor);
 	vert_rays(game, &ver);
-
+	game->wall.wall_cord = 0;
+	game->wall.vert = 0;
+	game->wall.hor = 0;
 	double wall_height = 0;
 	if (hor.dst < ver.dst)
 	{
 		wall_height = (BLOCK_SIZE / (hor.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		// draw_line(game, hor.x, hor.y);
+		game->wall.wall_cord = hor.x - floor(hor.x);
+		// game->wall.hor = 1;
 	}
 	else
 	{
 		wall_height = (BLOCK_SIZE / (ver.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		// draw_line(game, ver.x, ver.y);
+		game->wall.wall_cord = ver.y - floor(ver.y);
+		// game->wall.vert = 1;
 	}
-	draw_3d(game, i, (WIDTH / 2) - (wall_height / 2), 0xff0000, wall_height);
+	draw_3d(game, i, (HEIGHT / 2) - (wall_height / game->view_height), wall_height);
 }
 
 double normalize_angle(double angle)
@@ -446,14 +476,318 @@ void cast_rays(t_game *game)
     }
 }
 
+void draw_2d_map(t_game *game)
+{
+	int map_x, map_y;
+	int x_start, y_start;
+	int color;
+
+	for (map_y = 0; map_y < game->map_len; map_y++)
+	{
+
+		for (map_x = 0; map_x < game->map_width; map_x++)
+		{
+			x_start = WIDTH - (game->map_width * BLOCK_SIZE / 2) + (map_x * BLOCK_SIZE / 2);
+			y_start = map_y * BLOCK_SIZE / 2;
+			if (game->map[map_y][map_x] == '1')
+				color = 0xFFFFFF; // White for walls
+			else if (game->map[map_y][map_x] == '0')
+				color = 0x000000; // Black for empty spaces
+			else if (game->map[map_y][map_x] == 'E')
+				color = 0xFF0000; // Red for player start position
+			else
+				color = 0x000000; // Default to black for any other characters
+
+			// draw_square(game, x_start, y_start, color);
+		}
+	}
+
+	// Draw player position
+	int player_x = WIDTH - (game->map_width * BLOCK_SIZE / 2) + (game->player.x * BLOCK_SIZE / 2) + (BLOCK_SIZE / 4);
+	int player_y = (game->player.y * BLOCK_SIZE) + (BLOCK_SIZE / 4);
+	// draw_circle(game, 0x00FF00); // Green for player position
+}
+
+void draw_mini_map_content(t_game *game, int y, int x)
+{
+    int x_start;
+    int y_start = 0;
+	int x_offset = 0;
+	int y_offset = 0;
+
+    y_start = y - 1;
+    while (y_start < y + 1)
+    {
+        x = x_start - 1;
+        while (x_start < x + 1)
+        {
+
+			// if (game->map[y_start][x_start] == '1')
+			
+	        // ft_mlx_pixel_put(game, x, y, 0x00ffff);
+			// else
+				// ft_mlx_pixel_put(game, x, y, 0x000000);
+            x_start++;
+        }
+        y_start++;
+    }
+}
+
+void square(t_game *game, int x_start, int y_start, int color)
+{
+	for (int i = y_start; i < 20; i++)
+	{
+		for (int j = x_start; j < 20; j++)
+		{
+			ft_mlx_pixel_put(game, j, i, color);
+		}
+	}
+}
+
+void draw_square2(t_game *game, int x_start, int y_start, int color, int f)
+{
+	if (f == 0)
+	{
+		for (int y = y_start; y < y_start + 20; y++)
+		{
+			for (int x = x_start; x < x_start + 20; x++)
+			{
+				ft_mlx_pixel_put(game, x, y, color);
+			}
+		}
+	}
+	else
+	{
+		for (int y = y_start; y < y_start + 8; y++)
+		{
+			for (int x = x_start; x < x_start + 8; x++)
+			{
+				ft_mlx_pixel_put(game, x + 5, y + 5, color);
+			}
+		}
+	}
+}
+
+void draw_circle2(t_game *game, int x_start, int y_start, int color)
+{
+	int x = 5;
+    int y = 5;
+    int radius = 5;
+    int x_pos = 0;
+    int y_pos = radius;
+    int decision = 1 - radius;
+
+    draw_horizontal_line(game, x - radius, x + radius, y, color);
+    // while (y_pos >= x_pos)
+    // {
+    //     draw_horizontal_line(game, x - x_pos, x + x_pos, y + y_pos, color);
+    //     draw_horizontal_line(game, x - x_pos, x + x_pos, y - y_pos, color);
+    //     draw_horizontal_line(game, x - y_pos, x + y_pos, y + x_pos, color);
+    //     draw_horizontal_line(game, x - y_pos, x + y_pos, y - x_pos, color);
+
+    //     if (decision <= 0)
+    //         decision += 2 * x_pos + 5;
+    //     else
+    //     {
+    //         decision += 2 * (x_pos - y_pos) + 5;
+    //         y_pos--;
+    //     }
+    //     x_pos++;
+    // }
+}
+
+void draw_arrow(t_game *game, int x, int y, int color, int size)
+{
+    // Set default size if not specified
+    if (size <= 0)
+        size = 6;
+
+	x += 8;
+	y += 5;
+    // Common variables for all arrow types
+    int i, j;
+    int outline_color = 0x000000; // Black outline
+
+    // Draw  arrow shapes based on direction
+    if (game->player.direction == 0) // Upward arrow (▲)
+    {
+        // Draw filled triangle
+        for (i = -size; i <= size; i++)
+        {
+            for (j = 0; j <= size; j++)
+            {
+                // Calculate the position relative to the triangle's shape
+                if (j <= size - abs(i))
+                {
+                    ft_mlx_pixel_put(game, x + i, y - j, color);
+                }
+            }
+        }
+
+        // Draw outline
+        for (i = -size; i <= size; i++)
+        {
+            // Bottom line
+            if (i > -size && i < size)
+                ft_mlx_pixel_put(game, x + i, y, outline_color);
+            
+            // Left diagonal
+            j = abs(i + size);
+            if (j <= size)
+                ft_mlx_pixel_put(game, x - size + j, y - j, outline_color);
+            
+            // Right diagonal
+            j = abs(i - size);
+            if (j <= size)
+                ft_mlx_pixel_put(game, x + size - j, y - j, outline_color);
+        }
+    }
+    else if (game->player.direction == 1) // Rightward arrow (▶)
+    {
+        // Draw filled triangle
+        for (i = 0; i <= size; i++)
+        {
+            for (j = -size; j <= size; j++)
+            {
+                if (i <= size - abs(j))
+                {
+                    ft_mlx_pixel_put(game, x + i, y + j, color);
+                }
+            }
+        }
+
+        // Draw outline
+        for (j = -size; j <= size; j++)
+        {
+            // Left line
+            if (j > -size && j < size)
+                ft_mlx_pixel_put(game, x, y + j, outline_color);
+            
+            // Top diagonal
+            i = abs(j + size);
+            if (i <= size)
+                ft_mlx_pixel_put(game, x + i, y - size + i, outline_color);
+            
+            // Bottom diagonal
+            i = abs(j - size);
+            if (i <= size)
+                ft_mlx_pixel_put(game, x + i, y + size - i, outline_color);
+        }
+    }
+    else if (game->player.direction == 2) // Downward arrow (▼)
+    {
+        // Draw filled triangle
+        for (i = -size; i <= size; i++)
+        {
+            for (j = 0; j <= size; j++)
+            {
+                if (j <= size - abs(i))
+                {
+                    ft_mlx_pixel_put(game, x + i, y + j, color);
+                }
+            }
+        }
+
+        // Draw outline
+        for (i = -size; i <= size; i++)
+        {
+            // Top line
+            if (i > -size && i < size)
+                ft_mlx_pixel_put(game, x + i, y, outline_color);
+            
+            // Left diagonal
+            j = abs(i + size);
+            if (j <= size)
+                ft_mlx_pixel_put(game, x - size + j, y + j, outline_color);
+            
+            // Right diagonal
+            j = abs(i - size);
+            if (j <= size)
+                ft_mlx_pixel_put(game, x + size - j, y + j, outline_color);
+        }
+    }
+    else if (game->player.direction == 3) // Leftward arrow (◀)
+    {
+        // Draw filled triangle
+        for (i = 0; i <= size; i++)
+        {
+            for (j = -size; j <= size; j++)
+            {
+                if (i <= size - abs(j))
+                {
+                    ft_mlx_pixel_put(game, x - i, y + j, color);
+                }
+            }
+        }
+
+        // Draw outline
+        for (j = -size; j <= size; j++)
+        {
+            // Right line
+            if (j > -size && j < size)
+                ft_mlx_pixel_put(game, x, y + j, outline_color);
+            
+            // Top diagonal
+            i = abs(j + size);
+            if (i <= size)
+                ft_mlx_pixel_put(game, x - i, y - size + i, outline_color);
+            
+            // Bottom diagonal
+            i = abs(j - size);
+            if (i <= size)
+                ft_mlx_pixel_put(game, x - i, y + size - i, outline_color);
+        }
+    }
+}
+
+
+
+void draw_mini_map(t_game *game)
+{
+	int player_x = game->player.x_pixel / BLOCK_SIZE;
+	int player_y = game->player.y_pixel / BLOCK_SIZE;
+	int x_start, y_start, x_off, y_off;
+	int mini_map_width = 10;
+	int mini_map_height = 10; 
+
+	y_off = 0;
+	for(int k = 0; k < mini_map_height; k++)
+	{
+		for (int l = 0; l < mini_map_width; l++)
+			draw_square2(game, l * 20, k * 20, 0x000000, 0);
+	}
+	for (int y = player_y - mini_map_height / 2; y < player_y + mini_map_height / 2; y++)
+	{
+		x_off = 0;
+		for (int x = player_x - mini_map_width / 2; x < player_x + mini_map_width / 2; x++)
+		{
+			if (y >= 0 && y < game->map_len && x >= 0 && x < game->map_width)
+			{
+				if (game->map[y][x] == '1')
+					draw_square2(game, x_off, y_off, 0x00FFFF, 0); // Wall
+				else if (game->map[y][x] == '0' || game->map[y][x] == 'S')
+					draw_square2(game, x_off, y_off, 0x000000, 0); // Floor
+			}
+			x_off += 20;
+		}
+		y_off += 20;
+	}
+
+	// Draw player position
+	// draw_circle2(game, x_off, y_off, 0xFF0000);
+	// draw_square2(game, (mini_map_width / 2) * 20, (mini_map_height / 2) * 20, 0xFF0000, 1);
+	draw_arrow(game, (mini_map_width / 2) * 20, (mini_map_height / 2) * 20, 0xFF0000, 0);
+}
+
+
 void draw_map(t_game *game)
 {
 	char **map = game->map;
-	int x_offset = BLOCK_SIZE_2D;
-	int y_offset = BLOCK_SIZE_2D;
 
 	clean_screen(game);
 	cast_rays(game);
+	draw_mini_map(game);
+	// draw_2d_map(game);
 	mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
 }
 
@@ -463,14 +797,41 @@ int drawer(t_game *game)
 	return (0);
 }
 
+int crouch(int keycode, void *game1)
+{
+	static int f;
+	t_game *game = (t_game *)game1;
+	if (keycode == 65507)
+	{
+		if (f == 1)
+		{
+			f = 0;
+			game->view_height = 2.5;
+			game->player.move_speed = 5;//normal
+		}
+		else
+		{
+			f = 1;
+			game->view_height = 1.5;
+			game->player.move_speed = 5 / 2;
+		}
+	}
+}
+
 void ft_mlx(t_game *game)
 {
 	game->window.cnx = mlx_init();
 	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
+	game->wall.img = mlx_xpm_file_to_image(game->window.cnx, game->wall.path, &game->wall.width, &game->wall.height);
+	if (!game->wall.img)
+		exit(2);
+	game->wall.tex_data = mlx_get_data_addr(game->wall.img, &game->wall.bpp, &game->wall.line_length, &game->wall.endian);
 	game->window.img.addr = mlx_get_data_addr(game->window.img.img, &game->window.img.bpp, &game->window.img.line_length, &game->window.img.endian);
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
+	mlx_hook(game->window.win, KeyPress, KeyPressMask, crouch, game);
+	mlx_hook(game->window.win, KeyRelease, KeyReleaseMask, crouch, game);
 	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
 	mlx_loop(game->window.cnx);
@@ -491,6 +852,40 @@ void find_player(t_game *game)
 				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.direction = 0;
+				return ;
+			}
+			else if (game->map[i][j] == 'S')
+			{
+				game->player.pva = (PI / 2);
+				game->player.x = j;
+				game->player.y = i;
+				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.direction = 2;
+				return ;
+			}
+			else if (game->map[i][j] == 'E')
+			{
+				game->player.pva = 0;
+				game->player.x = j;
+				game->player.y = i;
+				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.direction = 1;
+				return ;
+			}
+			else if (game->map[i][j] == 'W')
+			{
+				game->player.pva = PI;
+				game->player.x = j;
+				game->player.y = i;
+				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.direction = 3;
 				return ;
 			}
 		}
@@ -506,6 +901,8 @@ void setup(t_game *game, int ac, char **av)
 	game->map = parse_map(av[1], game);
 	game->map_width = ft_strlen(game->map[0]);
 	game->filename = av[1];
+	game->wall.path = ft_strdup("wall.xpm");
+	game->view_height = 2.5;
 	find_player(game);
 	ft_mlx(game);
 }

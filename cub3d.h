@@ -20,12 +20,16 @@
 
 #define WIDTH 1280
 #define HEIGHT 720
+#define MINI_MAP_H 60
+#define MINI_MAP_W 100
 #define BLOCK_SIZE 64
-#define BLOCK_SIZE_2D 24
+#define BLOCK_SIZE_2D 64
+#define MINI_MAP_X 100
+#define MINI_MAP_Y 100
 #define PI 3.141592653589793
 #define FOV 60
 #define FOV_RAD (FOV * (PI / 180))
-
+// view height
 #define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
 #define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
 #define ERR_NO_PLAYER "No player found!"
@@ -40,6 +44,7 @@ typedef struct s_player
     double rotaion_speed;
     int radius;
     int move_speed;
+    int direction;
 }   t_player;
 
 typedef struct s_image
@@ -50,6 +55,22 @@ typedef struct s_image
 	int		line_length;
 	int		endian;
 }   t_img;
+
+typedef struct s_texture
+{
+    int vert;
+    int hor;
+    double wall_cord;
+    char *path;
+    void	*img;
+    char *tex_data;
+    int width;
+    int height;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+}   t_tex;
 
 typedef struct s_window
 {
@@ -81,11 +102,16 @@ typedef struct s_game
     int   map_width;
     char    **map;
     void *img;
+    double view_height;
+    double wall_hit_x;
+    double wall_hit_y;
     t_player player;
     t_window window;
     t_ray ver_ray;
     t_ray hor_ray;
     t_keys keys;
+    t_tex wall;
+    t_tex door;
 }   t_game;
 
 void    setup(t_game *game, int ac, char **av);
@@ -94,5 +120,7 @@ int     ft_error(const char *msg);
 void draw_map(t_game *game);
 int found_wall(t_game *game, int x_pos, int y_pos);
 double normalize_angle(double angle);
+int found_door(t_game *game, int x_pos, int y_pos);
+
 
 #endif
