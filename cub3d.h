@@ -6,7 +6,8 @@
 # include <math.h>
 # include <stdbool.h>
 # include <X11/X.h>
-#include "minilibx-linux/mlx.h"
+# include <SDL2/SDL.h>
+# include "minilibx-linux/mlx.h"
 
 #define ANSI_COLOR_RESET "\033[0m"
 #define ANSI_COLOR_BLACK "\033[30m"
@@ -121,8 +122,22 @@ typedef struct s_game
     t_keys keys;
     t_tex wall;
     t_tex door;
+    t_tex p0;
+    t_tex p1;
+    t_tex p2;
+    t_tex p3;
+    t_tex p4;
     t_menu menu;
 }   t_game;
+
+// parse
+char **parse_map(const char *file_name, t_game *game);
+void find_player(t_game *game);
+
+
+
+void ft_mlx(t_game *game);
+void	ft_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 void    setup(t_game *game, int ac, char **av);
 void	ft_panic(const char *msg);
@@ -131,6 +146,31 @@ void draw_map(t_game *game);
 int found_wall(t_game *game, int x_pos, int y_pos);
 double normalize_angle(double angle);
 int found_door(t_game *game, int x_pos, int y_pos);
+int doors(int keycode, t_game *game);
 
+//hooks
+int keys(int keycode, void *game1);
+int doors(int keycode, t_game *game);
+int mouse_move_hook(int x, int y, void *game1);
+int drawer(t_game *game);
+int ft_close(t_window *window);
+
+//
+void draw_menu(t_game *game);
+
+// raycast_utils
+int facing_north(t_game *game);
+int facing_south(t_game *game);
+int facing_west(t_game *game);
+int facing_east(t_game *game);
+
+//mini map
+void draw_mini_map(t_game *game);
+
+//raycaster
+void cast_rays(t_game *game);
+
+//ray utils
+double count_distance(double x1, double x2, double y1, double y2);
 
 #endif
