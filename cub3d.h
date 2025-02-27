@@ -60,7 +60,7 @@ typedef struct s_texture
 {
     int vert;
     int hor;
-    double wall_cord;
+    int wall_cord;
     char *path;
     void	*img;
     char *tex_data;
@@ -95,6 +95,15 @@ typedef struct s_keys
     int right;
 }   t_keys;
 
+typedef struct s_menu
+{
+    int index;
+    int started;
+    int entred;
+    int ended;
+    t_tex menu_img;
+}   t_menu;
+
 typedef struct s_game
 {
     char *filename;
@@ -112,6 +121,7 @@ typedef struct s_game
     t_keys keys;
     t_tex wall;
     t_tex door;
+    t_menu menu;
 }   t_game;
 
 void    setup(t_game *game, int ac, char **av);

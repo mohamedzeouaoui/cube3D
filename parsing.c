@@ -47,7 +47,6 @@ char **parse_map(const char *file_name, t_game *game)
     return map;
 }
 
-
 int ft_close(t_window *window)
 {
 	mlx_destroy_window(window->cnx, window->win);
@@ -57,7 +56,7 @@ int ft_close(t_window *window)
 
 void clean_screen(t_game *game)
 {
-	ft_memset(game->window.img.addr, 0, WIDTH * HEIGHT * sizeof(int));
+	// ft_memset(game->window.img.addr, 0, WIDTH * HEIGHT * sizeof(int));
 }
 
 int mouse_move_hook(int x, int y, void *game1)
@@ -65,6 +64,8 @@ int mouse_move_hook(int x, int y, void *game1)
 	t_game *game = (t_game *)game1;
 	static int last_x = -1;
 
+	// if (!game->menu.started && y == HEIGHT / 3)
+	// 	game->menu.started = 1;
 	if (last_x == -1)
 		last_x = x;
 	if (x > last_x)
@@ -72,25 +73,6 @@ int mouse_move_hook(int x, int y, void *game1)
 	else if (x < last_x)
 		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
 	last_x = x;
-	clean_screen(game);
-	return (0);
-}
-
-int keys(int keycode, void *game1)
-{
-	int new_pos = 0;
-	t_game *game = game1;
-	if (keycode == 113 || 65307 == keycode)
-		ft_close(&game->window);
-	if (keycode == 65361)
-		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
-	if (keycode == 65363)
-		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
-	game->keys.left = 0;
-	game->keys.right = 0;
-	game->keys.forward = 0;
-	game->keys.backward = 0;
-	game->player.direction = 0;
 	if (game->player.pva > (45 * (PI / 180)) && game->player.pva < (135 * (PI / 180)))
 	{
 		game->keys.left = 100;
@@ -123,28 +105,112 @@ int keys(int keycode, void *game1)
 		game->keys.backward = 97;
 		game->player.direction = 3;
 	}
+	// clean_screen(game);
+	return (0);
+}
+
+int facing_north(t_game *game)
+{
+	return (game->player.pva > (225 * (PI / 180)) && game->player.pva < (315 * (PI / 180)));
+}
+
+int facing_south(t_game *game)
+{
+	return (game->player.pva > (45 * (PI / 180)) && game->player.pva < (135 * (PI / 180)));
+}
+
+int facing_west(t_game *game)
+{
+	return (game->player.pva > (135 * (PI / 180)) && game->player.pva < (225 * (PI / 180)));
+}
+
+int facing_east(t_game *game)
+{
+	return (game->player.pva > (315 * (PI / 180)) || game->player.pva < (45 * (PI / 180)));
+}
+
+int keys(int keycode, void *game1)
+{
+	int new_pos = 0;
+	t_game *game = game1;
+	game->menu.entred = 0;
+	if (keycode == 65362)
+		game->menu.index = (game->menu.index + 1) % 2;
+	else if (keycode == 65364)
+		game->menu.index = (game->menu.index + 1) % 2;
+	if (keycode == 65293)
+		game->menu.entred = 1;
+	if (keycode == 113 || 65307 == keycode)
+	{
+		// clean_screen(game);
+		// game->menu.started = 0;
+		ft_close(&game->window);
+	}
+	if (!game->menu.started)
+		return 0;
+	if (keycode == 65361)
+		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
+	if (keycode == 65363)
+		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
+	game->keys.left = 0;
+	game->keys.right = 0;
+	game->keys.forward = 0;
+	game->keys.backward = 0;
+	game->player.direction = 0;
+	if (facing_south(game))//south
+	{
+		game->keys.left = 100;
+		game->keys.right = 97;
+		game->keys.forward = 115;
+		game->keys.backward = 119;
+		game->player.direction = 2;
+	}
+	else if (facing_north(game))//north
+	{
+		game->keys.left = 97;
+		game->keys.right = 100;
+		game->keys.forward = 119;
+		game->keys.backward = 115;
+		game->player.direction = 0;
+	}
+	else if (facing_east(game))//east ->
+	{
+		game->keys.left = 115;
+		game->keys.right = 119;
+		game->keys.forward = 97;
+		game->keys.backward = 100;
+		game->player.direction = 1;
+	}
+	else if (facing_west(game))//west <-
+	{
+		game->keys.left = 119;
+		game->keys.right = 115;
+		game->keys.forward = 100;
+		game->keys.backward = 97;
+		game->player.direction = 3;
+	}
 	if (keycode == game->keys.left)
 	{
 		new_pos = game->player.x_pixel - game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
 	}
 	if (keycode == game->keys.right)
 	{
 		new_pos = game->player.x_pixel + game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
 	}
 	if (keycode == game->keys.forward)
 	{
 		new_pos = game->player.y_pixel - game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
 	}
 	if (keycode == game->keys.backward)
 	{
 		new_pos = game->player.y_pixel + game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
 	}
 }
@@ -282,6 +348,15 @@ int found_wall(t_game *game, int x_pos, int y_pos)
     return (game->map[y_map][x_map] == '1');
 }
 
+int found_door(t_game *game, int x_pos, int y_pos)
+{
+    if (x_pos < 0 || x_pos >= (game->map_width * BLOCK_SIZE) || y_pos < 0 || y_pos >= (game->map_len * BLOCK_SIZE))
+        return (1);
+    int x_map = x_pos / BLOCK_SIZE;
+    int y_map = y_pos / BLOCK_SIZE;
+
+    return (game->map[y_map][x_map] == 'C');
+}
 
 double count_distance(double x1, double x2, double y1, double y2)
 {
@@ -316,7 +391,7 @@ void hor_rays(t_game *game, t_ray *hor)
 		y_next_step--;
 	while(1)
 	{
-		if (found_wall(game, x_next_step, y_next_step))
+		if (found_wall(game, x_next_step, y_next_step) || found_door(game, x_next_step, y_next_step))
 		{
 			hor->dst = count_distance(game->player.x_pixel, x_next_step, game->player.y_pixel, y_next_step);
 			hor->x = x_next_step;
@@ -360,7 +435,7 @@ void vert_rays(t_game *game, t_ray *ver)
 		x_next_step--;
 	while(y_next_step > 0 && x_next_step > 0)
 	{
-		if (found_wall(game, x_next_step, y_next_step))
+		if (found_wall(game, x_next_step, y_next_step) || found_door(game, x_next_step, y_next_step))
 		{
 			ver->dst = count_distance(game->player.x_pixel, x_next_step, game->player.y_pixel, y_next_step);
 			ver->x = x_next_step;
@@ -390,22 +465,23 @@ unsigned int	my_mlx_pixel_get(t_game *game, int x, int y)
 {
 	char	*dst;
 
-	dst = game->wall.addr + (y * game->wall.line_length + x * (game->wall.bpp / 8));
+		dst = game->wall.addr + (y * game->wall.line_length + x * (game->wall.bpp / 8));
 	return (*(unsigned int *)dst);
 }
+
 
 
 void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
 {
 	int y = 0;
-	int tex_x = (int)(game->wall.wall_cord * BLOCK_SIZE) % BLOCK_SIZE; // Get texture column
+	int tex_x = (int)(game->wall.wall_cord % BLOCK_SIZE); // Get texture column
 	double step = 1.0 * BLOCK_SIZE / wall_height;
 	double tex_pos = 0;
 
 	// y_start = (HEIGHT / 2) - (wall_height / game->view_height);
 	// Draw ceiling
 	for (int i = 0; i < y_start; i++)
-		ft_mlx_pixel_put(game, x_start, i, 0xff0000);
+		ft_mlx_pixel_put(game, x_start, i, 0x025B8E);
 	for (y = y_start; y < y_start + wall_height; y++)
 	{
 		int tex_y = (int)tex_pos; // Keep within texture bounds
@@ -413,13 +489,17 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
 
 		// Get pixel color from texture
 		int pixel_index = (tex_y * game->wall.line_length) + (tex_x * (game->wall.bpp / 8));
-		int color = *(int *)(game->wall.tex_data + pixel_index);
+		int color;
+		if (found_door(game, game->wall_hit_x, game->wall_hit_y))
+			color = *(int *)(game->door.tex_data + pixel_index);
+		else if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
+			color = *(int *)(game->wall.tex_data + pixel_index);
 		if (y >= 0 && y < HEIGHT)
 			ft_mlx_pixel_put(game, x_start, y, color);
 	}
 	// Draw floor
 	for (int i = y_start + wall_height; i < HEIGHT; i++)
-		ft_mlx_pixel_put(game, x_start, i, 0x00ff00);
+		ft_mlx_pixel_put(game, x_start, i,  0x003E2A);
 }
 
 // width scaling
@@ -444,13 +524,19 @@ void cast_ray(t_game *game, double ray_angle, int i)
 	if (hor.dst < ver.dst)
 	{
 		wall_height = (BLOCK_SIZE / (hor.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		game->wall.wall_cord = hor.x - floor(hor.x);
+		game->wall.wall_cord = hor.x;
+		game->wall_hit_x = hor.x;
+		game->wall_hit_y = hor.y;
+		// game->wall.wall_cord = hor.x;
 		// game->wall.hor = 1;
 	}
 	else
 	{
 		wall_height = (BLOCK_SIZE / (ver.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		game->wall.wall_cord = ver.y - floor(ver.y);
+		game->wall.wall_cord = ver.y;
+		game->wall_hit_x = ver.x;
+		game->wall_hit_y = ver.y;
+		// game->wall.wall_cord = v;
 		// game->wall.vert = 1;
 	}
 	draw_3d(game, i, (HEIGHT / 2) - (wall_height / game->view_height), wall_height);
@@ -602,8 +688,8 @@ void draw_arrow(t_game *game, int x, int y, int color, int size)
     if (size <= 0)
         size = 6;
 
-	x += 8;
-	y += 5;
+	x += 6;
+	y += 6;
     // Common variables for all arrow types
     int i, j;
     int outline_color = 0x000000; // Black outline
@@ -765,6 +851,8 @@ void draw_mini_map(t_game *game)
 			{
 				if (game->map[y][x] == '1')
 					draw_square2(game, x_off, y_off, 0x00FFFF, 0); // Wall
+				else if (game->map[y][x] == 'C')
+					draw_square2(game, x_off, y_off, 0xFFFFFF, 0); // door
 				else if (game->map[y][x] == '0' || game->map[y][x] == 'S')
 					draw_square2(game, x_off, y_off, 0x000000, 0); // Floor
 			}
@@ -782,18 +870,44 @@ void draw_mini_map(t_game *game)
 
 void draw_map(t_game *game)
 {
-	char **map = game->map;
-
 	clean_screen(game);
 	cast_rays(game);
 	draw_mini_map(game);
 	// draw_2d_map(game);
-	mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
+	if (game->menu.started)
+		mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
+}
+
+void draw_menu(t_game *game)
+{
+	if (game->menu.index == 0)
+	{
+		mlx_string_put(game->window.cnx, game->window.win, WIDTH / 2, HEIGHT / 3, 0x00ff00, "start game");
+		mlx_string_put(game->window.cnx, game->window.win, WIDTH / 2, HEIGHT / 2, 0xffffff, "quit game");
+	}
+	else if (game->menu.index)
+	{
+		mlx_string_put(game->window.cnx, game->window.win, WIDTH / 2, HEIGHT / 3, 0xffffff, "start game");
+		mlx_string_put(game->window.cnx, game->window.win, WIDTH / 2, HEIGHT / 2, 0xff0000, "quit game");
+	}
 }
 
 int drawer(t_game *game)
 {
-	draw_map(game);
+	if (game->menu.started)
+		draw_map(game);
+	else if (game->menu.ended)
+		exit(0);
+	else
+	{
+		//menu
+		mlx_put_image_to_window(game->window.cnx, game->window.win, game->menu.menu_img.img, 0, 0);
+		draw_menu(game);
+		if (game->menu.index == 0 && game->menu.entred)
+			game->menu.started = 1;
+		if (game->menu.index == 1 && game->menu.entred)
+			exit(0);
+	}
 	return (0);
 }
 
@@ -818,6 +932,42 @@ int crouch(int keycode, void *game1)
 	}
 }
 
+int keys_rotate(int keycode, void *game1)
+{
+	t_game *game = (t_game *)game1;
+
+	if (keycode == 65361)
+		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
+	if (keycode == 65363)
+		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
+}
+
+int doors(int keycode, t_game *game)
+{
+	if (keycode == (int)'e')
+	{
+		// if (game->player.pva)
+		int y = game->player.y_pixel / BLOCK_SIZE;
+		int x = game->player.x_pixel / BLOCK_SIZE;
+		if (facing_south(game) && game->map[y + 1][x] == 'C')
+			game->map[y + 1][x] = 'O';
+		else if (facing_north(game) && game->map[y - 1][x] == 'C')
+			game->map[y - 1][x] = 'O';
+		else if (facing_east(game) && game->map[y][x + 1] == 'C')
+			game->map[y][x + 1] = 'O';
+		else if (facing_west(game) && game->map[y][x - 1] == 'C')
+			game->map[y][x - 1] = 'O';
+		else if (facing_south(game) && game->map[y + 1][x] == 'O')
+			game->map[y + 1][x] = 'C';
+		else if (facing_north(game) && game->map[y - 1][x] == 'O')
+			game->map[y - 1][x] = 'C';
+		else if (facing_east(game) && game->map[y][x + 1] == 'O')
+			game->map[y][x + 1] = 'C';
+		else if (facing_west(game) && game->map[y][x - 1] == 'O')
+			game->map[y][x - 1] = 'C';
+	}
+}
+
 void ft_mlx(t_game *game)
 {
 	game->window.cnx = mlx_init();
@@ -827,12 +977,21 @@ void ft_mlx(t_game *game)
 	if (!game->wall.img)
 		exit(2);
 	game->wall.tex_data = mlx_get_data_addr(game->wall.img, &game->wall.bpp, &game->wall.line_length, &game->wall.endian);
+	game->menu.menu_img.img = mlx_xpm_file_to_image(game->window.cnx, game->menu.menu_img.path, &game->menu.menu_img.width, &game->menu.menu_img.height);
+	if (!game->menu.menu_img.img)
+		exit(2);
+	game->menu.menu_img.tex_data = mlx_get_data_addr(game->menu.menu_img.img, &game->menu.menu_img.bpp, &game->menu.menu_img.line_length, &game->menu.menu_img.endian);
+	game->door.img = mlx_xpm_file_to_image(game->window.cnx, game->door.path, &game->door.width, &game->door.height);
+	if (!game->door.img)
+		exit(2);
+	game->door.tex_data = mlx_get_data_addr(game->door.img, &game->door.bpp, &game->door.line_length, &game->door.endian);
 	game->window.img.addr = mlx_get_data_addr(game->window.img.img, &game->window.img.bpp, &game->window.img.line_length, &game->window.img.endian);
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, crouch, game);
 	mlx_hook(game->window.win, KeyRelease, KeyReleaseMask, crouch, game);
 	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
+	mlx_key_hook(game->window.win, doors, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
 	mlx_loop(game->window.cnx);
 }
@@ -851,7 +1010,7 @@ void find_player(t_game *game)
 				game->player.y = i;
 				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.rotaion_speed = 2 * (PI / 180);
 				game->player.direction = 0;
 				return ;
 			}
@@ -862,7 +1021,7 @@ void find_player(t_game *game)
 				game->player.y = i;
 				game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 				game->player.y_pixel = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-				game->player.rotaion_speed = 1.5 * (PI / 180);
+				game->player.rotaion_speed = 2 * (PI / 180);
 				game->player.direction = 2;
 				return ;
 			}
@@ -903,6 +1062,8 @@ void setup(t_game *game, int ac, char **av)
 	game->filename = av[1];
 	game->wall.path = ft_strdup("wall.xpm");
 	game->view_height = 2.5;
+	game->menu.menu_img.path = ft_strdup("menu.xpm");
+	game->door.path = ft_strdup("door.xpm");
 	find_player(game);
 	ft_mlx(game);
 }
