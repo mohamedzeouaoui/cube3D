@@ -67,16 +67,28 @@ typedef struct s_data
     t_texture_F     *floor;
     t_texture_C     *ceiling;
     t_texture   *map_lines;
+    char       **map;
     int     fd_map;
 }   t_data;
 
-int ft_strlen(char *str);
+
+ // parsing
 int check_args(int argc, char **argv, t_data *data);
+int		ft_check_file(char *file, t_data *data);
+void store_texture(t_texture *map_lines);
+void check_color_F_C(t_texture *map_lines);
+void convert_F_C_to_RGB(t_data *data);
+char	*ft_substr_parsing(char *s, int start, int len);
+void check_valid_map(char *file, t_data *data);
+int is_empty_line(char *line);
+
+// utils
+
 char	*get_next_line(int fd);
+int ft_strlen(char *str);
 void print_error(char *str);
 int ft_isdigit(char c);
 char * ft_strdup(char *str);
-char	*ft_substr_parsing(char *s, int start, int len);
 char	**ft_split(char *s, char c);
 int	ft_atoi(char *str);
 
