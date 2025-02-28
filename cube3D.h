@@ -16,6 +16,7 @@
 // # include <mlx.h>
 # include <math.h>
 # include <stdio.h>
+#include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -61,12 +62,22 @@ typedef struct s_texture_C
     int     B;
 }   t_texture_C;
 
+typedef struct s_dup_texture
+{
+    bool     NO;
+    bool     SO;
+    bool     WE;
+    bool     EA;
+    bool     F;
+    bool     C;
+}   t_dup_texture;
 
 typedef struct s_data
 {
     t_texture_F     *floor;
     t_texture_C     *ceiling;
     t_texture   *map_lines;
+    t_dup_texture   *dup_texture;
     char       **map;
     int     fd_map;
 }   t_data;
@@ -81,6 +92,7 @@ void convert_F_C_to_RGB(t_data *data);
 char	*ft_substr_parsing(char *s, int start, int len);
 void check_valid_map(char *file, t_data *data);
 int is_empty_line(char *line);
+void check_duplicate_texture(char *file,t_data *data);
 
 // utils
 
