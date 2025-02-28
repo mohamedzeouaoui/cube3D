@@ -16,13 +16,14 @@ void init_data(t_data *data)
 {
     data->floor = malloc(sizeof(t_texture_F));
     data->ceiling = malloc(sizeof(t_texture_C));
+    data->map_lines = malloc(sizeof(t_texture));
+    data->dup_texture = malloc(sizeof(t_dup_texture));
 
-    if (!data->floor || !data->ceiling)
+    if (!data->floor || !data->ceiling || !data->map_lines || !data->dup_texture)
     {
         printf("Memory allocation failed\n");
         exit(1);
     }
-
     // Initialize values
     data->floor->R = 0;
     data->floor->G = 0;
@@ -31,6 +32,13 @@ void init_data(t_data *data)
     data->ceiling->R = 0;
     data->ceiling->G = 0;
     data->ceiling->B = 0;
+
+    data->map_lines->line_NO = false;
+    data->map_lines->line_SO = false;
+    data->map_lines->line_WE = false;
+    data->map_lines->line_EA = false;
+    data->map_lines->line_F = false;
+    data->map_lines->line_C = false;
 }
 
 
@@ -52,10 +60,11 @@ int check_args(int argc, char **argv, t_data *data)
     check_path(argv[1]);
     init_data(data);
     ft_check_file(argv[1], data);
-    store_texture(data->map_lines);
-    check_color_F_C(data->map_lines);
-    convert_F_C_to_RGB(data);
     check_valid_map(argv[1], data);
+    // store_texture(data->map_lines);
+    // check_color_F_C(data->map_lines);
+    // convert_F_C_to_RGB(data);
+    // check_valid_map(argv[1], data);
 
     return (1);
 }
