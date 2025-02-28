@@ -26,34 +26,58 @@ int is_empty_line(char *line)
     return (0);
 }
 
-void check_valid_map(char *file, t_data *data)
+void stor_map(char *line, t_data *data)
 {
-    char *line = NULL;
+    int i;
+    int j;
 
-    data->fd_map = open(file, O_RDONLY);
-    if (data->fd_map == -1)
-        print_error("File not found");
-    int i = 0;
-    line = get_next_line(data->fd_map);
-    free(line);
+    i = 0;
+    j = 0;
+    while (line[i] != '\0')
+    {
+        if (line[i] == '1')
+            j++;
+        i++;
+    }
+    if (j == 0)
+        print_error("Wrong map");
+    data->map = malloc(sizeof(char *) * 100);
+    if (!data->map)
+        print_error("Malloc failed");
+    data->map[0] = ft_strdup(line);
+    i = 1;
     while (1)
     {
         line = get_next_line(data->fd_map);
         if (line == NULL)
             break;
-        if(is_empty_line(line) == 1)
-        {
-            printf("line %d is empty %s\n", i, line);
-            free(line);
-            continue;
-        }
-        if (!ft_isdigit(line[0]) || line[0] == '\n')
-        {
-            free(line);
-            continue;
-        }
-
+        data->map[i] = ft_strdup(line);
         i++;
+    }
+    data->map[i] = NULL;
+}
+
+void check_valid_map(char *file, t_data *data)
+{
+    char *line;
+    int i;
+
+    i = 0;
+    data->fd_map = open(file, O_RDONLY);
+    if (data->fd_map == -1)
+        print_error("File not found");
+    while (1)
+    {
+        line = get_next_line(data->fd_map);
+        if (line == NULL)
+            break;
+        while (line[i] == ' ' || line[i] == '\t')
+            i++;
+        if(line[i] == '1')
+        {
+            stor_map(line, data);
+            break;
+        }
         free(line);
     }
 }
