@@ -6,7 +6,8 @@
 # include <math.h>
 # include <stdbool.h>
 # include <X11/X.h>
-#include "minilibx-linux/mlx.h"
+# include <SDL2/SDL.h>
+# include "minilibx-linux/mlx.h"
 
 #define ANSI_COLOR_RESET "\033[0m"
 #define ANSI_COLOR_BLACK "\033[30m"
@@ -20,11 +21,16 @@
 
 #define WIDTH 1280
 #define HEIGHT 720
+#define MINI_MAP_H 60
+#define MINI_MAP_W 100
 #define BLOCK_SIZE 64
+#define BLOCK_SIZE_2D 64
+#define MINI_MAP_X 100
+#define MINI_MAP_Y 100
 #define PI 3.141592653589793
 #define FOV 60
 #define FOV_RAD (FOV * (PI / 180))
-
+// view height
 #define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
 #define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
 #define ERR_NO_PLAYER "No player found!"
@@ -39,6 +45,7 @@ typedef struct s_player
     double rotaion_speed;
     int radius;
     int move_speed;
+    int direction;
 }   t_player;
 
 typedef struct s_image
@@ -49,6 +56,22 @@ typedef struct s_image
 	int		line_length;
 	int		endian;
 }   t_img;
+
+typedef struct s_texture1
+{
+    int vert;
+    int hor;
+    int wall_cord;
+    char *path;
+    void	*img;
+    char *tex_data;
+    int width;
+    int height;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+}   t_tex;
 
 typedef struct s_window
 {
@@ -73,18 +96,95 @@ typedef struct s_keys
     int right;
 }   t_keys;
 
+typedef struct s_menu
+{
+    int index;
+    int started;
+    int entred;
+    int ended;
+    t_tex menu_img;
+}   t_menu;
+
 typedef struct s_game
 {
     char *filename;
     int   map_len;
+    int   map_width;
     char    **map;
     void *img;
+    double view_height;
+    double wall_hit_x;
+    double wall_hit_y;
     t_player player;
     t_window window;
     t_ray ver_ray;
     t_ray hor_ray;
     t_keys keys;
+    t_tex wall;
+    t_tex door;
+    t_tex p0;
+    t_tex p1;
+    t_tex p2;
+    t_tex p3;
+    t_tex p4;
+    t_menu menu;
 }   t_game;
+
+typedef struct s_texture
+{
+	char				*line_NO;
+    char                *line_SO;
+    char                *line_WE;
+    char                *line_EA;
+    char                *line_F;
+    char                *line_C;
+}						t_texture;
+
+typedef struct s_texture_F
+{
+    int    R;
+    int     G;
+    int     B;
+}   t_texture_F;
+
+typedef struct s_texture_C
+{
+    int    R;
+    int     G;
+    int     B;
+}   t_texture_C;
+
+typedef struct s_dup_texture
+{
+    bool     NO;
+    bool     SO;
+    bool     WE;
+    bool     EA;
+    bool     F;
+    bool     C;
+}   t_dup_texture;
+
+typedef struct s_data
+{
+    t_texture_F     *floor;
+    t_texture_C     *ceiling;
+    t_texture   *map_lines;
+    t_dup_texture   *dup_texture;
+    char       **map;
+    char	**file;
+	int		max_len;
+    int     num_lines;
+    int     fd_map;
+}   t_data;
+
+// parse
+char **parse_map(const char *file_name, t_game *game);
+void find_player(t_game *game);
+
+
+
+void ft_mlx(t_game *game);
+void	ft_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 void    setup(t_game *game, int ac, char **av);
 void	ft_panic(const char *msg);
@@ -92,5 +192,43 @@ int     ft_error(const char *msg);
 void draw_map(t_game *game);
 int found_wall(t_game *game, int x_pos, int y_pos);
 double normalize_angle(double angle);
+int found_door(t_game *game, int x_pos, int y_pos);
+int doors(int keycode, t_game *game);
+
+//hooks
+int keys(int keycode, void *game1);
+int doors(int keycode, t_game *game);
+int mouse_move_hook(int x, int y, void *game1);
+int drawer(t_game *game);
+int ft_close(t_window *window);
+
+//
+void draw_menu(t_game *game);
+
+// raycast_utils
+int facing_north(t_game *game);
+int facing_south(t_game *game);
+int facing_west(t_game *game);
+int facing_east(t_game *game);
+
+//mini map
+void draw_mini_map(t_game *game);
+
+//raycaster
+void cast_rays(t_game *game);
+
+//ray utils
+double count_distance(double x1, double x2, double y1, double y2);
+
+//
+int is_empty_line(char *line);
+void count_lines(char * file, t_data *data);
+void stor_file(char *file,t_data *data);
+void max_len_of_map(t_data *data, int i);
+void stor_map(t_data *data, int i);
+void check_line_of_map(t_data *data);
+void check_zero_and_space(t_data *data);
+void cheack_wall(t_data *data);
+void check_valid_map(char *file, t_data *data);
 
 #endif
