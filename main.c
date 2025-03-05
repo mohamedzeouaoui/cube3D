@@ -17,6 +17,10 @@ int main(int argc, char **argv)
     t_data data;
 
     check_args(argc, argv, &data);
-
+    // while(data.map[i])
+    // {
+    //     printf(">>%s<<\n", data.map[i]);
+    //     i++;
+    // }
     return (0);
 }
