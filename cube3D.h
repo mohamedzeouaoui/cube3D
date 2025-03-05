@@ -79,6 +79,9 @@ typedef struct s_data
     t_texture   *map_lines;
     t_dup_texture   *dup_texture;
     char       **map;
+    char	**file;
+	int		max_len;
+    int     num_lines;
     int     fd_map;
 }   t_data;
 
