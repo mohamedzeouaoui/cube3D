@@ -255,44 +255,44 @@ int		ft_check_file(char *file, t_data *data)
     
 // }
 
-// char *check_valid_texture(char *texture, char *line, int len)
-// {
-//     int i;
+char *v_texture(char *texture, char *line, int len)
+{
+    int i;
 
-//     i = 0;
-//     while (line[i] == ' ' || line[i] == '\t')
-//         i++;
-//     if (len == 2)
-//     {    
-//         if (line[i] == texture[0] && line[i + 1] == texture[1])
-//         {
-//             i += 3;
-//             while (line[i] == ' ' || line[i] == '\t')
-//                 i++;
-//         }
-//     }
-//     if (len == 1)
-//     {
-//         if (line[i] == texture[0])
-//         {
-//             i += 2;
-//             while (line[i] == ' ' || line[i] == '\t')
-//                 i++;
-//         }
-//     }
-//     line = ft_substr_parsing(line, i, ft_strlen(line));
-//     return (line);
-// }
+    i = 0;
+    while (line[i] == ' ' || line[i] == '\t')
+        i++;
+    if (len == 2)
+    {    
+        if (line[i] == texture[0] && line[i + 1] == texture[1])
+        {
+            i += 3;
+            while (line[i] == ' ' || line[i] == '\t')
+                i++;
+        }
+    }
+    if (len == 1)
+    {
+        if (line[i] == texture[0])
+        {
+            i += 2;
+            while (line[i] == ' ' || line[i] == '\t')
+                i++;
+        }
+    }
+    line = ft_substr_parsing(line, i, ft_strlen(line));
+    return (line);
+}
 
-// void store_texture(t_texture *map_lines)
-// {
-//     map_lines->line_NO = check_valid_texture("NO", map_lines->line_NO, 2);
-//     map_lines->line_SO = check_valid_texture("SO", map_lines->line_SO, 2);
-//     map_lines->line_WE = check_valid_texture("WE", map_lines->line_WE, 2);
-//     map_lines->line_EA = check_valid_texture("EA", map_lines->line_EA, 2);
-//     map_lines->line_F = check_valid_texture("F", map_lines->line_F, 1);
-//     map_lines->line_C = check_valid_texture("C", map_lines->line_C, 1);
+void store_texture(t_texture *map_lines)
+{
+    map_lines->line_NO = v_texture("NO", map_lines->line_NO, 2);
+    map_lines->line_SO = v_texture("SO", map_lines->line_SO, 2);
+    map_lines->line_WE = v_texture("WE", map_lines->line_WE, 2);
+    map_lines->line_EA = v_texture("EA", map_lines->line_EA, 2);
+    map_lines->line_F = v_texture("F", map_lines->line_F, 1);
+    map_lines->line_C = v_texture("C", map_lines->line_C, 1);
 
-// }
+}
 
 
