@@ -4,7 +4,7 @@ CFLAGS = #-Werror -Wextra -Wall #-fsanitize=address
 RM = rm -rf
 UTILS = error.c
 
-PARSING = parsing.c check_map.c
+PARSING = parsing.c check_map.c ft_substr_parsing.c
 
 RAYCASTING = raycaster.c raycaster_utils.c mini_map.c mlx_hooks.c directions.c
 

@@ -230,5 +230,6 @@ void check_line_of_map(t_data *data);
 void check_zero_and_space(t_data *data);
 void cheack_wall(t_data *data);
 void check_valid_map(char *file, t_data *data);
+char	*ft_substr_parsing(char *s, int start, int len);
 
 #endif
