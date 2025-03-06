@@ -89,13 +89,15 @@ void format_color(char *line)
     
     i = 0;
     j = 0;
-    while (ft_isdigit(line[i]) || line[i] == ',')
+    while (ft_isdigit(line[i]) || line[i] == ',' || (line[i] == '+' && ft_isdigit(line[i + 1]) && line[i - 1] != ','))
     {
         if (line[i] == ',')
         {
             j++;
             i++;
         }
+        if (line[i] == '+')
+            i++;
         if (ft_isdigit(line[i]) == 0)
             ft_panic("Wrong color");
         i++;
@@ -121,10 +123,14 @@ void check_valid_color(char A, char *line)
     {
         while (line[i] == ' ' || line[i] == '\t')
             i++;
+        if (line[i]== '+' && ft_isdigit(line[i + 1]))
+            i++;        
         format_color(line+i);
         while (line[i] != '\0' && line[i] != '\n' && line[i] != ' ' && line[i] != '\t')
         {
-            if (ft_isdigit(line[i]) == 0 && line[i] != ',')
+            if (line[i]== '+' && line[i - 1] == ',')
+                i++;
+        if (ft_isdigit(line[i]) == 0 && line[i] != ',')
                 ft_panic("Wrong color");            
             if (line[i] == ',')
                 j++;
@@ -138,6 +144,14 @@ void check_valid_color(char A, char *line)
     return ;
 }
 
+int check_spase_tab(char c)
+{
+    if (c == ' ' || c == '\t')
+        return (1);
+    return (0);
+}
+
+
 int check_texture(char *line)
 {
     int i;
@@ -145,17 +159,17 @@ int check_texture(char *line)
     i = 0;
     while (line[i] == ' ' || line[i] == '\t')
         i++;
-    if (line[i] == 'N' && line[i + 1] == 'O')
+    if (line[i] == 'N' && line[i + 1] == 'O' && check_spase_tab(line[i + 2]))
         check_valid_texture('N', 'O', line);
-    else if (line[i] == 'S' && line[i + 1] == 'O')
+    else if (line[i] == 'S' && line[i + 1] == 'O'&& check_spase_tab(line[i + 2]))
         check_valid_texture('S', 'O', line);
-    else if (line[i] == 'W' && line[i + 1] == 'E')
+    else if (line[i] == 'W' && line[i + 1] == 'E'&& check_spase_tab(line[i + 2]))
         check_valid_texture('W', 'E', line);
-    else if (line[i] == 'E' && line[i + 1] == 'A')
+    else if (line[i] == 'E' && line[i + 1] == 'A'&& check_spase_tab(line[i + 2]))
         check_valid_texture('E', 'A', line);
-    else if (line[i] == 'F')
+    else if (line[i] == 'F' && check_spase_tab(line[i + 1]))
         check_valid_color('F', line);
-    else if (line[i] == 'C')
+    else if (line[i] == 'C' && check_spase_tab(line[i + 1]))
         check_valid_color('C', line);
     else
         ft_panic("Wrong texture");    
@@ -325,6 +339,7 @@ int	main(int ac, char **av)
 	check_valid_map(av[1], &data);	
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
+// --------------------------------------------------------------------------------------------
 	init(&game, av);
 	
 	game.map = data.map;
