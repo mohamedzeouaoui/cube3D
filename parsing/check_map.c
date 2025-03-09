@@ -93,7 +93,7 @@ void stor_map(t_data *data, int i)
             print_error("Malloc failed");
         k = 0;
         l = 0;
-        while (data->file[i][k] != '\0' && data->file[i][k] != '\n' && l < data->max_len - 2)
+        while (data->file[i][k] != '\0' && data->file[i][k] != '\n' && l < data->max_len)
         {
             data->map[j][l] = data->file[i][k];
             k++;
@@ -174,7 +174,6 @@ void check_zero_and_space(t_data *data)
             {
                 if (data->map[i][j - 1] == '0' || data->map[i][j + 1] == '0' || data->map[i - 1][j] == '0' || data->map[i + 1][j] == '0')
                 {
-                    printf(">%s<\n", data->map[i]);
                     print_error("Map is not valid");
                 }
                 
@@ -185,6 +184,38 @@ void check_zero_and_space(t_data *data)
     }
     
 }
+
+void player_position(char *line, bool *player)
+{
+    int i;
+
+    i = 0;
+
+    while (line[i] && line[i] == ' ')
+        i++;
+    while (line[i] == '1' || line[i] == ' ' || line[i] == '0')
+            i++;
+    if (line[i] != '\0')
+    {
+        if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
+        {
+            if (*player == true)
+                print_error("Map is not valid");
+            *player = true;
+        }
+        else
+            print_error("Map is not valid");
+    }
+    if (line[i] == '\0')
+        return ;
+    i++;
+    while (line[i] == '1' || line[i] == ' ' || line[i] == '0')
+        i++;
+    if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
+        print_error("Map is not valid444");
+}
+
+
 
 void cheack_wall(t_data *data)
 {
@@ -204,22 +235,8 @@ void cheack_wall(t_data *data)
     i = 1;
     while (data->map[i] != NULL)
     {
-        j = 0;
-        while (data->map[i][j] == ' ')
-            j++;
-        while (data->map[i][j] == '1' || data->map[i][j] == ' ' || data->map[i][j] == '0')
-            j++;
-        if (data->map[i][j] != '\0')
-            {
-                if (data->map[i][j] == 'N' || data->map[i][j] == 'S' || data->map[i][j] == 'W' || data->map[0][j] == 'E')
-                {
-                    if (player == true)
-                        print_error("Map is not valid");
-                    player = true;
-                }
-                else
-                    print_error("Map is not valid");
-            }
+        // j = 0;
+        player_position(data->map[i], &player);
         i++;
     }
     j = 0;
@@ -235,6 +252,59 @@ void cheack_wall(t_data *data)
         print_error("Map is not valid");
     check_zero_and_space(data);
 }
+
+
+
+
+// void cheack_wall(t_data *data)
+// {
+//     int i;
+//     int j;
+//     bool player;
+
+//     i = 0;
+//     player = false;
+//     j = 0;
+//     while (data->map[i][j] != '\0')
+//     {
+//         if (data->map[i][j] != '1' && data->map[i][j] != ' ')
+//             print_error("Map is not valid");
+//         j++;
+//     }
+//     i = 1;
+//     while (data->map[i] != NULL)
+//     {
+//         j = 0;
+//         while (data->map[i][j] == ' ')
+//             j++;
+//         while (data->map[i][j] == '1' || data->map[i][j] == ' ' || data->map[i][j] == '0')
+//             j++;
+//         if (data->map[i][j] != '\0')
+//             {
+//                 if (data->map[i][j] == 'N' || data->map[i][j] == 'S' || data->map[i][j] == 'W' || data->map[0][j] == 'E')
+//                 {
+//                     if (player == true)
+//                         print_error("Map is not valid");
+//                     player = true;
+//                 }
+//                 else
+//                     print_error("Map is not valid");
+//             }
+//         i++;
+//     }
+//     j = 0;
+//     while (data->map[i - 1][j] != '\0')
+//     {
+//         if (data->map[i-1][j] != '1' && data->map[i-1][j] != ' ')
+//         {
+//             print_error("Map is not valid");
+//         }
+//         j++;
+//     }
+//     if (player == false)
+//         print_error("Map is not valid");
+//     check_zero_and_space(data);
+// }
 
 void check_valid_map(char *file, t_data *data)
 {
