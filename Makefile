@@ -10,7 +10,7 @@ PARSING = ./parsing/parsing.c ./parsing/pars_texture.c ./parsing/pars_color.c ./
 GET_NEXT_LINE = ./get_next_line/get_next_line.c ./get_next_line/get_next_line_utils.c
 
 #EXECUTION = 
-CFILES = main.c  ${PARSING} ${UTILS} ${GET_NEXT_LINE} {EXECUTION}
+CFILES = main.c  ${PARSING} ${UTILS} ${GET_NEXT_LINE} 
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D
 
