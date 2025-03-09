@@ -65,18 +65,19 @@ int check_args(int argc, char **argv, t_data *data)
     // check_color_F_C(data->map_lines);
     convert_F_C_to_RGB(data);
     // check_valid_map(argv[1], data);
-    printf("NO: %s\n", data->map_lines->line_NO);
-    printf("SO: %s\n", data->map_lines->line_SO);
-    printf("WE: %s\n", data->map_lines->line_WE);
-    printf("EA: %s\n", data->map_lines->line_EA);
-    printf("F: %s\n", data->map_lines->line_F);
-    printf("C: %s\n", data->map_lines->line_C);
-    printf("R_F: %d\n", data->floor->R);
-    printf("G_F: %d\n", data->floor->G);
-    printf("B_F: %d\n", data->floor->B);
-    printf("R_F: %d\n", data->ceiling->R);
-    printf("G_F: %d\n", data->ceiling->G);
-    printf("B_F: %d\n", data->ceiling->B);
+    // printf("NO: %s\n", data->map_lines->line_NO);
+    // printf("SO: %s\n", data->map_lines->line_SO);
+    // printf("WE: %s\n", data->map_lines->line_WE);
+    // printf("EA: %s\n", data->map_lines->line_EA);
+    // printf("F: %s\n", data->map_lines->line_F);
+    // printf("C: %s\n", data->map_lines->line_C);
+    // printf("R_F: %d\n", data->floor->R);
+    // printf("G_F: %d\n", data->floor->G);
+    // printf("B_F: %d\n", data->floor->B);
+    // printf("R_F: %d\n", data->ceiling->R);
+    // printf("G_F: %d\n", data->ceiling->G);
+    // printf("B_F: %d\n", data->ceiling->B);
+
 
 
     return (1);
