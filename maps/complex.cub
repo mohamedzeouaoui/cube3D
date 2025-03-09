@@ -1,6 +1,6 @@
 NO ./wall_north.xpm
 SO ./wall_south.xpm    
-C 5,0,0
+C +5,0,0
 
 EA ./wall_east.xpm     
 WE ./wall_west.xpm

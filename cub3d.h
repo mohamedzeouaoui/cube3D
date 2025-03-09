@@ -200,6 +200,21 @@ typedef struct s_data
 // parse
 char **parse_map(const char *file_name, t_game *game);
 void find_player(t_game *game);
+int check_path(char *path);
+void init_data(t_data *data);
+int		ft_check_file(char *file, t_data *data);
+void store_texture(t_texture *map_lines);
+void convert_F_C_to_RGB(t_data *data);
+void check_valid_texture(char A, char B, char *line);
+void format_color(char *line);
+void check_valid_color(char A, char *line);
+void ft_get_texture(char *line, t_texture *map_lines, t_data *data);
+int check_spase_tab(char c);
+void check_line_of_map(t_data *data);
+void stor_map(t_data *data, int i);
+void check_zero_and_space(t_data *data);
+void count_lines(char * file, t_data *data);
+
 
 
 
