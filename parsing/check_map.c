@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 22:24:13 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/26 22:24:15 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/09 19:59:24 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void player_position(char *line, bool *player)
 
     while (line[i] && line[i] == ' ')
         i++;
-    while (line[i] == '1' || line[i] == ' ' || line[i] == '0')
+    while (line[i] == '1' || line[i] == ' ' || line[i] == '0' || line[i] == 'C' || line[i] == 'O')
             i++;
     if (line[i] != '\0')
     {

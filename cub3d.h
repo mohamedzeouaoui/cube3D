@@ -269,5 +269,7 @@ int ray_facing_east(double ray_angle);
 int ray_facing_west(double ray_angle);
 void draw_ceiling(t_game *game, int y_start, int x_start);
 void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
+void draw_mini_map(t_game *game);
+int found_door(t_game *game, int x_pos, int y_pos);
 
 #endif

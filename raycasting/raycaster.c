@@ -8,7 +8,7 @@ void hor_rays2(t_game *game, t_ray *hor)
 		hor->y_next_step--;
 	while(1)
 	{
-		if (found_wall(game, hor->x_next_step, hor->y_next_step))
+		if (found_wall(game, hor->x_next_step, hor->y_next_step) || found_door(game, hor->x_next_step, hor->y_next_step))
 		{
 			hor->dst = count_distance(game->player.x_pixel, hor->x_next_step, game->player.y_pixel, hor->y_next_step);
 			hor->x = hor->x_next_step;
@@ -55,7 +55,7 @@ void vert_rays2(t_game *game, t_ray *ver)
 		ver->x_next_step--;
 	while(ver->y_next_step > 0 && ver->x_next_step > 0)
 	{
-		if (found_wall(game, ver->x_next_step, ver->y_next_step))
+		if (found_wall(game, ver->x_next_step, ver->y_next_step) || found_door(game, ver->x_next_step, ver->y_next_step))
 		{
 			ver->dst = count_distance(game->player.x_pixel, ver->x_next_step, game->player.y_pixel, ver->y_next_step);
 			ver->x = ver->x_next_step;

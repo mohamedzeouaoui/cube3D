@@ -42,6 +42,7 @@ void ft_mlx_init(t_game *game, t_data *data)
 	game->wall_south.path = data->map_lines->line_SO;
 	game->wall_east.path = data->map_lines->line_EA;
 	game->wall_west.path = data->map_lines->line_WE;
+	game->door.path = ft_strdup("door.xpm");
 	game->window.cnx = mlx_init();
 	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
@@ -61,7 +62,36 @@ void ft_mlx_init(t_game *game, t_data *data)
 	if (!game->wall_west.img)
 		exit(2);
 	game->wall_west.tex_data = mlx_get_data_addr(game->wall_west.img, &game->wall_west.bpp, &game->wall_west.line_length, &game->wall_west.endian);
+	game->door.img = mlx_xpm_file_to_image(game->window.cnx, game->door.path, &game->door.width, &game->door.height);
+	if (!game->door.img)
+		exit(2);
+	game->door.tex_data = mlx_get_data_addr(game->door.img, &game->door.bpp, &game->door.line_length, &game->door.endian);
 	game->window.img.addr = mlx_get_data_addr(game->window.img.img, &game->window.img.bpp, &game->window.img.line_length, &game->window.img.endian);
+}
+
+int doors(int keycode, t_game *game)
+{
+	if (keycode == (int)'e')
+	{
+		int y = game->player.y_pixel / BLOCK_SIZE;
+		int x = game->player.x_pixel / BLOCK_SIZE;
+		if (facing_south(game) && game->map[y + 1][x] == 'C')
+			game->map[y + 1][x] = 'O';
+		else if (facing_north(game) && game->map[y - 1][x] == 'C')
+			game->map[y - 1][x] = 'O';
+		else if (facing_east(game) && game->map[y][x + 1] == 'C')
+			game->map[y][x + 1] = 'O';
+		else if (facing_west(game) && game->map[y][x - 1] == 'C')
+			game->map[y][x - 1] = 'O';
+		else if (facing_south(game) && game->map[y + 1][x] == 'O')
+			game->map[y + 1][x] = 'C';
+		else if (facing_north(game) && game->map[y - 1][x] == 'O')
+			game->map[y - 1][x] = 'C';
+		else if (facing_east(game) && game->map[y][x + 1] == 'O')
+			game->map[y][x + 1] = 'C';
+		else if (facing_west(game) && game->map[y][x - 1] == 'O')
+			game->map[y][x - 1] = 'C';
+	}
 }
 
 void ft_mlx(t_game *game, t_data *data)
@@ -69,6 +99,8 @@ void ft_mlx(t_game *game, t_data *data)
 	ft_mlx_init(game, data);
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
+	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
+	mlx_key_hook(game->window.win, doors, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
 	mlx_loop(game->window.cnx);
 }

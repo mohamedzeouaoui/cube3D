@@ -64,6 +64,8 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 		int color;
 		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
 			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
+		if (found_door(game, game->wall_hit_x, game->wall_hit_y))
+			color = *(int *)(game->door.tex_data + pixel_index);
 		if (y >= 0 && y < HEIGHT)
 			ft_mlx_pixel_put(game, x_start, y, color);
 	}

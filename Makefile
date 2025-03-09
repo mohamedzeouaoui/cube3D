@@ -6,7 +6,7 @@ UTILS = error.c
 
 PARSING = $(addprefix parsing/, check_map.c ft_substr_parsing.c pars_color.c pars_texture.c parsing.c pars_color_utils.c pars_texture_utils.c check_map_utils.c utils_prs.c)
 
-RAYCASTING = $(addprefix raycasting/, precasting.c raycaster.c raycaster_utils.c mlx_hooks.c directions.c draw_textures.c)
+RAYCASTING = $(addprefix raycasting/, mini_map.c mouse_hooks.c precasting.c raycaster.c raycaster_utils.c mlx_hooks.c directions.c draw_textures.c)
 
 CFILES = main.c  ${PARSING} ${UTILS} ${RAYCASTING}
 OFILES = ${CFILES:.c=.o}
