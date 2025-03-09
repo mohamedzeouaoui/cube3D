@@ -6,7 +6,7 @@ UTILS = error.c
 
 PARSING = parsing.c check_map.c ft_substr_parsing.c
 
-RAYCASTING = raycaster.c raycaster_utils.c mini_map.c mlx_hooks.c directions.c
+RAYCASTING = raycaster.c raycaster_utils.c mlx_hooks.c directions.c
 
 CFILES = main.c  ${PARSING} ${UTILS} ${RAYCASTING}
 OFILES = ${CFILES:.c=.o}

@@ -1,92 +1,172 @@
 #include "cub3d.h"
 
-void hor_rays(t_game *game, t_ray *hor)
+void hor_rays2(t_game *game, t_ray *hor)
 {
-	double x_intercept = 0, y_intercept = 0;
-	double x_step = 0, y_step = 0;
-	int is_ray_facing_down = (hor->ray_angle > 0 && hor->ray_angle < PI);
-	int is_ray_facing_right = (hor->ray_angle < (0.5 * PI) || hor->ray_angle > (PI * 1.5));
-
-	y_intercept = floor(game->player.y_pixel / BLOCK_SIZE) * BLOCK_SIZE;
-	if (is_ray_facing_down)
-		y_intercept += BLOCK_SIZE;
-	x_intercept = game->player.x_pixel + ((y_intercept - game->player.y_pixel) / tan(hor->ray_angle));
-
-	y_step = BLOCK_SIZE;
-	if (!is_ray_facing_down)
-		y_step *= -1;
-
-	x_step = (BLOCK_SIZE / tan(hor->ray_angle));
-	if (!is_ray_facing_right && x_step > 0)
-		x_step *= -1;
-	if (is_ray_facing_right && x_step < 0)
-		x_step *= -1;
-
-	double x_next_step = x_intercept;
-	double y_next_step = y_intercept;
-	if (!is_ray_facing_down)
-		y_next_step--;
+	hor->x_next_step = hor->x_intercept;
+	hor->y_next_step = hor->y_intercept;
+	if (!hor->is_ray_facing_down)
+		hor->y_next_step--;
 	while(1)
 	{
-		if (found_wall(game, x_next_step, y_next_step) || found_door(game, x_next_step, y_next_step))
+		if (found_wall(game, hor->x_next_step, hor->y_next_step))
 		{
-			hor->dst = count_distance(game->player.x_pixel, x_next_step, game->player.y_pixel, y_next_step);
-			hor->x = x_next_step;
-			hor->y = y_next_step;
+			hor->dst = count_distance(game->player.x_pixel, hor->x_next_step, game->player.y_pixel, hor->y_next_step);
+			hor->x = hor->x_next_step;
+			hor->y = hor->y_next_step;
 			return ;
 		}
 		else
 		{
-			x_next_step += x_step;
-			y_next_step += y_step;
+			hor->x_next_step += hor->x_step;
+			hor->y_next_step += hor->y_step;
+		}
+	}
+}
+
+void hor_rays(t_game *game, t_ray *hor)
+{
+	hor->x_intercept = 0, hor->y_intercept = 0;
+	hor->x_step = 0, hor->y_step = 0;
+	hor->is_ray_facing_down = (hor->ray_angle > 0 && hor->ray_angle < PI);
+	hor->is_ray_facing_right = (hor->ray_angle < (0.5 * PI) || hor->ray_angle > (PI * 1.5));
+
+	hor->y_intercept = floor(game->player.y_pixel / BLOCK_SIZE) * BLOCK_SIZE;
+	if (hor->is_ray_facing_down)
+		hor->y_intercept += BLOCK_SIZE;
+	hor->x_intercept = game->player.x_pixel + ((hor->y_intercept - game->player.y_pixel) / tan(hor->ray_angle));
+
+	hor->y_step = BLOCK_SIZE;
+	if (!hor->is_ray_facing_down)
+		hor->y_step *= -1;
+
+	hor->x_step = (BLOCK_SIZE / tan(hor->ray_angle));
+	if (!hor->is_ray_facing_right && hor->x_step > 0)
+		hor->x_step *= -1;
+	if (hor->is_ray_facing_right && hor->x_step < 0)
+		hor->x_step *= -1;
+	hor_rays2(game, hor);
+}
+
+void vert_rays2(t_game *game, t_ray *ver)
+{
+	ver->x_next_step = ver->x_intercept;
+	ver->y_next_step = ver->y_intercept;
+	if (!ver->is_ray_facing_right)
+		ver->x_next_step--;
+	while(ver->y_next_step > 0 && ver->x_next_step > 0)
+	{
+		if (found_wall(game, ver->x_next_step, ver->y_next_step))
+		{
+			ver->dst = count_distance(game->player.x_pixel, ver->x_next_step, game->player.y_pixel, ver->y_next_step);
+			ver->x = ver->x_next_step;
+			ver->y = ver->y_next_step;
+			return ;
+		}
+		else
+		{
+			ver->x_next_step += ver->x_step;
+			ver->y_next_step += ver->y_step;
 		}
 	}
 }
 
 void vert_rays(t_game *game, t_ray *ver)
 {
-	double x_intercept = 0, y_intercept = 0;
-	double x_step = 0, y_step = 0;
-	int is_ray_facing_down = (ver->ray_angle > 0 && ver->ray_angle < PI);
-	int is_ray_facing_right = (ver->ray_angle < (0.5 * PI) || ver->ray_angle > (PI * 1.5));
+	ver->x_intercept = 0, ver->y_intercept = 0;
+	ver->x_step = 0, ver->y_step = 0;
+	ver->is_ray_facing_down = (ver->ray_angle > 0 && ver->ray_angle < PI);
+	ver->is_ray_facing_right = (ver->ray_angle < (0.5 * PI) || ver->ray_angle > (PI * 1.5));
 
-	x_intercept = floor(game->player.x_pixel / BLOCK_SIZE) * BLOCK_SIZE;
-	if (is_ray_facing_right)
-		x_intercept += BLOCK_SIZE;
-	y_intercept = game->player.y_pixel + ((x_intercept - game->player.x_pixel) * tan(ver->ray_angle));
+	ver->x_intercept = floor(game->player.x_pixel / BLOCK_SIZE) * BLOCK_SIZE;
+	if (ver->is_ray_facing_right)
+		ver->x_intercept += BLOCK_SIZE;
+	ver->y_intercept = game->player.y_pixel + ((ver->x_intercept - game->player.x_pixel) * tan(ver->ray_angle));
 
-	x_step = BLOCK_SIZE;
-	if (!is_ray_facing_right)
-		x_step *= -1;
+	ver->x_step = BLOCK_SIZE;
+	if (!ver->is_ray_facing_right)
+		ver->x_step *= -1;
 
-	y_step = (BLOCK_SIZE * tan(ver->ray_angle));
-	if (!is_ray_facing_down && y_step > 0)
-		y_step *= -1;
-	if (is_ray_facing_down && y_step < 0)
-		y_step *= -1;
-
-	double x_next_step = x_intercept;
-	double y_next_step = y_intercept;
-	if (!is_ray_facing_right)
-		x_next_step--;
-	while(y_next_step > 0 && x_next_step > 0)
-	{
-		if (found_wall(game, x_next_step, y_next_step) || found_door(game, x_next_step, y_next_step))
-		{
-			ver->dst = count_distance(game->player.x_pixel, x_next_step, game->player.y_pixel, y_next_step);
-			ver->x = x_next_step;
-			ver->y = y_next_step;
-			return ;
-		}
-		else
-		{
-			x_next_step += x_step;
-			y_next_step += y_step;
-		}
-	}
+	ver->y_step = (BLOCK_SIZE * tan(ver->ray_angle));
+	if (!ver->is_ray_facing_down && ver->y_step > 0)
+		ver->y_step *= -1;
+	if (ver->is_ray_facing_down && ver->y_step < 0)
+		ver->y_step *= -1;
+	vert_rays2(game, ver);
 }
 
-void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
+int ray_facing_north(double ray_angle)
+{
+    ray_angle = normalize_angle(ray_angle);
+    return (ray_angle > PI && ray_angle < 1.5 * PI);
+}
+
+int ray_facing_south(double ray_angle)
+{
+    ray_angle = normalize_angle(ray_angle);
+    return (ray_angle > 0.5 * PI && ray_angle < PI);
+}
+
+int ray_facing_east(double ray_angle)
+{
+    ray_angle = normalize_angle(ray_angle);
+    return (ray_angle < 0.5 * PI || ray_angle > 1.5 * PI);
+}
+
+int ray_facing_west(double ray_angle)
+{
+    ray_angle = normalize_angle(ray_angle);
+    return (ray_angle > 0.5 * PI);
+}
+
+char *get_wall_img2(t_game *game, double ray_angle)
+{
+	if (facing_west(game)) //<-
+	{
+		if (game->which_hit == 0)//ver
+			return (game->wall_east.tex_data);//gris
+		if (game->which_hit == 1 && ray_facing_south(ray_angle))
+			return (game->wall_north.tex_data);
+		if (game->which_hit == 1 && ray_facing_north(ray_angle))
+			return (game->wall_south.tex_data);
+	}
+	else if (facing_east(game)) // ->
+	{
+		if (game->which_hit == 0)//hor
+			return (game->wall_west.tex_data);//gris
+		if (game->which_hit == 1 && ray_facing_west(ray_angle))
+			return (game->wall_south.tex_data);
+		if (game->which_hit == 1)
+			return (game->wall_north.tex_data);
+	}
+	return (NULL);
+}
+
+char *get_wall_img(t_game *game, double ray_angle)
+{
+	ray_angle = normalize_angle(ray_angle);
+	if (facing_north(game))
+	{
+		if (game->which_hit == 1)//hor
+			return (game->wall_south.tex_data);//yellow
+		if (game->which_hit == 0 && ray_facing_east(ray_angle))
+			return (game->wall_west.tex_data);
+		if (game->which_hit == 0 && ray_facing_west(ray_angle))
+			return (game->wall_east.tex_data);
+	}
+	else if (facing_south(game))
+	{
+		if (game->which_hit == 1)//hor
+			return (game->wall_north.tex_data);//gris
+		if (game->which_hit == 0 && ray_facing_east(ray_angle))
+			return (game->wall_west.tex_data);
+		if (game->which_hit == 0)
+			return (game->wall_east.tex_data);
+	}
+	return (get_wall_img2(game, ray_angle));
+}
+
+
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray_angle)
 {
 	int y = 0;
 	int tex_x = (int)(game->wall.wall_cord % BLOCK_SIZE); // Get texture column
@@ -101,12 +181,10 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
 		int tex_y = (int)tex_pos; // Keep within texture bounds
 		tex_pos += step;
 
-		int pixel_index = (tex_y * game->wall.line_length) + (tex_x * (game->wall.bpp / 8));
+		int pixel_index = (tex_y * game->wall_north.line_length) + (tex_x * (game->wall_north.bpp / 8));
 		int color;
-		if (found_door(game, game->wall_hit_x, game->wall_hit_y))
-			color = *(int *)(game->door.tex_data + pixel_index);
-		else if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
-			color = *(int *)(game->wall.tex_data + pixel_index);
+		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
+			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
 		if (y >= 0 && y < HEIGHT)
 			ft_mlx_pixel_put(game, x_start, y, color);
 	}
@@ -115,39 +193,47 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height)
 		ft_mlx_pixel_put(game, x_start, i,  0x003E2A);
 }
 
+void cast_ray_init(t_game *game, t_ray *hor, t_ray *ver, double ray_angle)
+{
+	hor->dst = INFINITY;
+	hor->x = 0;
+	hor->y = 0;
+	hor->ray_angle = ray_angle;
+	ver->dst = INFINITY;
+	ver->x = 0;
+	ver->y = 0;
+	ver->ray_angle = ray_angle;
+	game->which_hit = -1;
+	game->wall.wall_cord = 0;
+	game->wall.vert = 0;
+	game->wall.hor = 0;
+	game->wall_height = 0;
+}
+
 void cast_ray(t_game *game, double ray_angle, int i)
 {
 	t_ray	hor;
 	t_ray	ver;
-	hor.dst = INFINITY;
-	hor.x = 0;
-	hor.y = 0;
-	hor.ray_angle = ray_angle;
-	ver.dst = INFINITY;
-	ver.x = 0;
-	ver.y = 0;
-	ver.ray_angle = ray_angle;
+	cast_ray_init(game, &hor, &ver, ray_angle);
 	hor_rays(game, &hor);
 	vert_rays(game, &ver);
-	game->wall.wall_cord = 0;
-	game->wall.vert = 0;
-	game->wall.hor = 0;
-	double wall_height = 0;
 	if (hor.dst < ver.dst)
 	{
-		wall_height = (BLOCK_SIZE / (hor.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		game->wall.wall_cord = hor.x;
+		game->wall_height = (BLOCK_SIZE / (hor.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
+		game->wall.wall_cord = fmod(hor.x, BLOCK_SIZE);
 		game->wall_hit_x = hor.x;
 		game->wall_hit_y = hor.y;
+		game->which_hit = 1;
 	}
-	else
+	else if (ver.dst < hor.dst)
 	{
-		wall_height = (BLOCK_SIZE / (ver.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
-		game->wall.wall_cord = ver.y;
+		game->wall_height = (BLOCK_SIZE / (ver.dst * cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
+		game->wall.wall_cord = fmod(ver.y, BLOCK_SIZE);
 		game->wall_hit_x = ver.x;
 		game->wall_hit_y = ver.y;
+		game->which_hit = 0;
 	}
-	draw_3d(game, i, (HEIGHT / 2) - (wall_height / game->view_height), wall_height);
+	draw_3d(game, i, (HEIGHT / 2) - (game->wall_height / game->view_height), game->wall_height, ray_angle);
 }
 
 double normalize_angle(double angle)

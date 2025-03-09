@@ -13,16 +13,6 @@ int is_empty_line(char *line)
     return (0);
 }
 
-void init(t_game *game, char **av)
-{
-	game->filename = av[1];
-	game->view_height = 2.5;
-	game->wall.path = ft_strdup("wall.xpm");
-	game->menu.menu_img.path = ft_strdup("menu.xpm");
-	game->door.path = ft_strdup("door.xpm");
-	game->p0.path = ft_strdup("p0.xpm");
-}
-
 void init_data(t_data *data)
 {
 	data->floor = malloc(sizeof(t_texture_F));
@@ -326,6 +316,42 @@ void convert_F_C_to_RGB(t_data *data)
     free(str_F);
 }
 
+void init_keys(t_game *game)
+{
+    if (game->map[game->player.y][game->player.x] == 'N')
+    {
+        game->keys.left = 97;
+		game->keys.right = 100;
+		game->keys.forward = 119;
+		game->keys.backward = 115;
+		game->player.direction = 0;
+    }
+    if (game->map[game->player.y][game->player.x] == 'W')
+    {
+        game->keys.left = 119;
+		game->keys.right = 115;
+		game->keys.forward = 100;
+		game->keys.backward = 97;
+		game->player.direction = 3;
+    }
+    if (game->map[game->player.y][game->player.x] == 'E')
+    {
+        game->keys.left = 115;
+		game->keys.right = 119;
+		game->keys.forward = 97;
+		game->keys.backward = 100;
+		game->player.direction = 1;
+    }
+    if (game->map[game->player.y][game->player.x] == 'S')
+    {
+        game->keys.left = 100;
+		game->keys.right = 97;
+		game->keys.forward = 115;
+		game->keys.backward = 119;
+		game->player.direction = 2;
+    }
+}
+
 int	main(int ac, char **av)
 {
 	static t_data	data;
@@ -340,11 +366,11 @@ int	main(int ac, char **av)
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
 // --------------------------------------------------------------------------------------------
-	init(&game, av);
-	
+    game.view_height = 2.5;
 	game.map = data.map;
 	game.map_width = data.max_len;
 	game.map_len = map_len(game.map);
 	find_player(&game);
-	ft_mlx(&game);
+    init_keys(&game);
+	ft_mlx(&game, &data);
 }

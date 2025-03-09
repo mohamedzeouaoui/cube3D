@@ -59,9 +59,6 @@ typedef struct s_image
 
 typedef struct s_texture1
 {
-    int vert;
-    int hor;
-    int wall_cord;
     char *path;
     void	*img;
     char *tex_data;
@@ -86,6 +83,14 @@ typedef struct s_ray
     double y;
     double dst;
     double ray_angle;
+    double x_intercept;
+    double y_intercept;
+    double x_step;
+    double y_step;
+    int is_ray_facing_down;
+    int is_ray_facing_right;
+    double x_next_step;
+    double y_next_step;
 }   t_ray;
 
 typedef struct s_keys
@@ -105,6 +110,13 @@ typedef struct s_menu
     t_tex menu_img;
 }   t_menu;
 
+typedef struct wall_hit
+{
+    int vert;
+    int hor;
+    int wall_cord;
+}   t_wall;
+
 typedef struct s_game
 {
     char *filename;
@@ -115,12 +127,18 @@ typedef struct s_game
     double view_height;
     double wall_hit_x;
     double wall_hit_y;
+    double wall_height;
+    int which_hit;
     t_player player;
     t_window window;
     t_ray ver_ray;
     t_ray hor_ray;
     t_keys keys;
-    t_tex wall;
+    t_wall wall;
+    t_tex wall_north;
+    t_tex wall_south;
+    t_tex wall_east;
+    t_tex wall_west;
     t_tex door;
     t_tex p0;
     t_tex p1;
@@ -183,7 +201,7 @@ void find_player(t_game *game);
 
 
 
-void ft_mlx(t_game *game);
+void ft_mlx(t_game *game, t_data *data);
 void	ft_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 void    setup(t_game *game, int ac, char **av);
@@ -192,18 +210,14 @@ int     ft_error(const char *msg);
 void draw_map(t_game *game);
 int found_wall(t_game *game, int x_pos, int y_pos);
 double normalize_angle(double angle);
-int found_door(t_game *game, int x_pos, int y_pos);
-int doors(int keycode, t_game *game);
 
 //hooks
 int keys(int keycode, void *game1);
-int doors(int keycode, t_game *game);
 int mouse_move_hook(int x, int y, void *game1);
 int drawer(t_game *game);
 int ft_close(t_window *window);
 
 //
-void draw_menu(t_game *game);
 
 // raycast_utils
 int facing_north(t_game *game);
@@ -211,8 +225,6 @@ int facing_south(t_game *game);
 int facing_west(t_game *game);
 int facing_east(t_game *game);
 
-//mini map
-void draw_mini_map(t_game *game);
 
 //raycaster
 void cast_rays(t_game *game);
