@@ -4,12 +4,9 @@ CFLAGS = #-Werror -Wextra -Wall #-fsanitize=address
 RM = rm -rf
 UTILS = error.c
 
-PARSING = precasting.c ./parsing/check_map.c ft_substr_parsing.c \
-		 ./parsing/pars_color.c ./parsing/pars_texture.c ./parsing/parsing.c \
-		 ./parsing/pars_color_utils.c ./parsing/pars_texture_utils.c ./parsing/check_map_utils.c \
-		 parsing/utils_prs.c
+PARSING = $(addprefix parsing/, check_map.c ft_substr_parsing.c pars_color.c pars_texture.c parsing.c pars_color_utils.c pars_texture_utils.c check_map_utils.c utils_prs.c)
 
-RAYCASTING = raycaster.c raycaster_utils.c mlx_hooks.c directions.c
+RAYCASTING = $(addprefix raycasting/, precasting.c raycaster.c raycaster_utils.c mlx_hooks.c directions.c draw_textures.c)
 
 CFILES = main.c  ${PARSING} ${UTILS} ${RAYCASTING}
 OFILES = ${CFILES:.c=.o}

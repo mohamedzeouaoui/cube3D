@@ -8,6 +8,26 @@ int map_len(char **map)
 	return i;
 }
 
+void init_keys2(t_game *game)
+{
+	if (game->map[game->player.y][game->player.x] == 'E')
+	{
+		game->keys.left = 115;
+		game->keys.right = 119;
+		game->keys.forward = 97;
+		game->keys.backward = 100;
+		game->player.direction = 1;
+	}
+	if (game->map[game->player.y][game->player.x] == 'S')
+	{
+		game->keys.left = 100;
+		game->keys.right = 97;
+		game->keys.forward = 115;
+		game->keys.backward = 119;
+		game->player.direction = 2;
+	}
+}
+
 void init_keys(t_game *game)
 {
     if (game->map[game->player.y][game->player.x] == 'N')
@@ -26,22 +46,7 @@ void init_keys(t_game *game)
 		game->keys.backward = 97;
 		game->player.direction = 3;
     }
-    if (game->map[game->player.y][game->player.x] == 'E')
-    {
-        game->keys.left = 115;
-		game->keys.right = 119;
-		game->keys.forward = 97;
-		game->keys.backward = 100;
-		game->player.direction = 1;
-    }
-    if (game->map[game->player.y][game->player.x] == 'S')
-    {
-        game->keys.left = 100;
-		game->keys.right = 97;
-		game->keys.forward = 115;
-		game->keys.backward = 119;
-		game->player.direction = 2;
-    }
+	init_keys2(game);
 }
 
 int	main(int ac, char **av)

@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static size_t	get_map_rows(const char *file_name)
 {
@@ -22,11 +22,6 @@ static size_t	get_map_rows(const char *file_name)
 	return (rows);
 }
 
-void clean_screen(t_game *game)
-{
-	// ft_memset(game->window.img.addr, 0, WIDTH * HEIGHT * sizeof(int));
-}
-
 void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
 	char	*dst;
@@ -37,7 +32,6 @@ void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
 
 void draw_map(t_game *game)
 {
-	// clean_screen(game);
 	cast_rays(game);
 	mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
 }
@@ -51,22 +45,18 @@ void ft_mlx_init(t_game *game, t_data *data)
 	game->window.cnx = mlx_init();
 	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
-	//north
 	game->wall_north.img = mlx_xpm_file_to_image(game->window.cnx, game->wall_north.path, &game->wall_north.width, &game->wall_north.height);
 	if (!game->wall_north.img)
 		exit(2);
 	game->wall_north.tex_data = mlx_get_data_addr(game->wall_north.img, &game->wall_north.bpp, &game->wall_north.line_length, &game->wall_north.endian);
-	// //south
 	game->wall_south.img = mlx_xpm_file_to_image(game->window.cnx, game->wall_south.path, &game->wall_south.width, &game->wall_south.height);
 	if (!game->wall_south.img)
 		exit(2);
 	game->wall_south.tex_data = mlx_get_data_addr(game->wall_south.img, &game->wall_south.bpp, &game->wall_south.line_length, &game->wall_south.endian);
-	// //east
 	game->wall_east.img = mlx_xpm_file_to_image(game->window.cnx, game->wall_east.path, &game->wall_east.width, &game->wall_east.height);
 	if (!game->wall_east.img)
 		exit(2);
 	game->wall_east.tex_data = mlx_get_data_addr(game->wall_east.img, &game->wall_east.bpp, &game->wall_east.line_length, &game->wall_east.endian);
-	// //west
 	game->wall_west.img = mlx_xpm_file_to_image(game->window.cnx, game->wall_west.path, &game->wall_west.width, &game->wall_west.height);
 	if (!game->wall_west.img)
 		exit(2);
@@ -93,41 +83,51 @@ void player_abilities(t_game *game, int i, int j)
 	game->player.rotaion_speed = 3 * (PI / 180);
 }
 
+int found_player(int i, int j, t_game *game)
+{
+	if (game->map[i][j] == 'N')
+	{
+		game->player.pva = -(PI / 2);
+		game->player.direction = 0;
+		return 1;
+	}
+	else if (game->map[i][j] == 'S')
+	{
+		game->player.pva = (PI / 2);
+		game->player.direction = 2;
+		return 1;
+	}
+	else if (game->map[i][j] == 'E')
+	{
+		game->player.pva = 0;
+		game->player.direction = 1;
+		return 1;
+	}
+	else if (game->map[i][j] == 'W')
+	{
+		game->player.pva = PI;
+		game->player.direction = 3;
+		return 1;
+	}
+	return (0);
+}
+
 void find_player(t_game *game)
 {
-	for(int i = 0; i < game->map_len + 1; i++)
+	int i = 0;
+	int j;
+	while(i < game->map_len + 1)
 	{
-		for (int j = 0; j < ft_strlen(game->map[i]); j++)
+		j = 0;
+		while(j < ft_strlen(game->map[i]))
 		{
-			if (game->map[i][j] == 'N')
+			if (found_player(i, j, game))
 			{
-				game->player.pva = -(PI / 2);
 				player_abilities(game, i, j);
-				game->player.direction = 0;
 				return ;
 			}
-			else if (game->map[i][j] == 'S')
-			{
-				game->player.pva = (PI / 2);
-				player_abilities(game, i, j);
-				game->player.direction = 2;
-				return ;
-			}
-			else if (game->map[i][j] == 'E')
-			{
-				game->player.pva = 0;
-				player_abilities(game, i, j);
-				game->player.direction = 1;
-				return ;
-			}
-			else if (game->map[i][j] == 'W')
-			{
-				game->player.pva = PI;
-				player_abilities(game, i, j);
-				game->player.direction = 3;
-				return ;
-			}
+			j++;
 		}
+		i++;
 	}
 }
-// -lmlx -lX11 -lXext -lm -Llibft -lft

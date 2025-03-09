@@ -250,6 +250,8 @@ void cast_rays(t_game *game);
 double count_distance(double x1, double x2, double y1, double y2);
 
 //
+void cast_rays(t_game *game);
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray_angle);
 int is_empty_line(char *line);
 void count_lines(char * file, t_data *data);
 void stor_file(char *file,t_data *data);
@@ -261,5 +263,11 @@ void cheack_wall(t_data *data);
 void check_valid_map(char *file, t_data *data);
 char	*ft_substr_parsing(char *s, int start, int len);
 int r_g_b(int r, int g, int b);
+int ray_facing_north(double ray_angle);
+int ray_facing_south(double ray_angle);
+int ray_facing_east(double ray_angle);
+int ray_facing_west(double ray_angle);
+void draw_ceiling(t_game *game, int y_start, int x_start);
+void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
 
 #endif
