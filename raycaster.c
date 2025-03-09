@@ -175,7 +175,7 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 
 	// Draw ceiling
 	for (int i = 0; i < y_start; i++)
-		ft_mlx_pixel_put(game, x_start, i, 0x025B8E);
+		ft_mlx_pixel_put(game, x_start, i, game->c_color);
 	for (y = y_start; y < y_start + wall_height; y++)
 	{
 		int tex_y = (int)tex_pos; // Keep within texture bounds
@@ -190,7 +190,7 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 	}
 	// Draw floor
 	for (int i = y_start + wall_height; i < HEIGHT; i++)
-		ft_mlx_pixel_put(game, x_start, i,  0x003E2A);
+		ft_mlx_pixel_put(game, x_start, i,  game->f_color);
 }
 
 void cast_ray_init(t_game *game, t_ray *hor, t_ray *ver, double ray_angle)

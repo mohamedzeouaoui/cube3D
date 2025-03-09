@@ -15,3 +15,8 @@ double count_distance(double x1, double x2, double y1, double y2)
 {
 	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
+
+int r_g_b(int r, int g, int b)
+{
+    return (r << 16) | (g << 8) | b;
+}

@@ -370,7 +370,9 @@ int	main(int ac, char **av)
 	game.map = data.map;
 	game.map_width = data.max_len;
 	game.map_len = map_len(game.map);
-	find_player(&game);
+    game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
+	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
+    find_player(&game);
     init_keys(&game);
 	ft_mlx(&game, &data);
 }
