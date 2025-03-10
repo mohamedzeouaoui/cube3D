@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void draw_square2(t_game *game, int x_start, int y_start, int color, int f)
 {

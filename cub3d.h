@@ -59,9 +59,6 @@ typedef struct s_image
 
 typedef struct s_texture1
 {
-    int vert;
-    int hor;
-    int wall_cord;
     char *path;
     void	*img;
     char *tex_data;
@@ -86,6 +83,14 @@ typedef struct s_ray
     double y;
     double dst;
     double ray_angle;
+    double x_intercept;
+    double y_intercept;
+    double x_step;
+    double y_step;
+    int is_ray_facing_down;
+    int is_ray_facing_right;
+    double x_next_step;
+    double y_next_step;
 }   t_ray;
 
 typedef struct s_keys
@@ -105,6 +110,13 @@ typedef struct s_menu
     t_tex menu_img;
 }   t_menu;
 
+typedef struct wall_hit
+{
+    int vert;
+    int hor;
+    int wall_cord;
+}   t_wall;
+
 typedef struct s_game
 {
     char *filename;
@@ -115,12 +127,20 @@ typedef struct s_game
     double view_height;
     double wall_hit_x;
     double wall_hit_y;
+    double wall_height;
+    int which_hit;
+    int c_color;
+    int f_color;
     t_player player;
     t_window window;
     t_ray ver_ray;
     t_ray hor_ray;
     t_keys keys;
-    t_tex wall;
+    t_wall wall;
+    t_tex wall_north;
+    t_tex wall_south;
+    t_tex wall_east;
+    t_tex wall_west;
     t_tex door;
     t_tex p0;
     t_tex p1;
@@ -136,6 +156,7 @@ typedef struct s_texture
     char                *line_SO;
     char                *line_WE;
     char                *line_EA;
+    char                *line_D;
     char                *line_F;
     char                *line_C;
 }						t_texture;
@@ -160,6 +181,7 @@ typedef struct s_dup_texture
     bool     SO;
     bool     WE;
     bool     EA;
+    bool     D;
     bool     F;
     bool     C;
 }   t_dup_texture;
@@ -180,10 +202,25 @@ typedef struct s_data
 // parse
 char **parse_map(const char *file_name, t_game *game);
 void find_player(t_game *game);
+int check_path(char *path);
+void init_data(t_data *data);
+int		ft_check_file(char *file, t_data *data);
+void store_texture(t_texture *map_lines);
+void convert_F_C_to_RGB(t_data *data);
+void check_valid_texture(char A, char B, char *line);
+void format_color(char *line);
+void check_valid_color(char A, char *line);
+void ft_get_texture(char *line, t_texture *map_lines, t_data *data);
+int check_spase_tab(char c);
+void check_line_of_map(t_data *data);
+void stor_map(t_data *data, int i);
+void check_zero_and_space(t_data *data);
+void count_lines(char * file, t_data *data);
 
 
 
-void ft_mlx(t_game *game);
+
+void ft_mlx(t_game *game, t_data *data);
 void	ft_mlx_pixel_put(t_game *game, int x, int y, int color);
 
 void    setup(t_game *game, int ac, char **av);
@@ -192,18 +229,14 @@ int     ft_error(const char *msg);
 void draw_map(t_game *game);
 int found_wall(t_game *game, int x_pos, int y_pos);
 double normalize_angle(double angle);
-int found_door(t_game *game, int x_pos, int y_pos);
-int doors(int keycode, t_game *game);
 
 //hooks
 int keys(int keycode, void *game1);
-int doors(int keycode, t_game *game);
 int mouse_move_hook(int x, int y, void *game1);
 int drawer(t_game *game);
 int ft_close(t_window *window);
 
 //
-void draw_menu(t_game *game);
 
 // raycast_utils
 int facing_north(t_game *game);
@@ -211,8 +244,6 @@ int facing_south(t_game *game);
 int facing_west(t_game *game);
 int facing_east(t_game *game);
 
-//mini map
-void draw_mini_map(t_game *game);
 
 //raycaster
 void cast_rays(t_game *game);
@@ -221,6 +252,8 @@ void cast_rays(t_game *game);
 double count_distance(double x1, double x2, double y1, double y2);
 
 //
+void cast_rays(t_game *game);
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray_angle);
 int is_empty_line(char *line);
 void count_lines(char * file, t_data *data);
 void stor_file(char *file,t_data *data);
@@ -231,5 +264,14 @@ void check_zero_and_space(t_data *data);
 void cheack_wall(t_data *data);
 void check_valid_map(char *file, t_data *data);
 char	*ft_substr_parsing(char *s, int start, int len);
+int r_g_b(int r, int g, int b);
+int ray_facing_north(double ray_angle);
+int ray_facing_south(double ray_angle);
+int ray_facing_east(double ray_angle);
+int ray_facing_west(double ray_angle);
+void draw_ceiling(t_game *game, int y_start, int x_start);
+void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
+void draw_mini_map(t_game *game);
+int found_door(t_game *game, int x_pos, int y_pos);
 
 #endif

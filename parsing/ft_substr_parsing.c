@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_substr_parsing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:02:41 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/24 13:02:45 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/09 05:38:05 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 char	*ft_strcat_edit(char *str, char *str2)
 {
@@ -35,7 +35,6 @@ char	*ft_strcat_edit(char *str, char *str2)
 char	*ft_substr_parsing(char *s, int start, int len)
 {
 	char	*new;
-	// int	i;
 
 	if (!s)
 		return (NULL);
