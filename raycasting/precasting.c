@@ -43,6 +43,10 @@ void ft_mlx_init(t_game *game, t_data *data)
 	game->wall_east.path = data->map_lines->line_EA;
 	game->wall_west.path = data->map_lines->line_WE;
 	game->door.path = ft_strdup("door.xpm");
+	game->p0.path = ft_strdup("p0.xpm");
+	game->p1.path = ft_strdup("p1.xpm");
+	game->p2.path = ft_strdup("p2.xpm");
+	game->p3.path = ft_strdup("p3.xpm");
 	game->window.cnx = mlx_init();
 	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
@@ -66,6 +70,22 @@ void ft_mlx_init(t_game *game, t_data *data)
 	if (!game->door.img)
 		exit(2);
 	game->door.tex_data = mlx_get_data_addr(game->door.img, &game->door.bpp, &game->door.line_length, &game->door.endian);
+	game->p0.img = mlx_xpm_file_to_image(game->window.cnx, game->p0.path, &game->p0.width, &game->p0.height);
+	if (!game->p0.img)
+		exit(2);
+	game->p0.tex_data = mlx_get_data_addr(game->p0.img, &game->p0.bpp, &game->p0.line_length, &game->p0.endian);
+	game->p1.img = mlx_xpm_file_to_image(game->window.cnx, game->p1.path, &game->p1.width, &game->p1.height);
+	if (!game->p1.img)
+		exit(2);
+	game->p1.tex_data = mlx_get_data_addr(game->p1.img, &game->p1.bpp, &game->p1.line_length, &game->p1.endian);
+	game->p2.img = mlx_xpm_file_to_image(game->window.cnx, game->p2.path, &game->p2.width, &game->p2.height);
+	if (!game->p2.img)
+		exit(2);
+	game->p2.tex_data = mlx_get_data_addr(game->p2.img, &game->p2.bpp, &game->p2.line_length, &game->p2.endian);
+	game->p3.img = mlx_xpm_file_to_image(game->window.cnx, game->p3.path, &game->p3.width, &game->p3.height);
+	if (!game->p3.img)
+		exit(2);
+	game->p3.tex_data = mlx_get_data_addr(game->p3.img, &game->p3.bpp, &game->p3.line_length, &game->p3.endian);
 	game->window.img.addr = mlx_get_data_addr(game->window.img.img, &game->window.img.bpp, &game->window.img.line_length, &game->window.img.endian);
 }
 
@@ -92,6 +112,19 @@ int doors(int keycode, t_game *game)
 		else if (facing_west(game) && game->map[y][x - 1] == 'O')
 			game->map[y][x - 1] = 'C';
 	}
+	return 0;
+}
+
+void clear_previous_image(t_game *game)
+{
+	ft_memset(game->window.img.addr, 0, WIDTH * HEIGHT);
+}
+
+int animation(int keycode, int x, int y, t_game *game)
+{
+	if (keycode == 1)
+		game->animation = 1;
+	return 0;
 }
 
 void ft_mlx(t_game *game, t_data *data)
@@ -100,14 +133,16 @@ void ft_mlx(t_game *game, t_data *data)
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
 	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
+	// mlx_hook(game->window.win, 6, , animation, game);
 	mlx_key_hook(game->window.win, doors, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
+	mlx_mouse_hook(game->window.win, animation, game);
 	mlx_loop(game->window.cnx);
 }
 
 void player_abilities(t_game *game, int i, int j)
 {
-	game->player.move_speed = 20;
+	game->player.move_speed = 10;
 	game->player.x = j;
 	game->player.y = i;
 	game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);

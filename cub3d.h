@@ -1,4 +1,4 @@
-#ifndef CUBD3D_H
+#ifndef CUB3D_H
 #define CUB3D_H
 
 # include "libft/libft.h"
@@ -131,6 +131,7 @@ typedef struct s_game
     int which_hit;
     int c_color;
     int f_color;
+    int animation;
     t_player player;
     t_window window;
     t_ray ver_ray;
@@ -146,7 +147,6 @@ typedef struct s_game
     t_tex p1;
     t_tex p2;
     t_tex p3;
-    t_tex p4;
     t_menu menu;
 }   t_game;
 
@@ -273,5 +273,7 @@ void draw_ceiling(t_game *game, int y_start, int x_start);
 void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
 void draw_mini_map(t_game *game);
 int found_door(t_game *game, int x_pos, int y_pos);
+void draw_animation(t_game *game, t_tex *image);
+void clear_previous_image(t_game *game);
 
 #endif

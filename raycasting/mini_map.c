@@ -193,7 +193,7 @@ void draw_mini_map(t_game *game)
 					draw_square2(game, x_off, y_off, 0x00FFFF, 0); // Wall
 				else if (game->map[y][x] == 'C')
 					draw_square2(game, x_off, y_off, 0xFFFFFF, 0); // door
-				else if (game->map[y][x] == '0' || game->map[y][x] == 'S')
+				else if (game->map[y][x] == '0' || game->map[y][x] == 'O')
 					draw_square2(game, x_off, y_off, 0x000000, 0); // Floor
 			}
 			x_off += 20;

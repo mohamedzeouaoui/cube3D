@@ -7,10 +7,45 @@ int ft_close(t_window *window)
 	exit(0);
 }
 
+void draw_animation(t_game *game, t_tex *image)
+{
+	int y_start = HEIGHT - image->height;
+	while(y_start < HEIGHT)
+	{
+		int x_start = WIDTH / 2 - image->width / 2;
+		while(x_start < WIDTH / 2 + image->width / 2)
+		{
+			int color = *(unsigned int *)(image->tex_data + (4 * image->width * (y_start - (HEIGHT - image->height)) + 4 * (x_start - (WIDTH / 2 - image->width / 2))));
+			if (color != 0xff000000) // Eliminate black pixels
+				ft_mlx_pixel_put(game, x_start, y_start, color);
+			x_start++;
+		}
+		y_start++;
+	}
+}
+
 int drawer(t_game *game)
 {
 	draw_map(game);
 	draw_mini_map(game);
+	if (!game->animation)
+		draw_animation(game, &game->p0);
+	else if (game->animation == 1)
+	{
+		draw_animation(game, &game->p1);
+		game->animation = 2;
+	}
+	else if (game->animation == 2)
+	{
+		draw_animation(game, &game->p2);
+		game->animation = 3;
+	}
+	if (game->animation == 3)
+	{
+		draw_animation(game, &game->p3);
+		game->animation = 0;
+
+	}
 	return (0);
 }
 
@@ -132,4 +167,5 @@ int keys(int keycode, void *game1)
 		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
 	dynamic_control(game);
 	move_player(keycode, game, new_pos);
+	return 0;
 }
