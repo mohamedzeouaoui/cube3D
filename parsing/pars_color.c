@@ -49,7 +49,6 @@ void convert_F_C_to_RGB(t_data *data)
 {
     char **str_F;
     char **str_C;
-
     str_C = ft_split(data->map_lines->line_C, ',');
     str_F = ft_split(data->map_lines->line_F, ',');
     data->floor->R = check_valide_color(ft_atoi(str_F[0]));
