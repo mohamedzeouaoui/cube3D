@@ -35,6 +35,12 @@
 #define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
 #define ERR_NO_PLAYER "No player found!"
 
+struct							s_gc
+{
+	void						*p;
+	struct s_gc					*next;
+};
+
 typedef struct s_player
 {
     int x;
@@ -275,5 +281,10 @@ void draw_mini_map(t_game *game);
 int found_door(t_game *game, int x_pos, int y_pos);
 void draw_animation(t_game *game, t_tex *image);
 void clear_previous_image(t_game *game);
+
+// gc
+void	*gc_malloc(size_t bytes);
+void	add_to_gc(void *addr);
+void	free_all_in_gc(void);
 
 #endif

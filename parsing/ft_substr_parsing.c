@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:02:41 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/09 05:38:05 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/10 06:34:20 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,9 @@ char	*ft_substr_parsing(char *s, int start, int len)
 		return (NULL);
 	while (s[start] == ' ' || s[start] == '\t')
 		start++;
-	new = (char *)malloc(sizeof(char) * (len - start + 1));
+	new = (char *)gc_malloc(sizeof(char) * (len - start + 1));
 	if (!new)
 		return (NULL);
 	new = ft_strcat_edit(new, s + start);
-    free(s);
 	return (new);
 }

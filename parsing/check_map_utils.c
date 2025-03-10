@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 02:56:02 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/09 02:56:06 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/10 06:34:07 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ void stor_map(t_data *data, int i)
     int l;
 
     j = 0;
-    data->map = malloc(sizeof(char *) * data->num_lines + 1);
+    data->map = gc_malloc(sizeof(char *) * data->num_lines + 1);
     if (!data->map)
-        ft_panic("Malloc failed");
+        ft_panic("malloc failed");
     while (data->file[i] != NULL)
     {
-        data->map[j] = malloc(sizeof(char) * data->max_len);
+        data->map[j] = gc_malloc(sizeof(char) * data->max_len);
         if (!data->map[j])
-            ft_panic("Malloc failed");
+            ft_panic("malloc failed");
         k = 0;
         l = 0;
         while (data->file[i][k] != '\0' && data->file[i][k] != '\n' && l < data->max_len)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 17:26:14 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/23 17:26:16 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/10 06:33:44 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int check_spase_tab(char c)
 
 void init_data(t_data *data)
 {
-    data->floor = malloc(sizeof(t_texture_F));
-    data->ceiling = malloc(sizeof(t_texture_C));
-    data->map_lines = malloc(sizeof(t_texture));
-    data->dup_texture = malloc(sizeof(t_dup_texture));
+    data->floor = gc_malloc(sizeof(t_texture_F));
+    data->ceiling = gc_malloc(sizeof(t_texture_C));
+    data->map_lines = gc_malloc(sizeof(t_texture));
+    data->dup_texture = gc_malloc(sizeof(t_dup_texture));
 
     if (!data->floor || !data->ceiling || !data->map_lines || !data->dup_texture)
     {

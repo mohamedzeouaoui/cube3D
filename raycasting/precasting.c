@@ -133,7 +133,6 @@ void ft_mlx(t_game *game, t_data *data)
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
 	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
-	// mlx_hook(game->window.win, 6, , animation, game);
 	mlx_key_hook(game->window.win, doors, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
 	mlx_mouse_hook(game->window.win, animation, game);
