@@ -156,6 +156,7 @@ typedef struct s_texture
     char                *line_SO;
     char                *line_WE;
     char                *line_EA;
+    char                *line_D;
     char                *line_F;
     char                *line_C;
 }						t_texture;
@@ -180,6 +181,7 @@ typedef struct s_dup_texture
     bool     SO;
     bool     WE;
     bool     EA;
+    bool     D;
     bool     F;
     bool     C;
 }   t_dup_texture;
