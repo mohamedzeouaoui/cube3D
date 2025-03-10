@@ -35,7 +35,6 @@ void init_data(t_data *data)
     data->floor->R = 0;
     data->floor->G = 0;
     data->floor->B = 0;
-
     data->ceiling->R = 0;
     data->ceiling->G = 0;
     data->ceiling->B = 0;
@@ -44,6 +43,7 @@ void init_data(t_data *data)
     data->map_lines->line_SO = false;
     data->map_lines->line_WE = false;
     data->map_lines->line_EA = false;
+    data->map_lines->line_D = false;
     data->map_lines->line_F = false;
     data->map_lines->line_C = false;
 }
