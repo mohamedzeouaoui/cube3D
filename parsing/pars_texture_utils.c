@@ -47,6 +47,7 @@ void store_texture(t_texture *map_lines)
     map_lines->line_SO = v_texture("SO", map_lines->line_SO, 2);
     map_lines->line_WE = v_texture("WE", map_lines->line_WE, 2);
     map_lines->line_EA = v_texture("EA", map_lines->line_EA, 2);
+    map_lines->line_D = v_texture("D", map_lines->line_D, 1);
     map_lines->line_F = v_texture("F", map_lines->line_F, 1);
     map_lines->line_C = v_texture("C", map_lines->line_C, 1);
 
@@ -54,7 +55,6 @@ void store_texture(t_texture *map_lines)
 
 void ft_gettexture_dup(char *line, char **XX, bool *XX_flag)
 {
-     
     *XX = ft_strdup(line);
     *XX_flag = true;
 }
@@ -73,6 +73,8 @@ void ft_get_texture(char *line, t_texture *map_lines, t_data *data)
         ft_gettexture_dup(line, &map_lines->line_WE, &data->dup_texture->WE);
     else if (line[i] == 'E' && line[i + 1] == 'A' && data->dup_texture->EA == false)
         ft_gettexture_dup(line, &map_lines->line_EA, &data->dup_texture->EA);
+    else if (line[i] == 'D' && data->dup_texture->D == false)
+        ft_gettexture_dup(line, &map_lines->line_D, &data->dup_texture->D);
     else if (line[i] == 'F' && data->dup_texture->F == false)
         ft_gettexture_dup(line, &map_lines->line_F, &data->dup_texture->F);
     else if (line[i] == 'C' && data->dup_texture->C == false)
