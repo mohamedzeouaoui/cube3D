@@ -2,26 +2,37 @@
 
 void hor_rays2(t_game *game, t_ray *hor)
 {
-	hor->x_next_step = hor->x_intercept;
-	hor->y_next_step = hor->y_intercept;
-	if (!hor->is_ray_facing_down)
-		hor->y_next_step--;
-	while(1)
-	{
-		if (found_wall(game, hor->x_next_step, hor->y_next_step) || found_door(game, hor->x_next_step, hor->y_next_step))
-		{
-			hor->dst = count_distance(game->player.x_pixel, hor->x_next_step, game->player.y_pixel, hor->y_next_step);
-			hor->x = hor->x_next_step;
-			hor->y = hor->y_next_step;
-			return ;
-		}
-		else
-		{
-			hor->x_next_step += hor->x_step;
-			hor->y_next_step += hor->y_step;
-		}
-	}
+    hor->x_next_step = hor->x_intercept;
+    hor->y_next_step = hor->y_intercept;
+    
+    // Adjust y coordinate for upward rays to ensure we're checking the correct grid cell
+    if (!hor->is_ray_facing_down)
+        hor->y_next_step -= 0.001;  // Small offset to ensure we're in the correct cell
+    
+    while(hor->y_next_step >= 0 && hor->x_next_step >= 0 && 
+          hor->y_next_step < game->map_len * BLOCK_SIZE && 
+          hor->x_next_step < game->map_width * BLOCK_SIZE)
+    {
+        if (found_wall(game, hor->x_next_step, hor->y_next_step) || 
+            found_door(game, hor->x_next_step, hor->y_next_step))
+        {
+            hor->dst = count_distance(game->player.x_pixel, hor->x_next_step, 
+                                     game->player.y_pixel, hor->y_next_step);
+            hor->x = hor->x_next_step;
+            hor->y = hor->y_next_step;
+            return;
+        }
+        else
+        {
+            hor->x_next_step += hor->x_step;
+            hor->y_next_step += hor->y_step;
+        }
+    }
+    
+    // If no wall is found, set distance to a large value
+    hor->dst = INFINITY;
 }
+
 
 void hor_rays(t_game *game, t_ray *hor)
 {
@@ -49,25 +60,35 @@ void hor_rays(t_game *game, t_ray *hor)
 
 void vert_rays2(t_game *game, t_ray *ver)
 {
-	ver->x_next_step = ver->x_intercept;
-	ver->y_next_step = ver->y_intercept;
-	if (!ver->is_ray_facing_right)
-		ver->x_next_step--;
-	while(ver->y_next_step > 0 && ver->x_next_step > 0)
-	{
-		if (found_wall(game, ver->x_next_step, ver->y_next_step) || found_door(game, ver->x_next_step, ver->y_next_step))
-		{
-			ver->dst = count_distance(game->player.x_pixel, ver->x_next_step, game->player.y_pixel, ver->y_next_step);
-			ver->x = ver->x_next_step;
-			ver->y = ver->y_next_step;
-			return ;
-		}
-		else
-		{
-			ver->x_next_step += ver->x_step;
-			ver->y_next_step += ver->y_step;
-		}
-	}
+    ver->x_next_step = ver->x_intercept;
+    ver->y_next_step = ver->y_intercept;
+    
+    // Adjust x coordinate for leftward rays to ensure we're checking the correct grid cell
+    if (!ver->is_ray_facing_right)
+        ver->x_next_step -= 0.001;  // Small offset to ensure we're in the correct cell
+    
+    while(ver->y_next_step >= 0 && ver->x_next_step >= 0 && 
+          ver->y_next_step < game->map_len * BLOCK_SIZE && 
+          ver->x_next_step < game->map_width * BLOCK_SIZE)
+    {
+        if (found_wall(game, ver->x_next_step, ver->y_next_step) || 
+            found_door(game, ver->x_next_step, ver->y_next_step))
+        {
+            ver->dst = count_distance(game->player.x_pixel, ver->x_next_step, 
+                                     game->player.y_pixel, ver->y_next_step);
+            ver->x = ver->x_next_step;
+            ver->y = ver->y_next_step;
+            return;
+        }
+        else
+        {
+            ver->x_next_step += ver->x_step;
+            ver->y_next_step += ver->y_step;
+        }
+    }
+    
+    // If no wall is found, set distance to a large value
+    ver->dst = INFINITY;
 }
 
 void vert_rays(t_game *game, t_ray *ver)

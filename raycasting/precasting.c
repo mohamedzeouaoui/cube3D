@@ -107,7 +107,7 @@ void ft_mlx(t_game *game, t_data *data)
 
 void player_abilities(t_game *game, int i, int j)
 {
-	game->player.move_speed = 10;
+	game->player.move_speed = 20;
 	game->player.x = j;
 	game->player.y = i;
 	game->player.x_pixel = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);

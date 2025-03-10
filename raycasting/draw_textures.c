@@ -25,6 +25,8 @@ char *get_wall_img2(t_game *game, double ray_angle)
 
 char *get_wall_img(t_game *game, double ray_angle)
 {
+	// if (game->which_hit == 0)
+	// 	printf("%d\n", game->which_hit);
 	ray_angle = normalize_angle(ray_angle);
 	if (facing_north(game))
 	{
@@ -66,7 +68,7 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
 		if (found_door(game, game->wall_hit_x, game->wall_hit_y))
 			color = *(int *)(game->door.tex_data + pixel_index);
-		if (y >= 0 && y < HEIGHT)
+		if (y >= 0 && y <= HEIGHT)
 			ft_mlx_pixel_put(game, x_start, y, color);
 	}
 	draw_floor(game, y_start, x_start, wall_height);
