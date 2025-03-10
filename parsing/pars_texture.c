@@ -51,6 +51,8 @@ int check_texture(char *line)
         check_valid_texture('W', 'E', line);
     else if (line[i] == 'E' && line[i + 1] == 'A'&& check_spase_tab(line[i + 2]))
         check_valid_texture('E', 'A', line);
+    else if (line[i] == 'D' && check_spase_tab(line[i + 1]))
+        check_valid_texture('D', ' ', line);
     else if (line[i] == 'F' && check_spase_tab(line[i + 1]))
         check_valid_color('F', line);
     else if (line[i] == 'C' && check_spase_tab(line[i + 1]))
@@ -89,7 +91,7 @@ int ft_check_file(char *file, t_data *data)
         j = 0;
         while (line[j] == ' ' || line[j] == '\t')
             j++;
-        if (is_empty_line(line) == 1 || (i > 6 && line[j] == '1'))
+        if (is_empty_line(line) == 1 || (i > 7 && line[j] == '1'))
         {
             free(line);
             continue;
