@@ -62,12 +62,10 @@ int	main(int ac, char **av)
 	check_valid_map(av[1], &data);	
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
-
-
 // --------------------------------------------------------------------------------------------
     game.view_height = 2.5;
 	game.map = data.map;
-	game.map_width = data.max_len;
+	game.map_width = ft_strlen(game.map[0]);
 	game.map_len = map_len(game.map);
     game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
 	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);

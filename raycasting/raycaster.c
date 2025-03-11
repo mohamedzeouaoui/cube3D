@@ -4,6 +4,7 @@ void hor_rays2(t_game *game, t_ray *hor)
 {
 	hor->x_next_step = hor->x_intercept;
 	hor->y_next_step = hor->y_intercept;
+
 	if (!hor->is_ray_facing_down)
 		hor->y_next_step -= 0.001;
 	while(1)
@@ -25,8 +26,6 @@ void hor_rays2(t_game *game, t_ray *hor)
 
 void hor_rays(t_game *game, t_ray *hor)
 {
-	hor->x_intercept = 0, hor->y_intercept = 0;
-	hor->x_step = 0, hor->y_step = 0;
 	hor->is_ray_facing_down = (hor->ray_angle > 0 && hor->ray_angle < PI);
 	hor->is_ray_facing_right = (hor->ray_angle < (0.5 * PI) || hor->ray_angle > (PI * 1.5));
 
@@ -96,14 +95,30 @@ void vert_rays(t_game *game, t_ray *ver)
 
 void cast_ray_init(t_game *game, t_ray *hor, t_ray *ver, double ray_angle)
 {
-	hor->dst = INFINITY;
 	hor->x = 0;
 	hor->y = 0;
+	hor->dst = INFINITY;
 	hor->ray_angle = ray_angle;
-	ver->dst = INFINITY;
+	hor->x_intercept = 0;
+	hor->y_intercept = 0;
+	hor->x_step = 0;
+	hor->y_step = 0;
+	hor->is_ray_facing_down = 0;
+	hor->is_ray_facing_right = 0;
+	hor->x_next_step = hor->x_intercept;
+	hor->y_next_step = hor->x_intercept;
 	ver->x = 0;
 	ver->y = 0;
+	ver->dst = INFINITY;
 	ver->ray_angle = ray_angle;
+	ver->x_intercept = 0;
+	ver->y_intercept = 0;
+	ver->x_step = 0;
+	ver->y_step = 0;
+	ver->is_ray_facing_down = 0;
+	ver->is_ray_facing_right = 0;
+	ver->x_next_step = 0;
+	ver->y_next_step = 0;
 	game->which_hit = -1;
 	game->wall.wall_cord = 0;
 	game->wall.vert = 0;
