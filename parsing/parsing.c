@@ -32,12 +32,13 @@ void init_data(t_data *data)
         exit(1);
     }
     // Initialize values
-    data->floor->R = 0;
-    data->floor->G = 0;
-    data->floor->B = 0;
-    data->ceiling->R = 0;
-    data->ceiling->G = 0;
-    data->ceiling->B = 0;
+    data->dup_texture->NO = false;
+    data->dup_texture->SO = false;
+    data->dup_texture->WE = false;
+    data->dup_texture->EA = false;
+    data->dup_texture->D = false;
+    data->dup_texture->F = false;
+    data->dup_texture->C = false;
 
     data->map_lines->line_NO = false;
     data->map_lines->line_SO = false;
