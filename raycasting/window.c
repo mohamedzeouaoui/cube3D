@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:08:45 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/11 20:14:15 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:22:04 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	destroy_images(t_game *game)
 int	ft_close(t_game *game, int e_status)
 {
 	destroy_images(game);
-	mlx_destroy_image(game->window.cnx, game->window.img.img);
+	if (game->window.img.img)
+		mlx_destroy_image(game->window.cnx, game->window.img.img);
 	mlx_destroy_window(game->window.cnx, game->window.win);
 	mlx_destroy_display(game->window.cnx);
 	free(game->window.cnx);

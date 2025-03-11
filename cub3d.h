@@ -57,6 +57,17 @@ typedef struct s_image
 	int		endian;
 }   t_img;
 
+typedef struct s_draw
+{
+    int color;
+	int pixel_index;
+	int		y;
+	int tex_y;
+	int		tex_x;
+	double	step;
+	double	tex_pos;
+}   t_draw;
+
 typedef struct s_texture1
 {
     char *path;
@@ -132,6 +143,7 @@ typedef struct s_game
     int c_color;
     int f_color;
     float	slide_amount;
+    double ray_angle;
     t_player player;
     t_window window;
     t_ray ver_ray;
@@ -252,7 +264,7 @@ double count_distance(double x1, double x2, double y1, double y2);
 
 //
 void cast_rays(t_game *game);
-void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray_angle);
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height);
 int is_empty_line(char *line);
 void count_lines(char * file, t_data *data);
 void stor_file(char *file,t_data *data);

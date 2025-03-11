@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 19:38:37 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/11 19:56:56 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:34:35 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,9 @@ void	cast_ray(t_game *game, double ray_angle, int i)
 		game->wall_hit_y = ver.y;
 		game->which_hit = 0;
 	}
+	game->ray_angle = ray_angle;
 	draw_3d(game, i, (HEIGHT / 2) - (game->wall_height / game->view_height), \
-	game->wall_height, ray_angle);
+	game->wall_height);
 }
 
 void	cast_rays(t_game *game)

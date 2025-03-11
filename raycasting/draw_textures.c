@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:06:33 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/11 18:03:10 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/11 20:34:11 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,28 @@ char	*get_wall_img(t_game *game, double ray_angle)
 }
 
 void	draw_3d(t_game *game, int x_start, int y_start
-		, int wall_height, double ray_angle)
+		, int wall_height)
 {
-	int y = 0;
-	int tex_x = (int)(game->wall.wall_cord % BLOCK_SIZE);
-	double step = 1.0 * BLOCK_SIZE / wall_height;
-	double tex_pos = 0;
+	t_draw	var;
 
+	var.tex_x = (int)(game->wall.wall_cord % BLOCK_SIZE);
+	var.step = 1.0 * BLOCK_SIZE / wall_height;
+	var.tex_pos = 0;
 	draw_ceiling(game, y_start, x_start);
-	for (y = y_start; y < y_start + wall_height; y++)
+	var.y = y_start;
+	while (var.y < y_start + wall_height)
 	{
-		int tex_y = (int)tex_pos;
-		tex_pos += step;
-
-		int pixel_index = (tex_y * game->wall_north.line_length) + (tex_x * (game->wall_north.bpp / 8));
-		int color = 0;
+		var.tex_y = (int)var.tex_pos;
+		var.tex_pos += var.step;
+		var.pixel_index = (var.tex_y * game->wall_north.line_length) + \
+		(var.tex_x * (game->wall_north.bpp / 8));
+		var.color = 0;
 		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
-			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
-		if (y >= 0 && y < HEIGHT)
-			ft_mlx_pixel_put(game, x_start, y, color);
+			var.color = *(int *)(get_wall_img(game, game->ray_angle) + \
+			var.pixel_index);
+		if (var.y >= 0 && var.y < HEIGHT)
+			ft_mlx_pixel_put(game, x_start, var.y, var.color);
+		var.y++;
 	}
 	draw_floor(game, y_start, x_start, wall_height);
 }
