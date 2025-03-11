@@ -92,16 +92,20 @@ int	main(int ac, char **av)
 // --------------------------------------------------------------------------------------------
     game.view_height = 2.5;
 	game.map = data.map;
-	game.map_width = data.max_len;
+	game.map_width = ft_strlen(game.map[0]);
 	game.map_len = map_len(game.map);
     game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
 	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
-	game.key_pressed = 1;
-	game.touched_wall = 0;
     find_player(&game);
     init_keys(&game);
 	pthread_create(&game.thread, NULL, draw_animation_thread, &game);
+	// for (int i = 0; i < game.map_len; i++)
+	// {
+	// 	for (int j = 0; j < ft_strlen(game.map[i]); j++)
+	// 		printf("%c", game.map[i][j]);
+	// 	printf("\n");
+	// }
 	pthread_detach(game.thread);
 	ft_mlx(&game, &data);
-	free_all_in_gc();
+	// free_all_in_gc();
 }

@@ -27,27 +27,27 @@ void draw_animation(t_game *game, t_tex *image)
 int drawer(t_game *game)
 {
 	draw_map(game);
-	draw_mini_map(game);
-	if (!game->animation)
-		draw_animation(game, &game->p0);
-	else if (game->animation == 1)
-	{
-		// for (int i = 0; i < 150; i++)
-			draw_animation(game, &game->p1);
-		// game->animation = 2;
-	}
-	else if (game->animation == 2)
-	{
-		// for (int i = 0; i < 200; i++)
-			draw_animation(game, &game->p2);
-		// game->animation = 3;
-	}
-	if (game->animation == 3)
-	{
-		// for (int i = 0; i < 150; i++)
-			draw_animation(game, &game->p3);
-		// game->animation = 0;
-	}
+	// draw_mini_map(game);
+	// if (!game->animation)
+	// 	draw_animation(game, &game->p0);
+	// else if (game->animation == 1)
+	// {
+	// 	// for (int i = 0; i < 150; i++)
+	// 		draw_animation(game, &game->p1);
+	// 	// game->animation = 2;
+	// }
+	// else if (game->animation == 2)
+	// {
+	// 	// for (int i = 0; i < 200; i++)
+	// 		draw_animation(game, &game->p2);
+	// 	// game->animation = 3;
+	// }
+	// if (game->animation == 3)
+	// {
+	// 	// for (int i = 0; i < 150; i++)
+	// 		draw_animation(game, &game->p3);
+	// 	// game->animation = 0;
+	// }
 	return (0);
 }
 
