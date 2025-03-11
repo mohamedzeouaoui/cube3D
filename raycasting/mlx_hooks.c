@@ -1,9 +1,25 @@
 #include "../cub3d.h"
 
-int ft_close(t_window *window)
+void destroy_images(t_game *game)
 {
-	mlx_destroy_window(window->cnx, window->win);
-	mlx_destroy_display(window->cnx);
+	if (game->wall_north.img)
+		mlx_destroy_image(game->window.cnx, game->wall_north.img);
+	if (game->wall_south.img)
+		mlx_destroy_image(game->window.cnx, game->wall_south.img);
+	if (game->wall_east.img)
+		mlx_destroy_image(game->window.cnx, game->wall_east.img);
+	if (game->wall_west.img)
+		mlx_destroy_image(game->window.cnx, game->wall_west.img);
+}
+
+int ft_close(t_game *game)
+{
+	destroy_images(game);
+	mlx_destroy_image(game->window.cnx, game->window.img.img);
+	mlx_destroy_window(game->window.cnx, game->window.win);
+	mlx_destroy_display(game->window.cnx);
+	free(game->window.cnx);
+	free_all_in_gc();
 	exit(0);
 }
 
@@ -96,7 +112,7 @@ int keys(int keycode, void *game1)
 	if (keycode == 65293)
 		game->menu.entred = 1;
 	if (keycode == 113 || 65307 == keycode)
-		ft_close(&game->window);
+		ft_close(game);
 	if (keycode == 65361)
 		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
 	if (keycode == 65363)

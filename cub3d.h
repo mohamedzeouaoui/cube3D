@@ -232,7 +232,7 @@ double normalize_angle(double angle);
 int keys(int keycode, void *game1);
 int mouse_move_hook(int x, int y, void *game1);
 int drawer(t_game *game);
-int ft_close(t_window *window);
+int ft_close(t_game *game);
 
 //
 
@@ -269,5 +269,17 @@ int ray_facing_east(double ray_angle);
 int ray_facing_west(double ray_angle);
 void draw_ceiling(t_game *game, int y_start, int x_start);
 void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
+
+
+// gc
+typedef struct s_gc
+{
+    void	*p;
+    struct s_gc	*next;
+}	t_gc;
+
+void *gc_malloc(size_t size);
+void free_all_in_gc();
+char	*ft_gc_strdup(const char *s);
 
 #endif

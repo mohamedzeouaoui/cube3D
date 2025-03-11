@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 22:24:13 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/26 22:24:15 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 10:00:22 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,19 @@ void stor_file(char *file,t_data *data)
     data->fd_map = open(file, O_RDONLY);
     if (data->fd_map == -1)
         ft_panic("File not found");
-    data->file = malloc(sizeof(char *) * data->num_lines + 1);
+    data->file = gc_malloc(sizeof(char *) * data->num_lines + 1);
     if (!data->file)
+    {
         ft_panic("Malloc failed");
+        // free_all_in_gc();
+        exit(1);
+    }
     while (1)
     {
         line = get_next_line(data->fd_map);
         if (line == NULL)
             break;
-        data->file[i] = ft_strdup(line);
+        data->file[i] = ft_gc_strdup(line);
         i++;
         free(line);
     }
@@ -125,15 +129,18 @@ void check_valid_map(char *file, t_data *data)
     while (1)
     {
         j = 0;
-        while (data->file[i][j] == ' ' || data->file[i][j] == '\t')
-            j++;
-        if(data->file[i][j] == '1')
+        if (data && data->file)
         {
-            max_len_of_map(data, i);
-            stor_map(data, i);
-            break;
+            while (data->file[i] && data->file[i][j] && (data->file[i][j] == ' ' || data->file[i][j] == '\t'))
+                j++;
+            if(data->file[i] && data->file[i][j] && data->file[i][j] == '1')
+            {
+                max_len_of_map(data, i);
+                stor_map(data, i);
+                break;
+            }
+            i++;
         }
-        i++;
     }
     check_line_of_map(data);
     cheack_wall(data);

@@ -61,7 +61,7 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 		tex_pos += step;
 
 		int pixel_index = (tex_y * game->wall_north.line_length) + (tex_x * (game->wall_north.bpp / 8));
-		int color;
+		int color = 0;
 		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
 			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
 		if (y >= 0 && y < HEIGHT)

@@ -1,6 +1,6 @@
 #include "cub3d.h"
 
-char	*ft_strdup(const char *s)
+char	*ft_gc_strdup(const char *s)
 {
 	size_t	len;
 	char	*dest;

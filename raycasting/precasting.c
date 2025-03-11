@@ -67,7 +67,7 @@ void ft_mlx_init(t_game *game, t_data *data)
 void ft_mlx(t_game *game, t_data *data)
 {
 	ft_mlx_init(game, data);
-	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
+	mlx_hook(game->window.win, 17, 0, ft_close, game);
 	mlx_loop_hook(game->window.cnx, drawer, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
 	mlx_loop(game->window.cnx);
