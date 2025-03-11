@@ -62,6 +62,8 @@ int	main(int ac, char **av)
 	check_valid_map(av[1], &data);	
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
+
+
 // --------------------------------------------------------------------------------------------
     game.view_height = 2.5;
 	game.map = data.map;
