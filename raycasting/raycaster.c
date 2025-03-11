@@ -8,9 +8,7 @@ void hor_rays2(t_game *game, t_ray *hor)
 	if (!hor->is_ray_facing_down)
 		hor->y_next_step -= 0.001;
 	
-	while(hor->y_next_step >= 0 && hor->x_next_step >= 0 && 
-		  hor->y_next_step < game->map_len * BLOCK_SIZE && 
-		  hor->x_next_step < game->map_width * BLOCK_SIZE)
+	while(1)
 	{
 		if (found_wall(game, hor->x_next_step, hor->y_next_step) || 
 			found_door(game, hor->x_next_step, hor->y_next_step))
@@ -53,10 +51,9 @@ void vert_rays2(t_game *game, t_ray *ver)
 	
 	if (!ver->is_ray_facing_right)
 		ver->x_next_step -= 0.001;
-	
-	while(ver->y_next_step >= 0 && ver->x_next_step >= 0 && 
-		  ver->y_next_step < game->map_len * BLOCK_SIZE && 
-		  ver->x_next_step < game->map_width * BLOCK_SIZE)
+
+	while(ver->x_next_step >= 0 && ver->x_next_step <= game->map_width * BLOCK_SIZE &&
+		  ver->y_next_step >= 0 && ver->y_next_step <= game->map_len * BLOCK_SIZE)
 	{
 		if (found_wall(game, ver->x_next_step, ver->y_next_step) || 
 			found_door(game, ver->x_next_step, ver->y_next_step))
@@ -65,13 +62,21 @@ void vert_rays2(t_game *game, t_ray *ver)
 									 game->player.y_pixel, ver->y_next_step);
 			ver->x = ver->x_next_step;
 			ver->y = ver->y_next_step;
-			return;
+			break;
 		}
 		ver->x_next_step += ver->x_step;
 		ver->y_next_step += ver->y_step;
+		if (ver->x_next_step < 0 || ver->x_next_step > game->map_width * BLOCK_SIZE ||
+			ver->y_next_step < 0 || ver->y_next_step > game->map_len * BLOCK_SIZE)
+			break;
 	}
-	
-	ver->dst = INFINITY;
+	if (ver->dst == INFINITY)
+	{
+		ver->dst = count_distance(game->player.x_pixel, ver->x_next_step, 
+								  game->player.y_pixel, ver->y_next_step);
+		ver->x = ver->x_next_step;
+		ver->y = ver->y_next_step;
+	}
 }
 
 void vert_rays(t_game *game, t_ray *ver)

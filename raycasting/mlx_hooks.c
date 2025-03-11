@@ -32,19 +32,21 @@ int drawer(t_game *game)
 		draw_animation(game, &game->p0);
 	else if (game->animation == 1)
 	{
-		draw_animation(game, &game->p1);
-		game->animation = 2;
+		// for (int i = 0; i < 150; i++)
+			draw_animation(game, &game->p1);
+		// game->animation = 2;
 	}
 	else if (game->animation == 2)
 	{
-		draw_animation(game, &game->p2);
-		game->animation = 3;
+		// for (int i = 0; i < 200; i++)
+			draw_animation(game, &game->p2);
+		// game->animation = 3;
 	}
 	if (game->animation == 3)
 	{
-		draw_animation(game, &game->p3);
-		game->animation = 0;
-
+		// for (int i = 0; i < 150; i++)
+			draw_animation(game, &game->p3);
+		// game->animation = 0;
 	}
 	return (0);
 }
@@ -96,54 +98,54 @@ void move_player(int keycode, t_game *game, int new_pos)
 	if (keycode == game->keys.left)
 	{
 		new_pos = game->player.x_pixel - game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos - 5, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
-		else
-		{
-			slide_amount = game->player.move_speed * sinf(game->player.pva);
-			new_pos = game->player.y_pixel + slide_amount;
-			if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
-				game->player.y_pixel = new_pos;
-		}
+		// else
+		// {
+		// 	slide_amount = game->player.move_speed * sinf(game->player.pva);
+		// 	new_pos = game->player.y_pixel + slide_amount;
+		// 	if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
+		// 		game->player.y_pixel = new_pos;
+		// }
 	}
 	if (keycode == game->keys.right)
 	{
 		new_pos = game->player.x_pixel + game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos + 5, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
-		else
-		{
-			slide_amount = game->player.move_speed * sinf(game->player.pva);
-			new_pos = game->player.y_pixel + slide_amount;
-			if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
-				game->player.y_pixel = new_pos;
-		}
+		// else
+		// {
+		// 	slide_amount = game->player.move_speed * sinf(game->player.pva);
+		// 	new_pos = game->player.y_pixel + slide_amount;
+		// 	if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
+		// 		game->player.y_pixel = new_pos;
+		// }
 	}
 	if (keycode == game->keys.forward)
 	{
 		new_pos = game->player.y_pixel - game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos - 5) && !found_door(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
-		else
-		{
-			slide_amount = game->player.move_speed * cosf(game->player.pva);
-			new_pos = game->player.x_pixel + slide_amount;
-			if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
-				game->player.x_pixel = new_pos;
-		}
+		// else
+		// {
+		// 	slide_amount = game->player.move_speed * cosf(game->player.pva);
+		// 	new_pos = game->player.x_pixel + slide_amount;
+		// 	if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
+		// 		game->player.x_pixel = new_pos;
+		// }
 	}
 	if (keycode == game->keys.backward)
 	{
 		new_pos = game->player.y_pixel + game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos) && !found_door(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos + 5) && !found_door(game, game->player.x_pixel, new_pos))
 			game->player.y_pixel = new_pos;
-		else
-		{
-			slide_amount = game->player.move_speed * cosf(game->player.pva);
-			new_pos = game->player.x_pixel + slide_amount;
-			if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
-				game->player.x_pixel = new_pos;
-		}
+		// else
+		// {
+		// 	slide_amount = game->player.move_speed * cosf(game->player.pva);
+		// 	new_pos = game->player.x_pixel + slide_amount;
+		// 	if (!found_wall(game, new_pos, game->player.y_pixel) && !found_door(game, new_pos, game->player.y_pixel))
+		// 		game->player.x_pixel = new_pos;
+		// }
 	}
 }
 
@@ -153,18 +155,24 @@ int keys(int keycode, void *game1)
 	float slide_amount = 0;
 	t_game *game = game1;
 	game->menu.entred = 0;
-	if (keycode == 65362)
-		game->menu.index = (game->menu.index + 1) % 2;
-	else if (keycode == 65364)
-		game->menu.index = (game->menu.index + 1) % 2;
-	if (keycode == 65293)
-		game->menu.entred = 1;
+	// if (keycode == 65362)
+	// 	game->menu.index = (game->menu.index + 1) % 2;
+	// else if (keycode == 65364)
+	// 	game->menu.index = (game->menu.index + 1) % 2;
+	// if (keycode == 65293)
+	// 	game->menu.entred = 1;
 	if (keycode == 113 || 65307 == keycode)
 		ft_close(&game->window);
 	if (keycode == 65361)
+	{
+		game->key_pressed = 1;
 		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
+	}
 	if (keycode == 65363)
+	{
+		game->key_pressed = 1;
 		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
+	}
 	dynamic_control(game);
 	move_player(keycode, game, new_pos);
 	return 0;

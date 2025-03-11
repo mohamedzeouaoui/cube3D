@@ -33,6 +33,7 @@ void	ft_mlx_pixel_put(t_game *game, int x, int y, int color)
 void draw_map(t_game *game)
 {
 	cast_rays(game);
+	sleep(0.5);
 	mlx_put_image_to_window(game->window.cnx, game->window.win, game->window.img.img, 0, 0);
 }
 
@@ -133,8 +134,9 @@ void ft_mlx(t_game *game, t_data *data)
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);
 	mlx_hook(game->window.win, 6, 1L << 6, mouse_move_hook, game);
-	mlx_key_hook(game->window.win, doors, game);
 	mlx_hook(game->window.win, KeyPress, KeyPressMask, keys, game);
+	sleep(0.2);
+	mlx_key_hook(game->window.win, doors, game);
 	mlx_mouse_hook(game->window.win, animation, game);
 	mlx_loop(game->window.cnx);
 }

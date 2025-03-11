@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <X11/X.h>
 # include <SDL2/SDL.h>
+#include <pthread.h>
 # include "minilibx-linux/mlx.h"
 
 #define ANSI_COLOR_RESET "\033[0m"
@@ -138,6 +139,9 @@ typedef struct s_game
     int c_color;
     int f_color;
     int animation;
+    int key_pressed;
+    int touched_wall;
+    pthread_t thread;
     t_player player;
     t_window window;
     t_ray ver_ray;
