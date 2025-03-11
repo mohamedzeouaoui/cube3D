@@ -131,6 +131,7 @@ typedef struct s_game
     int which_hit;
     int c_color;
     int f_color;
+    float	slide_amount;
     t_player player;
     t_window window;
     t_ray ver_ray;
@@ -232,7 +233,7 @@ double normalize_angle(double angle);
 int keys(int keycode, void *game1);
 int mouse_move_hook(int x, int y, void *game1);
 int drawer(t_game *game);
-int ft_close(t_game *game);
+int	ft_close(t_game *game, int e_status);
 
 //
 
@@ -269,7 +270,8 @@ int ray_facing_east(double ray_angle);
 int ray_facing_west(double ray_angle);
 void draw_ceiling(t_game *game, int y_start, int x_start);
 void draw_floor(t_game *game, int y_start, int x_start, int wall_height);
-
+void	destroy_images(t_game *game);
+void	init_game(t_game *game, t_ray *hor, t_ray *ver);
 
 // gc
 typedef struct s_gc

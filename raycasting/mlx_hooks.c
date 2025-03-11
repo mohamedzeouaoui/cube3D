@@ -1,37 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx_hooks.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/11 18:03:29 by aakhrif           #+#    #+#             */
+/*   Updated: 2025/03/11 20:11:06 by aakhrif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
-void destroy_images(t_game *game)
+void	mv_ea_we(t_game *game)
 {
-	if (game->wall_north.img)
-		mlx_destroy_image(game->window.cnx, game->wall_north.img);
-	if (game->wall_south.img)
-		mlx_destroy_image(game->window.cnx, game->wall_south.img);
-	if (game->wall_east.img)
-		mlx_destroy_image(game->window.cnx, game->wall_east.img);
-	if (game->wall_west.img)
-		mlx_destroy_image(game->window.cnx, game->wall_west.img);
-}
-
-int ft_close(t_game *game)
-{
-	destroy_images(game);
-	mlx_destroy_image(game->window.cnx, game->window.img.img);
-	mlx_destroy_window(game->window.cnx, game->window.win);
-	mlx_destroy_display(game->window.cnx);
-	free(game->window.cnx);
-	free_all_in_gc();
-	exit(0);
-}
-
-int drawer(t_game *game)
-{
-	draw_map(game);
-	return (0);
-}
-
-void mv_ea_we(t_game *game)
-{
-	if (facing_east(game)) // east ->
+	if (facing_east(game))
 	{
 		game->keys.left = 115;
 		game->keys.right = 119;
@@ -39,7 +22,7 @@ void mv_ea_we(t_game *game)
 		game->keys.backward = 100;
 		game->player.direction = 1;
 	}
-	else if (facing_west(game)) // west <-
+	else if (facing_west(game))
 	{
 		game->keys.left = 119;
 		game->keys.right = 115;
@@ -49,9 +32,9 @@ void mv_ea_we(t_game *game)
 	}
 }
 
-void dynamic_control(t_game *game)
+void	dynamic_control(t_game *game)
 {
-	if (facing_south(game)) // south
+	if (facing_south(game))
 	{
 		game->keys.left = 100;
 		game->keys.right = 97;
@@ -59,7 +42,7 @@ void dynamic_control(t_game *game)
 		game->keys.backward = 119;
 		game->player.direction = 2;
 	}
-	else if (facing_north(game)) // north
+	else if (facing_north(game))
 	{
 		game->keys.left = 97;
 		game->keys.right = 100;
@@ -70,9 +53,9 @@ void dynamic_control(t_game *game)
 	mv_ea_we(game);
 }
 
-void move_player(int keycode, t_game *game, int new_pos)
+void	move_player(int keycode, t_game *game, int new_pos)
 {
-	float slide_amount = 0;
+	game->slide_amount = 0;
 	if (keycode == game->keys.left)
 	{
 		new_pos = game->player.x_pixel - game->player.move_speed;
@@ -99,11 +82,15 @@ void move_player(int keycode, t_game *game, int new_pos)
 	}
 }
 
-int keys(int keycode, void *game1)
+int	keys(int keycode, void *game1)
 {
-	int new_pos = 0;
-	float slide_amount = 0;
-	t_game *game = game1;
+	t_game	*game;
+	int		new_pos;
+	float	slide_amount;
+
+	game = game1;
+	new_pos = 0;
+	slide_amount = 0;
 	game->menu.entred = 0;
 	if (keycode == 65362)
 		game->menu.index = (game->menu.index + 1) % 2;
@@ -112,11 +99,13 @@ int keys(int keycode, void *game1)
 	if (keycode == 65293)
 		game->menu.entred = 1;
 	if (keycode == 113 || 65307 == keycode)
-		ft_close(game);
+		ft_close(game, 0);
 	if (keycode == 65361)
-		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
+		game->player.pva = normalize_angle(game->player.pva
+				- (game->player.rotaion_speed));
 	if (keycode == 65363)
-		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
+		game->player.pva = normalize_angle(game->player.pva
+				+ (game->player.rotaion_speed));
 	dynamic_control(game);
 	move_player(keycode, game, new_pos);
 }
