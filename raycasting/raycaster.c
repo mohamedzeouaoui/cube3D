@@ -5,7 +5,7 @@ void hor_rays2(t_game *game, t_ray *hor)
 	hor->x_next_step = hor->x_intercept;
 	hor->y_next_step = hor->y_intercept;
 	if (!hor->is_ray_facing_down)
-		hor->y_next_step--;
+		hor->y_next_step -= 0.001;
 	while(1)
 	{
 		if (found_wall(game, hor->x_next_step, hor->y_next_step))
@@ -52,7 +52,7 @@ void vert_rays2(t_game *game, t_ray *ver)
 	ver->x_next_step = ver->x_intercept;
 	ver->y_next_step = ver->y_intercept;
 	if (!ver->is_ray_facing_right)
-		ver->x_next_step--;
+		ver->x_next_step -= 0.001;
 	while(ver->y_next_step > 0 && ver->x_next_step > 0)
 	{
 		if (found_wall(game, ver->x_next_step, ver->y_next_step))

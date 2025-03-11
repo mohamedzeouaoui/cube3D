@@ -56,28 +56,29 @@ void dynamic_control(t_game *game)
 
 void move_player(int keycode, t_game *game, int new_pos)
 {
+	float slide_amount = 0;
 	if (keycode == game->keys.left)
 	{
 		new_pos = game->player.x_pixel - game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos - 5, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
 	}
 	if (keycode == game->keys.right)
 	{
 		new_pos = game->player.x_pixel + game->player.move_speed;
-		if (!found_wall(game, new_pos, game->player.y_pixel))
+		if (!found_wall(game, new_pos + 5, game->player.y_pixel))
 			game->player.x_pixel = new_pos;
 	}
 	if (keycode == game->keys.forward)
 	{
 		new_pos = game->player.y_pixel - game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos - 5))
 			game->player.y_pixel = new_pos;
 	}
 	if (keycode == game->keys.backward)
 	{
 		new_pos = game->player.y_pixel + game->player.move_speed;
-		if (!found_wall(game, game->player.x_pixel, new_pos))
+		if (!found_wall(game, game->player.x_pixel, new_pos + 5))
 			game->player.y_pixel = new_pos;
 	}
 }
