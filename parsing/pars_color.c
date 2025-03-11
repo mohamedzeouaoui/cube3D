@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_color.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:55:24 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/26 17:55:26 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/10 06:34:27 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,4 @@ void convert_F_C_to_RGB(t_data *data)
     data->ceiling->R = check_valide_color(ft_atoi(str_C[0]));
     data->ceiling->G = check_valide_color(ft_atoi(str_C[1]));
     data->ceiling->B = check_valide_color(ft_atoi(str_C[2]));
-    free(str_C);
-    free(str_F);
 }

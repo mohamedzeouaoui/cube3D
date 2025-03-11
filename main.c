@@ -49,6 +49,33 @@ void init_keys(t_game *game)
 	init_keys2(game);
 }
 
+void *draw_animation_thread(void *game)
+{
+	t_game *g = (t_game *)game;
+	while (1)
+	{
+		if (g->animation == 1)
+		{
+			usleep(100000);
+			g->animation = 2;
+		}
+		else if (g->animation == 2)
+		{
+			usleep(100000);
+			g->animation = 3;
+		}
+		else if (g->animation == 3)
+		{
+			usleep(100000);
+			g->animation = 0;
+		}
+		else
+		{
+			usleep(100000);
+		}
+	}
+}
+
 int	main(int ac, char **av)
 {
 	static t_data	data;
@@ -59,7 +86,7 @@ int	main(int ac, char **av)
     check_path(av[1]);
 	init_data(&data);
     ft_check_file(av[1], &data);
-	check_valid_map(av[1], &data);	
+	check_valid_map(av[1], &data);
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
 // --------------------------------------------------------------------------------------------
@@ -69,7 +96,12 @@ int	main(int ac, char **av)
 	game.map_len = map_len(game.map);
     game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
 	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
+	game.key_pressed = 1;
+	game.touched_wall = 0;
     find_player(&game);
     init_keys(&game);
+	pthread_create(&game.thread, NULL, draw_animation_thread, &game);
+	pthread_detach(game.thread);
 	ft_mlx(&game, &data);
+	free_all_in_gc();
 }

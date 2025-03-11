@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:48:32 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/02/26 17:48:35 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/10 06:34:33 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void ft_check_file_norm(char **line, t_data *data, int *i)
         ft_get_texture(*line, data->map_lines, data);
         (*i)++;
     }
-    free(*line);
 }
 
 
@@ -93,7 +92,6 @@ int ft_check_file(char *file, t_data *data)
             j++;
         if (is_empty_line(line) == 1 || (i > 7 && line[j] == '1'))
         {
-            free(line);
             continue;
         }
         ft_check_file_norm(&line, data, &i);

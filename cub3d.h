@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <X11/X.h>
 # include <SDL2/SDL.h>
+#include <pthread.h>
 # include "minilibx-linux/mlx.h"
 
 #define ANSI_COLOR_RESET "\033[0m"
@@ -34,6 +35,12 @@
 #define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
 #define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
 #define ERR_NO_PLAYER "No player found!"
+
+struct							s_gc
+{
+	void						*p;
+	struct s_gc					*next;
+};
 
 typedef struct s_player
 {
@@ -132,6 +139,9 @@ typedef struct s_game
     int c_color;
     int f_color;
     int animation;
+    int key_pressed;
+    int touched_wall;
+    pthread_t thread;
     t_player player;
     t_window window;
     t_ray ver_ray;
@@ -275,5 +285,10 @@ void draw_mini_map(t_game *game);
 int found_door(t_game *game, int x_pos, int y_pos);
 void draw_animation(t_game *game, t_tex *image);
 void clear_previous_image(t_game *game);
+
+// gc
+void	*gc_malloc(size_t bytes);
+void	add_to_gc(void *addr);
+void	free_all_in_gc(void);
 
 #endif

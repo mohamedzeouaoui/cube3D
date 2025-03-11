@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 22:24:13 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/09 19:59:24 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/10 06:34:17 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void stor_file(char *file,t_data *data)
     data->fd_map = open(file, O_RDONLY);
     if (data->fd_map == -1)
         ft_panic("File not found");
-    data->file = malloc(sizeof(char *) * data->num_lines + 1);
+    data->file = gc_malloc(sizeof(char *) * data->num_lines + 1);
     if (!data->file)
-        ft_panic("Malloc failed");
+        ft_panic("malloc failed");
     while (1)
     {
         line = get_next_line(data->fd_map);
@@ -32,7 +32,6 @@ void stor_file(char *file,t_data *data)
             break;
         data->file[i] = ft_strdup(line);
         i++;
-        free(line);
     }
     data->file[i] = NULL;
     close(data->fd_map);
