@@ -86,7 +86,7 @@ int	main(int ac, char **av)
     check_path(av[1]);
 	init_data(&data);
     ft_check_file(av[1], &data);
-	check_valid_map(av[1], &data);	
+	check_valid_map(av[1], &data);
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
 // --------------------------------------------------------------------------------------------
