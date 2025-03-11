@@ -81,7 +81,7 @@ void stor_map(t_data *data, int i)
         ft_panic("malloc failed");
     while (data->file[i] != NULL)
     {
-        data->map[j] = gc_malloc(sizeof(char) * data->max_len);
+        data->map[j] = gc_malloc(sizeof(char) * (data->max_len + 1));
         if (!data->map[j])
             ft_panic("malloc failed");
         k = 0;
