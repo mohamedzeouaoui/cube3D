@@ -42,8 +42,7 @@ void ft_mlx_init(t_game *game, t_data *data)
 	game->wall_south.path = data->map_lines->line_SO;
 	game->wall_east.path = data->map_lines->line_EA;
 	game->wall_west.path = data->map_lines->line_WE;
-	// game->door.path = data->map_lines->line_D;
-	game->door.path = ft_gc_strdup("door.xpm");
+	game->door.path = data->map_lines->line_D;
 	game->p0.path = ft_gc_strdup("p0.xpm");
 	game->p1.path = ft_gc_strdup("p1.xpm");
 	game->p2.path = ft_gc_strdup("p2.xpm");

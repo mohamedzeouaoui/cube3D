@@ -20,13 +20,11 @@ char *get_wall_img2(t_game *game, double ray_angle)
 		if (game->which_hit == 1)
 			return (game->wall_north.tex_data);
 	}
-	return (NULL);
+	return (game->wall_east.tex_data);
 }
 
 char *get_wall_img(t_game *game, double ray_angle)
 {
-	// if (game->which_hit == 0)
-	// 	printf("%d\n", game->which_hit);
 	ray_angle = normalize_angle(ray_angle);
 	if (facing_north(game))
 	{
@@ -59,15 +57,15 @@ void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray
 	draw_ceiling(game, y_start, x_start);
 	for (y = y_start; y < y_start + wall_height; y++)
 	{
-		int tex_y = (int)tex_pos; // Keep within texture bounds
+		int tex_y = (int)tex_pos;
 		tex_pos += step;
 
 		int pixel_index = (tex_y * game->wall_north.line_length) + (tex_x * (game->wall_north.bpp / 8));
-		int color;
-		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
-			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
+		int color = 0x0000ff;
 		if (found_door(game, game->wall_hit_x, game->wall_hit_y))
 			color = *(int *)(game->door.tex_data + pixel_index);
+		if (found_wall(game, game->wall_hit_x, game->wall_hit_y))
+			color = *(int *)(get_wall_img(game, ray_angle) + pixel_index);
 		if (y >= 0 && y <= HEIGHT)
 			ft_mlx_pixel_put(game, x_start, y, color);
 	}

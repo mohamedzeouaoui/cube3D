@@ -1,6 +1,6 @@
 
 CC = cc
-CFLAGS = -fsanitize=address #-Werror -Wextra -Wall
+CFLAGS = #-fsanitize=address #-Werror -Wextra -Wall
 RM = rm -rf
 UTILS = error.c
 
