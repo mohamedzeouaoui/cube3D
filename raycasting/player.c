@@ -53,8 +53,8 @@ int	found_player(int i, int j, t_game *game)
 
 void	find_player(t_game *game)
 {
-	int	i;
-	int	j;
+	int				i;
+	unsigned int	j;
 
 	i = 0;
 	while (i < game->map_len + 1)
