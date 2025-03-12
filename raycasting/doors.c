@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 07:05:36 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/12 07:28:24 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/12 21:10:47 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,18 @@ void	mv_ea_we(t_game *game)
 {
 	if (facing_east(game))
 	{
-		game->keys.left = 115;
-		game->keys.right = 119;
-		game->keys.forward = 97;
-		game->keys.backward = 100;
+		game->keys.left = (int) 's';
+		game->keys.right = (int) 'w';
+		game->keys.forward = (int) 'a';
+		game->keys.backward = (int) 'd';
 		game->player.direction = 1;
 	}
 	else if (facing_west(game))
 	{
-		game->keys.left = 119;
-		game->keys.right = 115;
-		game->keys.forward = 100;
-		game->keys.backward = 97;
+		game->keys.left = (int) 'w';
+		game->keys.right = (int) 's';
+		game->keys.forward = (int) 'd';
+		game->keys.backward = (int) 'a';
 		game->player.direction = 3;
 	}
 }
@@ -59,21 +59,22 @@ void	dynamic_control(t_game *game)
 {
 	if (facing_south(game))
 	{
-		game->keys.left = 100;
-		game->keys.right = 97;
-		game->keys.forward = 115;
-		game->keys.backward = 119;
+		game->keys.left = (int) 'd';
+		game->keys.right = (int) 'a';
+		game->keys.forward = (int) 's';
+		game->keys.backward = (int) 'w';
 		game->player.direction = 2;
 	}
 	else if (facing_north(game))
 	{
-		game->keys.left = 97;
-		game->keys.right = 100;
-		game->keys.forward = 119;
-		game->keys.backward = 115;
+		game->keys.left = (int) 'a';
+		game->keys.right = (int) 'd';
+		game->keys.forward = (int) 'w';
+		game->keys.backward = (int) 's';
 		game->player.direction = 0;
 	}
-	mv_ea_we(game);
+	else
+		mv_ea_we(game);
 }
 
 int	doors(int keycode, t_game *game)
