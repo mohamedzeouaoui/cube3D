@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 01:46:46 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/12 21:20:43 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/12 21:24:06 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,40 +93,31 @@ void	move_backward(t_game *game, int new_pos)
 	}
 }
 
-void	move_player(int keycode, t_game *game, int new_pos)
+void	move_left(t_game *game, int new_pos)
 {
 	float	s_a;
 
 	s_a = 0;
-	if (keycode == game->keys.left)
+	new_pos = game->player.x_pixel - game->player.move_speed;
+	if (!found_wall(game, new_pos - 5, game->player.y_pixel) && \
+		!found_door(game, new_pos - 5, game->player.y_pixel))
+		game->player.x_pixel = new_pos;
+	else if (facing_west(game))
 	{
-		new_pos = game->player.x_pixel - game->player.move_speed;
-		if (!found_wall(game, new_pos - 5, game->player.y_pixel) && \
-			!found_door(game, new_pos - 5, game->player.y_pixel))
-			game->player.x_pixel = new_pos;
-		else if (facing_west(game))
-		{
-			s_a = game->player.move_speed * sinf(game->player.pva);
-			new_pos = game->player.y_pixel + s_a;
-			if (!found_wall(game, game->player.x_pixel, new_pos + s_a) && \
-				!found_door(game, game->player.x_pixel, new_pos + s_a))
-				game->player.y_pixel = new_pos;
-		}
-		else if (facing_east(game))
-		{
-			s_a = game->player.move_speed * sinf(game->player.pva);
-			new_pos = game->player.y_pixel - s_a;
-			if (!found_wall(game, game->player.x_pixel, new_pos - s_a) && \
-				!found_door(game, game->player.x_pixel, new_pos - s_a))
-				game->player.y_pixel = new_pos;
-		}
+		s_a = game->player.move_speed * sinf(game->player.pva);
+		new_pos = game->player.y_pixel + s_a;
+		if (!found_wall(game, game->player.x_pixel, new_pos + s_a) && \
+			!found_door(game, game->player.x_pixel, new_pos + s_a))
+			game->player.y_pixel = new_pos;
 	}
-	else if (keycode == game->keys.right)
-		move_right(game, new_pos);
-	else if (keycode == game->keys.forward)
-		move_forward(game, new_pos);
-	else if (keycode == game->keys.backward)
-		move_backward(game, new_pos);
+	else if (facing_east(game))
+	{
+		s_a = game->player.move_speed * sinf(game->player.pva);
+		new_pos = game->player.y_pixel - s_a;
+		if (!found_wall(game, game->player.x_pixel, new_pos - s_a) && \
+			!found_door(game, game->player.x_pixel, new_pos - s_a))
+			game->player.y_pixel = new_pos;
+	}
 }
 
 int	keys(int keycode, void *game1)
@@ -145,5 +136,12 @@ int	keys(int keycode, void *game1)
 		game->player.pva = normalize_angle(game->player.pva
 				+ (game->player.rotaion_speed));
 	dynamic_control(game);
-	move_player(keycode, game, new_pos);
+	if (keycode == game->keys.left)
+		move_left(game, new_pos);
+	else if (keycode == game->keys.right)
+		move_right(game, new_pos);
+	else if (keycode == game->keys.forward)
+		move_forward(game, new_pos);
+	else if (keycode == game->keys.backward)
+		move_backward(game, new_pos);
 }
