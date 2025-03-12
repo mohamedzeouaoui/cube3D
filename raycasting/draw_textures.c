@@ -6,11 +6,21 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 01:45:50 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/12 01:45:51 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/12 07:29:41 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+double	count_distance(double x1, double x2, double y1, double y2)
+{
+	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+}
+
+int	r_g_b(int r, int g, int b)
+{
+	return ((r << 16) | (g << 8) | b);
+}
 
 char	*get_wall_img2(t_game *game, double ray_angle)
 {

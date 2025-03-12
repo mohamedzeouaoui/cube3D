@@ -6,24 +6,11 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 03:44:54 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/12 03:46:37 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/12 07:28:51 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-// int	found_wall(t_game *game, int x_pos, int y_pos)
-// {
-// 	int	x_map;
-// 	int	y_map;
-
-// 	if (x_pos < 0 || x_pos >= (game->map_width * BLOCK_SIZE) \
-// 	|| y_pos < 0 || y_pos >= (game->map_len * BLOCK_SIZE))
-// 		return (1);
-// 	x_map = x_pos / BLOCK_SIZE;
-// 	y_map = y_pos / BLOCK_SIZE;
-// 	return (game->map[y_map][x_map] == '1');
-// }
 
 void	init_game(t_game *game, t_ray *hor, t_ray *ver)
 {

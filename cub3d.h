@@ -302,6 +302,10 @@ int found_door(t_game *game, int x_pos, int y_pos);
 void draw_animation(t_game *game, t_tex *image);
 void clear_previous_image(t_game *game);
 char	*ft_gc_strdup(const char *s);
+int	doors(int keycode, t_game *game);
+int	animation(int keycode, int x, int y, t_game *game);
+void	dynamic_control(t_game *game);
+void	draw_animation(t_game *game, t_tex *image);
 
 // gc
 void	*gc_malloc(size_t bytes);
