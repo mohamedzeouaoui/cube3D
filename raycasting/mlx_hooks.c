@@ -86,11 +86,9 @@ int	keys(int keycode, void *game1)
 {
 	t_game	*game;
 	int		new_pos;
-	float	slide_amount;
 
 	game = game1;
 	new_pos = 0;
-	slide_amount = 0;
 	game->menu.entred = 0;
 	if (keycode == 65362)
 		game->menu.index = (game->menu.index + 1) % 2;
@@ -108,4 +106,5 @@ int	keys(int keycode, void *game1)
 				+ (game->player.rotaion_speed));
 	dynamic_control(game);
 	move_player(keycode, game, new_pos);
+	return (0);
 }
