@@ -75,14 +75,13 @@ int	main(int ac, char **av)
 	ft_check_file(av[1], &data);
 	check_valid_map(av[1], &data);
 	store_texture(data.map_lines);
-	convert_F_C_to_RGB(&data);
-	// --------------------------
+	convert_fc_to_rgb(&data);
 	game.view_height = 2.5;
 	game.map = data.map;
 	game.map_width = ft_strlen(game.map[0]);
 	game.map_len = map_len(game.map);
-	game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
-	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
+	game.c_color = r_g_b(data.ceiling->r, data.ceiling->g, data.ceiling->b);
+	game.f_color = r_g_b(data.floor->r, data.floor->g, data.floor->b);
 	find_player(&game);
 	init_keys(&game);
 	ft_mlx(&game, &data);
