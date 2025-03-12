@@ -30,6 +30,7 @@
 #define PI 3.141592653589793
 #define FOV 60
 #define FOV_RAD (FOV * (PI / 180))
+#define BUFFER_SIZE 13
 // view height
 #define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
 #define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
@@ -209,6 +210,10 @@ typedef struct s_data
     int     num_lines;
     int     fd_map;
 }   t_data;
+
+//get_next_line
+char	*get_next_line(int fd);
+
 
 // parse
 char **parse_map(const char *file_name, t_game *game);
