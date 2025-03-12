@@ -42,13 +42,12 @@ void ft_mlx_init(t_game *game, t_data *data)
 	game->wall_south.path = data->map_lines->line_SO;
 	game->wall_east.path = data->map_lines->line_EA;
 	game->wall_west.path = data->map_lines->line_WE;
-	game->door.path = ft_strdup("door.xpm");
-	game->p0.path = ft_strdup("p0.xpm");
-	game->p1.path = ft_strdup("p1.xpm");
-	game->p2.path = ft_strdup("p2.xpm");
-	game->p3.path = ft_strdup("p3.xpm");
-	game->window.cnx = mlx_init();
-	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
+	// game->door.path = data->map_lines->line_D;
+	game->door.path = ft_gc_strdup("door.xpm");
+	game->p0.path = ft_gc_strdup("p0.xpm");
+	game->p1.path = ft_gc_strdup("p1.xpm");
+	game->p2.path = ft_gc_strdup("p2.xpm");
+	game->p3.path = ft_gc_strdup("p3.xpm");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
 	game->wall_north.img = mlx_xpm_file_to_image(game->window.cnx, game->wall_north.path, &game->wall_north.width, &game->wall_north.height);
 	if (!game->wall_north.img)

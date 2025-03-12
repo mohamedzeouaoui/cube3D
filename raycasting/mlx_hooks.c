@@ -1,10 +1,39 @@
 #include "../cub3d.h"
 
-int ft_close(t_window *window)
+void	destroy_images(t_game *game)
 {
-	mlx_destroy_window(window->cnx, window->win);
-	mlx_destroy_display(window->cnx);
-	exit(0);
+	if (game->wall_north.img)
+		mlx_destroy_image(game->window.cnx, game->wall_north.img);
+	if (game->wall_south.img)
+		mlx_destroy_image(game->window.cnx, game->wall_south.img);
+	if (game->wall_east.img)
+		mlx_destroy_image(game->window.cnx, game->wall_east.img);
+	if (game->wall_west.img)
+		mlx_destroy_image(game->window.cnx, game->wall_west.img);
+	if (game->door.img)
+		mlx_destroy_image(game->window.cnx, game->door.img);
+	if (game->p0.img)
+		mlx_destroy_image(game->window.cnx, game->p0.img);
+	if (game->p1.img)
+		mlx_destroy_image(game->window.cnx, game->p1.img);
+	if (game->p2.img)
+		mlx_destroy_image(game->window.cnx, game->p2.img);
+	if (game->p3.img)
+		mlx_destroy_image(game->window.cnx, game->p3.img);
+}
+
+int	ft_close(t_game *game, int e_status)
+{
+	game->exit_thread = 1;
+	pthread_join(game->thread, NULL);
+	destroy_images(game);
+	if (game->window.img.img)
+		mlx_destroy_image(game->window.cnx, game->window.img.img);
+	mlx_destroy_window(game->window.cnx, game->window.win);
+	mlx_destroy_display(game->window.cnx);
+	free(game->window.cnx);
+	free_all_in_gc();
+	exit(e_status);
 }
 
 void draw_animation(t_game *game, t_tex *image)
@@ -27,27 +56,15 @@ void draw_animation(t_game *game, t_tex *image)
 int drawer(t_game *game)
 {
 	draw_map(game);
-	// draw_mini_map(game);
-	// if (!game->animation)
-	// 	draw_animation(game, &game->p0);
-	// else if (game->animation == 1)
-	// {
-	// 	// for (int i = 0; i < 150; i++)
-	// 		draw_animation(game, &game->p1);
-	// 	// game->animation = 2;
-	// }
-	// else if (game->animation == 2)
-	// {
-	// 	// for (int i = 0; i < 200; i++)
-	// 		draw_animation(game, &game->p2);
-	// 	// game->animation = 3;
-	// }
-	// if (game->animation == 3)
-	// {
-	// 	// for (int i = 0; i < 150; i++)
-	// 		draw_animation(game, &game->p3);
-	// 	// game->animation = 0;
-	// }
+	draw_mini_map(game);
+	if (!game->animation)
+		draw_animation(game, &game->p0);
+	else if (game->animation == 1)
+		draw_animation(game, &game->p1);
+	else if (game->animation == 2)
+		draw_animation(game, &game->p2);
+	if (game->animation == 3)
+		draw_animation(game, &game->p3);
 	return (0);
 }
 
@@ -164,7 +181,7 @@ int keys(int keycode, void *game1)
 	// if (keycode == 65293)
 	// 	game->menu.entred = 1;
 	if (keycode == 113 || 65307 == keycode)
-		ft_close(&game->window);
+		ft_close(game, 0);
 	if (keycode == 65361)
 	{
 		game->key_pressed = 1;

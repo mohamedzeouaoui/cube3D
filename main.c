@@ -54,6 +54,8 @@ void *draw_animation_thread(void *game)
 	t_game *g = (t_game *)game;
 	while (1)
 	{
+		if (g->exit_thread == 1)
+			return (NULL);
 		if (g->animation == 1)
 		{
 			usleep(100000);
@@ -81,6 +83,8 @@ int	main(int ac, char **av)
 	static t_data	data;
 	static t_game	game;
 
+	game.window.cnx = mlx_init();
+	game.window.win = mlx_new_window(game.window.cnx, WIDTH, HEIGHT, "Cub3D");
     if (ac != 2)
         ft_panic("Wrong number of arguments");
     check_path(av[1]);
@@ -90,7 +94,8 @@ int	main(int ac, char **av)
     store_texture(data.map_lines);
     convert_F_C_to_RGB(&data);
 // --------------------------------------------------------------------------------------------
-    game.view_height = 2.5;
+    // game.exit_thread = 0;
+	game.view_height = 2.5;
 	game.map = data.map;
 	game.map_width = ft_strlen(game.map[0]);
 	game.map_len = map_len(game.map);
@@ -99,13 +104,6 @@ int	main(int ac, char **av)
     find_player(&game);
     init_keys(&game);
 	pthread_create(&game.thread, NULL, draw_animation_thread, &game);
-	// for (int i = 0; i < game.map_len; i++)
-	// {
-	// 	for (int j = 0; j < ft_strlen(game.map[i]); j++)
-	// 		printf("%c", game.map[i][j]);
-	// 	printf("\n");
-	// }
-	pthread_detach(game.thread);
 	ft_mlx(&game, &data);
-	// free_all_in_gc();
+	free_all_in_gc();
 }

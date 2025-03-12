@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 22:24:13 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/10 06:34:17 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/11 23:02:18 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void stor_file(char *file,t_data *data)
         line = get_next_line(data->fd_map);
         if (line == NULL)
             break;
-        data->file[i] = ft_strdup(line);
+        data->file[i] = ft_gc_strdup(line);
         i++;
+        free(line);
     }
     data->file[i] = NULL;
     close(data->fd_map);

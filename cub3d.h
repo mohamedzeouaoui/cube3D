@@ -8,6 +8,7 @@
 # include <X11/X.h>
 # include <SDL2/SDL.h>
 #include <pthread.h>
+#include <signal.h>
 # include "minilibx-linux/mlx.h"
 
 #define ANSI_COLOR_RESET "\033[0m"
@@ -141,6 +142,7 @@ typedef struct s_game
     int animation;
     int key_pressed;
     int touched_wall;
+    int exit_thread;
     pthread_t thread;
     t_player player;
     t_window window;
@@ -244,7 +246,7 @@ double normalize_angle(double angle);
 int keys(int keycode, void *game1);
 int mouse_move_hook(int x, int y, void *game1);
 int drawer(t_game *game);
-int ft_close(t_window *window);
+int	ft_close(t_game *game, int e_status);
 
 //
 
@@ -285,6 +287,7 @@ void draw_mini_map(t_game *game);
 int found_door(t_game *game, int x_pos, int y_pos);
 void draw_animation(t_game *game, t_tex *image);
 void clear_previous_image(t_game *game);
+char	*ft_gc_strdup(const char *s);
 
 // gc
 void	*gc_malloc(size_t bytes);

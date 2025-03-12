@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_texture_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 02:49:15 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/09 02:49:17 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 23:09:37 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void store_texture(t_texture *map_lines)
 
 void ft_gettexture_dup(char *line, char **XX, bool *XX_flag)
 {
-    *XX = ft_strdup(line);
+    *XX = ft_gc_strdup(line);
     *XX_flag = true;
 }
 void ft_get_texture(char *line, t_texture *map_lines, t_data *data)
