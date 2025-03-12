@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx_hooks.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 01:46:46 by aakhrif           #+#    #+#             */
+/*   Updated: 2025/03/12 03:11:58 by aakhrif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
 void	destroy_images(t_game *game)
@@ -24,6 +36,8 @@ void	destroy_images(t_game *game)
 
 int	ft_close(t_game *game, int e_status)
 {
+	if (e_status != 0 && e_status != 1)
+		e_status = 0;
 	game->exit_thread = 1;
 	pthread_join(game->thread, NULL);
 	destroy_images(game);
@@ -45,7 +59,7 @@ void draw_animation(t_game *game, t_tex *image)
 		while(x_start < WIDTH / 2 + image->width / 2)
 		{
 			int color = *(unsigned int *)(image->tex_data + (4 * image->width * (y_start - (HEIGHT - image->height)) + 4 * (x_start - (WIDTH / 2 - image->width / 2))));
-			if (color != 0xff000000) // Eliminate black pixels
+			if (color != 0xff000000)
 				ft_mlx_pixel_put(game, x_start, y_start, color);
 			x_start++;
 		}
@@ -120,7 +134,6 @@ void move_player(int keycode, t_game *game, int new_pos)
             game->player.x_pixel = new_pos;
         else
         {
-            // Calculate slide amount for wall sliding
             slide_amount = game->player.move_speed * sinf(game->player.pva);
             new_pos = game->player.y_pixel + slide_amount;
             if (!found_wall(game, game->player.x_pixel, new_pos + 5) && !found_door(game, game->player.x_pixel, new_pos + 5))
@@ -168,31 +181,21 @@ void move_player(int keycode, t_game *game, int new_pos)
     }
 }
 
-int keys(int keycode, void *game1)
+int	keys(int keycode, void *game1)
 {
-	int new_pos = 0;
-	float slide_amount = 0;
-	t_game *game = game1;
-	game->menu.entred = 0;
-	// if (keycode == 65362)
-	// 	game->menu.index = (game->menu.index + 1) % 2;
-	// else if (keycode == 65364)
-	// 	game->menu.index = (game->menu.index + 1) % 2;
-	// if (keycode == 65293)
-	// 	game->menu.entred = 1;
+	t_game	*game;
+	int		new_pos;
+
+	game = game1;
+	new_pos = 0;
 	if (keycode == 113 || 65307 == keycode)
 		ft_close(game, 0);
 	if (keycode == 65361)
-	{
-		game->key_pressed = 1;
-		game->player.pva = normalize_angle(game->player.pva - (game->player.rotaion_speed));
-	}
+		game->player.pva = normalize_angle(game->player.pva
+				- (game->player.rotaion_speed));
 	if (keycode == 65363)
-	{
-		game->key_pressed = 1;
-		game->player.pva = normalize_angle(game->player.pva + (game->player.rotaion_speed));
-	}
+		game->player.pva = normalize_angle(game->player.pva
+				+ (game->player.rotaion_speed));
 	dynamic_control(game);
 	move_player(keycode, game, new_pos);
-	return 0;
 }

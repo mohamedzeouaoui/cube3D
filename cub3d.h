@@ -118,6 +118,17 @@ typedef struct s_menu
     t_tex menu_img;
 }   t_menu;
 
+typedef struct s_draw
+{
+    int color;
+	int pixel_index;
+	int		y;
+	int tex_y;
+	int		tex_x;
+	double	step;
+	double	tex_pos;
+}   t_draw;
+
 typedef struct wall_hit
 {
     int vert;
@@ -143,6 +154,7 @@ typedef struct s_game
     int key_pressed;
     int touched_wall;
     int exit_thread;
+    double ray_angle;
     pthread_t thread;
     t_player player;
     t_window window;
@@ -259,13 +271,15 @@ int facing_east(t_game *game);
 
 //raycaster
 void cast_rays(t_game *game);
+void vert_rays(t_game *game, t_ray *ver);
+void hor_rays(t_game *game, t_ray *hor);
 
 //ray utils
 double count_distance(double x1, double x2, double y1, double y2);
 
 //
 void cast_rays(t_game *game);
-void draw_3d(t_game *game, int x_start, int y_start, int wall_height, double ray_angle);
+void draw_3d(t_game *game, int x_start, int y_start, int wall_height);
 int is_empty_line(char *line);
 void count_lines(char * file, t_data *data);
 void stor_file(char *file,t_data *data);

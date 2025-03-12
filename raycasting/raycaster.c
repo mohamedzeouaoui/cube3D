@@ -1,13 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycaster.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/12 03:45:44 by aakhrif           #+#    #+#             */
+/*   Updated: 2025/03/12 03:50:55 by aakhrif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cub3d.h"
 
 void hor_rays2(t_game *game, t_ray *hor)
 {
 	hor->x_next_step = hor->x_intercept;
 	hor->y_next_step = hor->y_intercept;
-
 	if (!hor->is_ray_facing_down)
 		hor->y_next_step -= 0.001;
-	
 	while(hor->x_next_step >= 0 && hor->x_next_step <= game->map_width * BLOCK_SIZE &&
 		  hor->y_next_step >= 0 && hor->y_next_step <= game->map_len * BLOCK_SIZE)
 	{
@@ -95,62 +105,4 @@ void vert_rays(t_game *game, t_ray *ver)
 		ver->y_step *= -1;
 
 	vert_rays2(game, ver);
-}
-
-void cast_ray_init(t_game *game, t_ray *hor, t_ray *ver, double ray_angle)
-{
-	hor->dst = INFINITY;
-	hor->x = 0;
-	hor->y = 0;
-	hor->ray_angle = ray_angle;
-	ver->dst = INFINITY;
-	ver->x = 0;
-	ver->y = 0;
-	ver->ray_angle = ray_angle;
-	game->which_hit = -1;
-	game->wall.wall_cord = 0;
-	game->wall.vert = 0;
-	game->wall.hor = 0;
-	game->wall_height = 0;
-}
-
-void cast_ray(t_game *game, double ray_angle, int i)
-{
-	t_ray hor, ver;
-	cast_ray_init(game, &hor, &ver, ray_angle);
-	hor_rays(game, &hor);
-	vert_rays(game, &ver);
-
-	double cos_angle_diff = cos(ray_angle - game->player.pva);
-	double wall_height_factor = (WIDTH / 2) / tan(FOV_RAD / 2);
-
-	if (hor.dst < ver.dst)
-	{
-		game->wall_height = (BLOCK_SIZE / (hor.dst * cos_angle_diff)) * wall_height_factor;
-		game->wall.wall_cord = fmod(hor.x, BLOCK_SIZE);
-		game->wall_hit_x = hor.x;
-		game->wall_hit_y = hor.y;
-		game->which_hit = 1;
-	}
-	else
-	{
-		game->wall_height = (BLOCK_SIZE / (ver.dst * cos_angle_diff)) * wall_height_factor;
-		game->wall.wall_cord = fmod(ver.y, BLOCK_SIZE);
-		game->wall_hit_x = ver.x;
-		game->wall_hit_y = ver.y;
-		game->which_hit = 0;
-	}
-	draw_3d(game, i, (HEIGHT / 2) - (game->wall_height / game->view_height), game->wall_height, ray_angle);
-}
-
-void cast_rays(t_game *game)
-{
-	double angle_step = FOV_RAD / WIDTH;
-	double ray_angle = normalize_angle(game->player.pva - (FOV_RAD / 2));
-
-	for (int i = 0; i < WIDTH; i++)
-	{
-		cast_ray(game, ray_angle, i);
-		ray_angle = normalize_angle(ray_angle + angle_step);
-	}
 }

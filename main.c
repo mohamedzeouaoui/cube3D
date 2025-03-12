@@ -101,6 +101,11 @@ int	main(int ac, char **av)
 	game.map_len = map_len(game.map);
     game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
 	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
+	game.door.path = data.map_lines->line_D;
+	game.p0.path = ft_gc_strdup("p0.xpm");
+	game.p1.path = ft_gc_strdup("p1.xpm");
+	game.p2.path = ft_gc_strdup("p2.xpm");
+	game.p3.path = ft_gc_strdup("p3.xpm");
     find_player(&game);
     init_keys(&game);
 	pthread_create(&game.thread, NULL, draw_animation_thread, &game);
