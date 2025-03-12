@@ -1,44 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/12 13:14:24 by mzeouaou          #+#    #+#             */
+/*   Updated: 2023/11/12 13:14:31 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libft.h"
 
-static int	compute_len(int n)
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	len;
+	int	mb;
 
-	len = 0;
-	while (n)
+	mb = -2147483648;
+	if (n == mb)
 	{
-		n /= 10;
-		len++;
+		write(fd, "-2147483648", 11);
 	}
-	return (len);
-}
-
-int	ft_putnbr_fd(int n, int fd)
-{
-	int	sign;
-
-	sign = 0;
-	if (n == INT_MIN)
-		return (ft_putstr_fd("-2147483648", fd));
-	else if (n == 0)
-		return (ft_putchar_fd('0', fd));
-	else
+	else if (n < 0)
 	{
-		if (n < 0)
-		{
-			sign = ft_putchar_fd('-', fd);
-			n = -n;
-		}
-		if (n < 10)
-		{
-			ft_putchar_fd((n + 48), fd);
-		}
-		else
-		{
-			ft_putnbr_fd(n / 10, fd);
-			ft_putchar_fd((n % 10) + 48, fd);
-		}
+		n = n * -1;
+		ft_putchar_fd('-', fd);
+		ft_putnbr_fd(n, fd);
 	}
-	return (compute_len(n) + sign);
+	else if (n >= 0 && n <= 9)
+	{
+		ft_putchar_fd((n + 48), fd);
+		return ;
+	}
+	else if (n > 9)
+	{
+		ft_putnbr_fd((n / 10), fd);
+		ft_putchar_fd((48 + n % 10), fd);
+	}
 }
