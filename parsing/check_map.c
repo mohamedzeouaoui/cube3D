@@ -88,7 +88,7 @@ void	player_position(char *line, bool *player)
 		ft_panic("Map is not valid444");
 }
 
-void	cheack_wall(t_data *data)
+void	check_wall(t_data *data)
 {
 	int		i;
 	int		j;
@@ -142,5 +142,5 @@ void	check_valid_map(char *file, t_data *data)
 		}
 	}
 	check_line_of_map(data);
-	cheack_wall(data);
+	check_wall(data);
 }
