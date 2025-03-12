@@ -1,4 +1,3 @@
-
 CC = cc
 CFLAGS = #-Werror -Wextra -Wall #-fsanitize=address
 RM = rm -rf
@@ -6,9 +5,11 @@ UTILS = error.c
 
 GET_NEXT_LINE = ./get_next_line/get_next_line.c 
 
-PARSING = $(addprefix parsing/, check_map.c ft_substr_parsing.c pars_color.c pars_texture.c parsing.c pars_color_utils.c pars_texture_utils.c check_map_utils.c utils_prs.c)
+PARSING = $(addprefix parsing/, check_map.c ft_substr_parsing.c pars_color.c pars_texture.c parsing.c pars_color_utils.c pars_texture_utils.c \
+			check_map_utils.c utils_prs.c)
 
-RAYCASTING = ft_gc_strdup.c gc.c $(addprefix raycasting/, precasting.c raycaster.c raycaster_utils.c mlx_hooks.c directions.c draw_textures.c window.c raycaster2.c ray_dir.c player.c)
+RAYCASTING = ft_gc_strdup.c gc.c $(addprefix raycasting/, precasting.c raycaster.c raycaster_utils.c mlx_hooks.c directions.c draw_textures.c \
+			window.c raycaster2.c ray_dir.c player.c)
 
 CFILES = main.c  ${PARSING} ${UTILS} ${RAYCASTING} ${GET_NEXT_LINE}
 OFILES = ${CFILES:.c=.o}
