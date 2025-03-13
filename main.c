@@ -88,9 +88,7 @@ void	*draw_animation_thread(void *game)
 			g->animation = 0;
 		}
 		else
-		{
 			usleep(100000);
-		}
 	}
 }
 
@@ -109,7 +107,6 @@ int	main(int ac, char **av)
 	check_valid_map(av[1], &data);
 	store_texture(data.map_lines);
 	convert_f_c_to_rgb(&data);
-	// --------------------------------------------------------------------------------------------
 	game.exit_thread = 0;
 	game.view_height = 2.5;
 	game.map = data.map;
@@ -118,13 +115,8 @@ int	main(int ac, char **av)
 	game.c_color = r_g_b(data.ceiling->r, data.ceiling->g, data.ceiling->b);
 	game.f_color = r_g_b(data.floor->r, data.floor->g, data.floor->b);
 	game.door.path = data.map_lines->line_d;
-	game.p0.path = ft_gc_strdup("p0.xpm");
-	game.p1.path = ft_gc_strdup("p1.xpm");
-	game.p2.path = ft_gc_strdup("p2.xpm");
-	game.p3.path = ft_gc_strdup("p3.xpm");
 	find_player(&game);
 	init_keys(&game);
 	pthread_create(&game.thread, NULL, draw_animation_thread, &game);
-	ft_mlx(&game, &data);
-	free_all_in_gc();
+	return (ft_mlx(&game, &data), free_all_in_gc(), 0);
 }

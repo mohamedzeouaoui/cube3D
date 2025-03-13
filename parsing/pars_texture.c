@@ -70,7 +70,6 @@ void	ft_check_file_norm(char **line, t_data *data, int *i)
 		ft_get_texture(*line, data->map_lines, data);
 		(*i)++;
 	}
-	// free(*line);
 }
 
 int	ft_check_file(char *file, t_data *data)

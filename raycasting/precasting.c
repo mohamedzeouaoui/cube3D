@@ -86,8 +86,6 @@ void	ft_mlx_init(t_game *game, t_data *data)
 	game->wall_south.path = data->map_lines->line_so;
 	game->wall_east.path = data->map_lines->line_ea;
 	game->wall_west.path = data->map_lines->line_we;
-	// game->window.cnx = mlx_init();
-	// game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
 	if (!game->window.img.img)
 		ft_close(game, 1);
@@ -106,6 +104,10 @@ void	ft_mlx_init(t_game *game, t_data *data)
 
 void	ft_mlx(t_game *game, t_data *data)
 {
+	game->p0.path = ft_gc_strdup("p0.xpm");
+	game->p1.path = ft_gc_strdup("p1.xpm");
+	game->p2.path = ft_gc_strdup("p2.xpm");
+	game->p3.path = ft_gc_strdup("p3.xpm");
 	ft_mlx_init(game, data);
 	mlx_hook(game->window.win, 17, 0, ft_close, &game->window);
 	mlx_loop_hook(game->window.cnx, drawer, game);

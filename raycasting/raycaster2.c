@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzeouaou <mzeouaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 03:44:54 by aakhrif           #+#    #+#             */
-/*   Updated: 2025/03/12 07:28:51 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/13 11:09:14 by mzeouaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	cast_ray(t_game *game, double ray_angle, int i)
 	cast_ray_init(game, &hor, &ver, ray_angle);
 	if (hor.dst < ver.dst)
 	{
-		game->wall_height = (BLOCK_SIZE / (hor.dst * \
-		cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
+		game->wall_height = (BLOCK_SIZE / (hor.dst * cos(ray_angle - \
+		game->player.pva))) * ((WIDTH / 2) / tan((FOV * (PI / 180)) / 2));
 		game->wall.wall_cord = fmod(hor.x, BLOCK_SIZE);
 		game->wall_hit_x = hor.x;
 		game->wall_hit_y = hor.y;
@@ -69,8 +69,8 @@ void	cast_ray(t_game *game, double ray_angle, int i)
 	}
 	else if (ver.dst < hor.dst)
 	{
-		game->wall_height = (BLOCK_SIZE / (ver.dst * \
-		cos(ray_angle - game->player.pva))) * ((WIDTH / 2) / tan(FOV_RAD / 2));
+		game->wall_height = (BLOCK_SIZE / (ver.dst * cos(ray_angle - \
+		game->player.pva))) * ((WIDTH / 2) / tan((FOV * (PI / 180)) / 2));
 		game->wall.wall_cord = fmod(ver.y, BLOCK_SIZE);
 		game->wall_hit_x = ver.x;
 		game->wall_hit_y = ver.y;
@@ -87,8 +87,8 @@ void	cast_rays(t_game *game)
 	double	angle_step;
 	double	ray_angle;
 
-	angle_step = FOV_RAD / WIDTH;
-	ray_angle = normalize_angle(game->player.pva - (FOV_RAD / 2));
+	angle_step = (FOV * (PI / 180)) / WIDTH;
+	ray_angle = normalize_angle(game->player.pva - ((FOV * (PI / 180)) / 2));
 	i = -1;
 	while (++i < WIDTH)
 	{

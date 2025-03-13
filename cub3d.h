@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mzeouaou <mzeouaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 10:08:58 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/13 10:09:00 by mzeouaou         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:08:55 by mzeouaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@
 # define MINI_MAP_Y 100
 # define PI 3.141592653589793
 # define FOV 60
-# define FOV_RAD (FOV * (PI / 180))
-// view height
 # define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
 # define ERR_INVALID_FILENAME "The map file must be ending with .cub!"
 # define ERR_NO_PLAYER "No player found!"
@@ -62,7 +60,7 @@ typedef struct s_player
 	int				y;
 	int				x_pixel;
 	int				y_pixel;
-	double pva; // player view angle
+	double			pva; // player view angle
 	double			rotaion_speed;
 	int				radius;
 	int				move_speed;
@@ -240,7 +238,8 @@ typedef struct s_map
 {
 	int				player_x;
 	int				player_y;
-	int x_off, y_off;
+	int				x_off;
+	int				y_off;
 	int				mini_map_width;
 	int				mini_map_height;
 	int				k;
