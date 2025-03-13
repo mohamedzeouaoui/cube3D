@@ -6,7 +6,7 @@
 /*   By: aakhrif <aakhrif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 13:02:41 by mzeouaou          #+#    #+#             */
-/*   Updated: 2025/03/10 06:34:20 by aakhrif          ###   ########.fr       */
+/*   Updated: 2025/03/11 23:09:35 by aakhrif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ char	*ft_strcat_edit(char *str, char *str2)
 
 	i = 0;
 	j = 0;
-	str[0] = '\0'; 
+	str[0] = '\0';
 	while (str[i])
 		i++;
-	while (str2[j] != '\0' && str2[j] != '\n' && str2[j] != ' ' && str2[j] != '\t')
+	while (str2[j] != '\0' && str2[j] != '\n' && str2[j] != ' '
+		&& str2[j] != '\t')
 	{
 		str[i] = str2[j];
 		i++;
