@@ -92,16 +92,16 @@ int	main(int ac, char **av)
     ft_check_file(av[1], &data);
 	check_valid_map(av[1], &data);
     store_texture(data.map_lines);
-    convert_F_C_to_RGB(&data);
+    convert_f_c_to_rgb(&data);
 // --------------------------------------------------------------------------------------------
-    // game.exit_thread = 0;
+    game.exit_thread = 0;
 	game.view_height = 2.5;
 	game.map = data.map;
 	game.map_width = ft_strlen(game.map[0]);
 	game.map_len = map_len(game.map);
-    game.c_color = r_g_b(data.ceiling->R, data.ceiling->G, data.ceiling->B);
-	game.f_color = r_g_b(data.floor->R, data.floor->G, data.floor->B);
-	game.door.path = data.map_lines->line_D;
+    game.c_color = r_g_b(data.ceiling->r, data.ceiling->g, data.ceiling->b);
+	game.f_color = r_g_b(data.floor->r, data.floor->g, data.floor->b);
+	game.door.path = data.map_lines->line_d;
 	game.p0.path = ft_gc_strdup("p0.xpm");
 	game.p1.path = ft_gc_strdup("p1.xpm");
 	game.p2.path = ft_gc_strdup("p2.xpm");
