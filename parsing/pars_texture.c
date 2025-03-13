@@ -70,7 +70,7 @@ void	ft_check_file_norm(char **line, t_data *data, int *i)
 		ft_get_texture(*line, data->map_lines, data);
 		(*i)++;
 	}
-	free(*line);
+	// free(*line);
 }
 
 int	ft_check_file(char *file, t_data *data)
@@ -92,10 +92,7 @@ int	ft_check_file(char *file, t_data *data)
 		while (line[j] == ' ' || line[j] == '\t')
 			j++;
 		if (is_empty_line(line) == 1 || (i > 7 && line[j] == '1'))
-		{
-			free(line);
 			continue ;
-		}
 		ft_check_file_norm(&line, data, &i);
 	}
 	close(data->fd_map);

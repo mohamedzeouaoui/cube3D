@@ -86,8 +86,8 @@ void	ft_mlx_init(t_game *game, t_data *data)
 	game->wall_south.path = data->map_lines->line_so;
 	game->wall_east.path = data->map_lines->line_ea;
 	game->wall_west.path = data->map_lines->line_we;
-	game->window.cnx = mlx_init();
-	game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
+	// game->window.cnx = mlx_init();
+	// game->window.win = mlx_new_window(game->window.cnx, WIDTH, HEIGHT, "cub3D");
 	game->window.img.img = mlx_new_image(game->window.cnx, WIDTH, HEIGHT);
 	if (!game->window.img.img)
 		ft_close(game, 1);

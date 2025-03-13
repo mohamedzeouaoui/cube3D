@@ -106,7 +106,6 @@ void	count_lines(char *file, t_data *data)
 		if (line == NULL)
 			break ;
 		i++;
-		free(line);
 	}
 	data->num_lines = i;
 	close(data->fd_map);

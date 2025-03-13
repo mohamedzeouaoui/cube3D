@@ -56,4 +56,6 @@ void	convert_f_c_to_rgb(t_data *data)
 	data->ceiling->r = check_valide_color(ft_atoi(str_c[0]));
 	data->ceiling->g = check_valide_color(ft_atoi(str_c[1]));
 	data->ceiling->b = check_valide_color(ft_atoi(str_c[2]));
+	free(str_c);
+	free(str_f);
 }
