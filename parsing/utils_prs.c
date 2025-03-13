@@ -12,10 +12,10 @@
 
 #include "../cub3d.h"
 
-void check_wall_in_last(t_data *data)
+void	check_wall_in_last(t_data *data)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (data->map[i] != NULL)
@@ -27,13 +27,13 @@ void check_wall_in_last(t_data *data)
 			j--;
 		if (data->map[i][j] != '1')
 			ft_panic("Map is not valid");
-		i++;		
+		i++;
 	}
-	
 }
-void check_last_line(char *line, char *prev_line)
+
+void	check_last_line(char *line, char *prev_line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (line[i] != '\0')
@@ -47,9 +47,9 @@ void check_last_line(char *line, char *prev_line)
 	}
 }
 
-void check_first_line(char *line, char *next_line)
+void	check_first_line(char *line, char *next_line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (line[i] != '\0')
@@ -72,7 +72,7 @@ void	check_zero_and_space(t_data *data)
 	while (data->map[i + 1] != NULL)
 	{
 		j = 1;
-		while (data->map[i][j] != '\0')
+		while (data->map[i][j + 1] != '\0')
 		{
 			if (data->map[i][j] == ' ')
 			{

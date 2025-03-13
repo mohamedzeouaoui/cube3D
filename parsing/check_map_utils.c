@@ -53,9 +53,9 @@ void	check_line_of_map(t_data *data)
 
 void	stor_map_norm(int *j, int *i, int *l, t_data *data)
 {
-	if (*l < data->max_len - 1)
+	if (*l < data->max_len)
 	{
-		while (*l < data->max_len - 1)
+		while (*l < data->max_len)
 		{
 			data->map[*j][*l] = ' ';
 			(*l)++;
