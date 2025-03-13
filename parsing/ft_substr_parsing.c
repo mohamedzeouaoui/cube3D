@@ -19,10 +19,11 @@ char	*ft_strcat_edit(char *str, char *str2)
 
 	i = 0;
 	j = 0;
-	str[0] = '\0'; 
+	str[0] = '\0';
 	while (str[i])
 		i++;
-	while (str2[j] != '\0' && str2[j] != '\n' && str2[j] != ' ' && str2[j] != '\t')
+	while (str2[j] != '\0' && str2[j] != '\n' && str2[j] != ' '
+		&& str2[j] != '\t')
 	{
 		str[i] = str2[j];
 		i++;
