@@ -37,12 +37,14 @@ static size_t	compute_w_len(char const *s, char c)
 
 static char	**free_strs(char **strs, size_t size)
 {
-	size_t	i;
+	// size_t	i;
 
-	i = 0;
-	while (i <= size)
-		free(strs[i++]);
-	free(strs);
+	// i = 0;
+	(void)size;
+	(void)strs;
+	// while (i <= size)
+	// 	free(strs[i++]);
+	// free(strs);
 	return (NULL);
 }
 
@@ -58,7 +60,7 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	cpd_w = 0;
 	words_count = ft_countword(s, c);
-	split = (char **)malloc(sizeof(char *) * (words_count + 1));
+	split = (char **)gc_malloc(sizeof(char *) * (words_count + 1));
 	if (!split)
 		return (NULL);
 	split[words_count] = NULL;
