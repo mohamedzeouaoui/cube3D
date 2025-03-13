@@ -14,7 +14,7 @@
 
 void	draw_animation(t_game *game, t_tex *image)
 {
-	int	color;
+	unsigned int	color;
 	int	y_start;
 	int	x_start;
 
@@ -108,6 +108,8 @@ int	doors(int keycode, t_game *game)
 
 int	animation(int keycode, int x, int y, t_game *game)
 {
+	(void)x;
+	(void)y;
 	if (keycode == 1)
 		game->animation = 1;
 	return (0);
