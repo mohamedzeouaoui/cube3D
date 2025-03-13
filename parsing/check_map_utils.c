@@ -55,7 +55,7 @@ void	stor_map_norm(int *j, int *i, int *l, t_data *data)
 {
 	if (*l < data->max_len - 1)
 	{
-		while (*l < data->max_len - 2)
+		while (*l < data->max_len - 1)
 		{
 			data->map[*j][*l] = ' ';
 			(*l)++;
