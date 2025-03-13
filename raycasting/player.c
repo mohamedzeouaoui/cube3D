@@ -53,7 +53,7 @@ int	found_player(int i, int j, t_game *game)
 
 void	find_player(t_game *game)
 {
-	int	i;
+	int				i;
 	unsigned int	j;
 
 	i = 0;

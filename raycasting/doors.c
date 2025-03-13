@@ -15,8 +15,8 @@
 void	draw_animation(t_game *game, t_tex *image)
 {
 	unsigned int	color;
-	int	y_start;
-	int	x_start;
+	int				y_start;
+	int				x_start;
 
 	y_start = HEIGHT - image->height;
 	while (y_start < HEIGHT)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/13 10:08:58 by mzeouaou          #+#    #+#             */
+/*   Updated: 2025/03/13 10:09:00 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -226,16 +238,16 @@ typedef struct s_data
 
 typedef struct s_map
 {
-	int player_x;
-    int player_y;
-    int x_off, y_off;
-    int mini_map_width;
-    int mini_map_height;
-    int k;
-    int l;
-    int y;
-    int x;
-}	t_map;
+	int				player_x;
+	int				player_y;
+	int x_off, y_off;
+	int				mini_map_width;
+	int				mini_map_height;
+	int				k;
+	int				l;
+	int				y;
+	int				x;
+}					t_map;
 
 // parse
 char				**parse_map(const char *file_name, t_game *game);
@@ -265,14 +277,17 @@ int					ft_error(const char *msg);
 void				draw_map(t_game *game);
 int					found_wall(t_game *game, int x_pos, int y_pos);
 double				normalize_angle(double angle);
-char	*get_next_line(int fd);
+char				*get_next_line(int fd);
 
 // mini_map
-void draw_filled_triangle_west(int x, int y, t_game *game , int color);
-void draw_filled_triangle_south(int x, int y, t_game *game , int color);
-void draw_filled_triangle_east(int x, int y, t_game *game , int color);
-void draw_filled_triangle_north(int x, int y, t_game *game , int color);
-
+void				draw_filled_triangle_west(int x, int y, t_game *game,
+						int color);
+void				draw_filled_triangle_south(int x, int y, t_game *game,
+						int color);
+void				draw_filled_triangle_east(int x, int y, t_game *game,
+						int color);
+void				draw_filled_triangle_north(int x, int y, t_game *game,
+						int color);
 
 // hooks
 int					keys(int keycode, void *game1);
