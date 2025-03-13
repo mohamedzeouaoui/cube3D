@@ -224,6 +224,19 @@ typedef struct s_data
 	int				fd_map;
 }					t_data;
 
+typedef struct s_map
+{
+	int player_x;
+    int player_y;
+    int x_off, y_off;
+    int mini_map_width;
+    int mini_map_height;
+    int k;
+    int l;
+    int y;
+    int x;
+}	t_map;
+
 // parse
 char				**parse_map(const char *file_name, t_game *game);
 void				find_player(t_game *game);
