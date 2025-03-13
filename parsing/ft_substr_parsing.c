@@ -45,6 +45,5 @@ char	*ft_substr_parsing(char *s, int start, int len)
 	if (!new)
 		return (NULL);
 	new = ft_strcat_edit(new, s + start);
-	free(s);
 	return (new);
 }

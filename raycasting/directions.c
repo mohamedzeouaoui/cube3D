@@ -14,8 +14,8 @@
 
 int	facing_north(t_game *game)
 {
-	return ((game->player.pva > (225 * (PI / 180))
-		&& game->player.pva < (315 * (PI / 180)))
+	return ((game->player.pva > (225 * (PI / 180)) \
+	&& game->player.pva < (315 * (PI / 180)))
 		|| game->player.pva == -(PI / 2));
 }
 

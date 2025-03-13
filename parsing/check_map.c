@@ -34,7 +34,6 @@ void	stor_file(char *file, t_data *data)
 			break ;
 		data->file[i] = ft_gc_strdup(line);
 		i++;
-		free(line);
 	}
 	data->file[i] = NULL;
 	close(data->fd_map);

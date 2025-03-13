@@ -35,12 +35,13 @@ void	check_last_line(char *line, char *prev_line)
 {
 	int	i;
 
-	i = 0;
-	while (line[i] != '\0')
+	i = 1;
+	while (line[i])
 	{
 		if (line[i] == ' ')
 		{
-			if (line[i + 1] == '0' || line[i - 1] == '0' || prev_line[i] == '0')
+			if (line[i + 1] && (line[i + 1] == '0' || \
+				line[i - 1] == '0' || prev_line[i] == '0'))
 				ft_panic("Map is not valid");
 		}
 		i++;
@@ -51,7 +52,7 @@ void	check_first_line(char *line, char *next_line)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (line[i] != '\0')
 	{
 		if (line[i] == ' ')
@@ -106,7 +107,6 @@ void	count_lines(char *file, t_data *data)
 		if (line == NULL)
 			break ;
 		i++;
-		free(line);
 	}
 	data->num_lines = i;
 	close(data->fd_map);

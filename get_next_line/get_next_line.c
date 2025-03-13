@@ -21,18 +21,18 @@ char	*redlang_line(char *str, int fd, char *buffer)
 	{
 		nmbre_byte = read(fd, buffer, BUFFER_SIZE);
 		if (nmbre_byte == -1)
-			return (free(buffer), free(str), NULL);
+			return (NULL);
 		else if (nmbre_byte == 0)
 		{
 			if (ft_strlen(str) > 0)
-				return (free(buffer), str);
+				return str;
 			else
-				return (free(buffer), free(str), NULL);
+				return NULL;
 		}
 		buffer[nmbre_byte] = '\0';
 		str = ft_strjoin(str, buffer);
 	}
-	return (free(buffer), str);
+	return str;
 }
 
 char	*correcte_line(char *str)
@@ -45,7 +45,7 @@ char	*correcte_line(char *str)
 		i++;
 	if (str[i] == '\n')
 		i++;
-	line = malloc(i + 1);
+	line = gc_malloc(i + 1);
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -71,9 +71,9 @@ char	*rest_line(char *str, char *line)
 
 	i = 0;
 	j = 0;
-	rest = malloc(ft_strlen(str) - ft_strlen(line) + 1);
+	rest = gc_malloc(ft_strlen(str) - ft_strlen(line) + 1);
 	if (!rest)
-		return (free(str), NULL);
+		return (NULL);
 	while (str[i] && str[i] != '\n')
 		i++;
 	if (str[i] == '\n')
@@ -87,7 +87,7 @@ char	*rest_line(char *str, char *line)
 		}
 	}
 	rest[j] = '\0';
-	return (free(str), rest);
+	return (rest);
 }
 
 char	*get_next_line(int fd)
@@ -100,21 +100,21 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (str == NULL)
 	{
-		str = malloc(1);
+		str = gc_malloc(1);
 		str[0] = '\0';
 		if (str == NULL)
 			return (NULL);
 	}
-	buffer = malloc(BUFFER_SIZE * sizeof(char) + 1);
+	buffer = gc_malloc(BUFFER_SIZE * sizeof(char) + 1);
 	if (!buffer)
-		return (free(str), NULL);
+		return (NULL);
 	str = redlang_line(str, fd, buffer);
 	if (!str)
 		return (NULL);
 	line = correcte_line(str);
 	str = rest_line(str, line);
 	if (!str)
-		return (free(line), NULL);
+		return ( NULL);
 	return (line);
 }
 

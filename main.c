@@ -85,4 +85,5 @@ int	main(int ac, char **av)
 	find_player(&game);
 	init_keys(&game);
 	ft_mlx(&game, &data);
+	free_all_in_gc();
 }

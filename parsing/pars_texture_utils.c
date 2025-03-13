@@ -53,7 +53,7 @@ void	store_texture(t_texture *map_lines)
 
 void	ft_gettexture_dup(char *line, char **XX, bool *XX_flag)
 {
-	*XX = ft_strdup(line);
+	*XX = ft_gc_strdup(line);
 	*XX_flag = true;
 }
 
