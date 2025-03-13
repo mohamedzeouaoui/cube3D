@@ -144,4 +144,5 @@ int	keys(int keycode, void *game1)
 		move_forward(game, new_pos);
 	else if (keycode == game->keys.backward)
 		move_backward(game, new_pos);
+	return (0);
 }

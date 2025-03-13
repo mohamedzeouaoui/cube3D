@@ -53,6 +53,7 @@ int	mouse_move_hook(int x, int y, void *game1)
 	static int	last_x = -1;
 	t_game		*game;
 
+	(void)y;
 	game = (t_game *)game1;
 	if (last_x == -1)
 		last_x = x;
