@@ -1,20 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/04 13:21:40 by mzeouaou          #+#    #+#             */
+/*   Updated: 2023/11/22 09:32:40 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libft.h"
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
+	size_t	dstlen;
+	size_t	srclen;
 	size_t	i;
-	size_t	d_len;
+	size_t	j;
 
-	d_len = ft_strlen(dst);
 	i = 0;
-	if (dstsize <= d_len || dstsize == 0)
-		return (dstsize + ft_strlen(src));
-	while (src[i] && (i + d_len) < dstsize - 1)
+	dstlen = ft_strlen(dst);
+	srclen = ft_strlen(src);
+	j = dstlen;
+	if (dstsize <= dstlen)
+		return (srclen + dstsize);
+	while (src[i] != '\0' && i < dstsize - dstlen - 1)
 	{
-		dst[d_len + i] = src[i];
+		((char *)dst)[j] = ((char *)src)[i];
+		j++;
 		i++;
 	}
-	dst[d_len + i] = '\0';
-	return (d_len + ft_strlen(src));
+	((char *)dst)[j] = '\0';
+	return (dstlen + srclen);
 }

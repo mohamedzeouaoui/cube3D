@@ -1,17 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/04 13:22:02 by mzeouaou          #+#    #+#             */
+/*   Updated: 2023/11/04 13:22:04 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libft.h"
 
 char	*ft_strrchr(const char *s, int c)
 {
-	size_t	s_len;
+	int	lens;
 
-	s_len = ft_strlen(s);
-	if (s[s_len] == (const char)c)
-		return ((char *)(s + s_len));
-	while (s_len--)
+	lens = ft_strlen(s);
+	while (lens >= 0)
 	{
-		if (s[s_len] == (const char)c)
-			return ((char *)(s + s_len));
+		if (s[lens] == (char)c)
+			return (&((char *)s)[lens]);
+		lens--;
 	}
 	return (NULL);
 }

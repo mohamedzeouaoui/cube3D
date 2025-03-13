@@ -1,17 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/08 12:14:35 by mzeouaou          #+#    #+#             */
+/*   Updated: 2023/11/29 13:57:42 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libft.h"
+#include <stdint.h>
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void	*buffer;
+	unsigned char	*ptr;
 
-	if (!nmemb || !size)
+	if (size != 0 && nmemb != 0 && nmemb > SIZE_MAX / size)
+		return (NULL);
+	ptr = malloc(size * nmemb);
+	if (ptr == NULL)
 	{
-		nmemb = 1;
-		size = 1;
+		return (0);
 	}
-	buffer = malloc(nmemb * size);
-	if (buffer)
-		ft_bzero(buffer, nmemb * size);
-	return (buffer);
+	ft_bzero((void *)ptr, nmemb * size);
+	return ((void *)ptr);
 }
+
+// #include <stdio.h>
+
+// int main(void)
+// {
+// 	char *str = calloc(2, 20);
+// 	if (str == NULL)
+// 		printf("NULL");
+// 	return (0);
+// }

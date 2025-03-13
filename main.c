@@ -94,7 +94,11 @@ int	main(int ac, char **av)
     store_texture(data.map_lines);
     convert_f_c_to_rgb(&data);
 // --------------------------------------------------------------------------------------------
-    game.exit_thread = 0;
+    // printf("data.map[0] = >%s<\n", data.map[0]);
+	// printf("data.map[1] = >%s<\n", data.map[1]);
+	// printf("data.map[2] = %s\n", data.map[2]);
+	// printf("data.map[3] = %s\n", data.map[3]);
+	game.exit_thread = 0;
 	game.view_height = 2.5;
 	game.map = data.map;
 	game.map_width = ft_strlen(game.map[0]);

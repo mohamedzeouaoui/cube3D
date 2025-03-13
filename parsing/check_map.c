@@ -114,8 +114,6 @@ void	check_wall(t_data *data)
 	check_zero_and_space(data);
 }
 
-
-
 void	check_valid_map(char *file, t_data *data)
 {
 	int	i;

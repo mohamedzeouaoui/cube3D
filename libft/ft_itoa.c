@@ -1,51 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzeouaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/12 13:08:41 by mzeouaou          #+#    #+#             */
+/*   Updated: 2023/11/22 09:28:25 by mzeouaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "libft.h"
 
-static int	compute_len(int n)
+static long	if_nega(long n)
 {
-	int	len;
-
-	len = 0;
-	while (n)
-	{
-		n /= 10;
-		len++;
-	}
-	return (len);
+	if (n < 0)
+		return (-n);
+	return (n);
 }
 
-static void	gen_char_array(char *int_str, long number, int len, int sign)
+static size_t	count_n(long n)
 {
-	while (number && len--)
+	size_t	cont;
+	long	m;
+
+	cont = 1;
+	m = if_nega(n);
+	while (m > 9)
 	{
-		int_str[len + sign] = (number % 10) + 48;
-		number /= 10;
+		m = m / 10;
+		cont++;
 	}
+	return (cont);
+}
+
+static char	*allocate(int nmb_d)
+{
+	char	*ptr;
+
+	ptr = malloc(sizeof(char) * (nmb_d + 1));
+	if (!ptr)
+		return (NULL);
+	return (ptr);
+}
+
+static void	line25(int idx, char *str, long num)
+{
+	if (num < 0)
+	{
+		str[0] = '-';
+		num *= -1;
+	}
+	while (num > 9)
+	{
+		str[idx] = num % 10 + '0';
+		num = num / 10;
+		idx--;
+	}
+	str[idx] = num + '0';
 }
 
 char	*ft_itoa(int n)
 {
-	int		sign;
-	int		len;
-	char	*int_str;
-	long	number;
+	int		nmbr_dj;
+	long	num;
+	int		idx;
+	char	*str;
 
-	number = (long)n;
-	if (n == 0)
-		return (ft_strdup("0"));
-	sign = 0;
-	if (n < 0)
+	num = n;
+	nmbr_dj = count_n(n);
+	if (num < 0)
 	{
-		sign = 1;
-		number = -number;
+		nmbr_dj++;
 	}
-	len = compute_len(number);
-	int_str = (char *)malloc(sizeof(char) * (len + sign + 1));
-	if (!int_str)
+	idx = nmbr_dj;
+	str = allocate(nmbr_dj);
+	if (!str)
 		return (NULL);
-	if (sign)
-		int_str[0] = '-';
-	int_str[len + sign] = '\0';
-	gen_char_array(int_str, number, len, sign);
-	return (int_str);
+	str[idx] = '\0';
+	idx--;
+	line25(idx, str, num);
+	return (str);
 }

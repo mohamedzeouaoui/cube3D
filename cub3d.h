@@ -21,6 +21,7 @@
 # define ANSI_COLOR_CYAN "\033[36m"
 # define ANSI_COLOR_WHITE "\033[37m"
 
+# define BUFFER_SIZE 13
 # define WIDTH 1280
 # define HEIGHT 720
 # define MINI_MAP_H 60
@@ -251,6 +252,14 @@ int					ft_error(const char *msg);
 void				draw_map(t_game *game);
 int					found_wall(t_game *game, int x_pos, int y_pos);
 double				normalize_angle(double angle);
+char	*get_next_line(int fd);
+
+// mini_map
+void draw_filled_triangle_west(int x, int y, t_game *game , int color);
+void draw_filled_triangle_south(int x, int y, t_game *game , int color);
+void draw_filled_triangle_east(int x, int y, t_game *game , int color);
+void draw_filled_triangle_north(int x, int y, t_game *game , int color);
+
 
 // hooks
 int					keys(int keycode, void *game1);
