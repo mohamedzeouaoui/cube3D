@@ -13,9 +13,9 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
 
 typedef struct s_list
 {
@@ -68,7 +68,7 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
-void *gc_malloc(size_t size);
-void free_all_in_gc(void);
-char *ft_gc_strdup(const char *s);
+void				*gc_malloc(size_t size);
+void				free_all_in_gc(void);
+char				*ft_gc_strdup(const char *s);
 #endif

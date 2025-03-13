@@ -25,14 +25,14 @@ char	*redlang_line(char *str, int fd, char *buffer)
 		else if (nmbre_byte == 0)
 		{
 			if (ft_strlen(str) > 0)
-				return str;
+				return (str);
 			else
-				return NULL;
+				return (NULL);
 		}
 		buffer[nmbre_byte] = '\0';
 		str = ft_strjoin(str, buffer);
 	}
-	return str;
+	return (str);
 }
 
 char	*correcte_line(char *str)
@@ -114,7 +114,7 @@ char	*get_next_line(int fd)
 	line = correcte_line(str);
 	str = rest_line(str, line);
 	if (!str)
-		return ( NULL);
+		return (NULL);
 	return (line);
 }
 

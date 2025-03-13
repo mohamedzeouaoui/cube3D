@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUBD3D_H
+#ifndef CUB3D_H
 # define CUB3D_H
 
 # include "libft/libft.h"
@@ -41,7 +41,6 @@
 # define MINI_MAP_Y 100
 # define PI 3.141592653589793
 # define FOV 60
-# define FOV_RAD (FOV * (PI / 180))
 # define BUFFER_SIZE 13
 // view height
 # define CUB3D_USAGE "usage ./cub3d [/path/to/map.cub]!"
